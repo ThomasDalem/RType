@@ -12,7 +12,7 @@ Client::Client(string name) {
 }
 Client::~Client() {}
 
-bool Client::operator=(Client another) {
+void Client::operator=(Client another) {
     this->_name = another.getName();
 }
 

@@ -16,7 +16,7 @@ class Client {
         Client(string name);
         ~Client();
 
-        bool operator=(Client another);
+        void operator=(Client another);
         bool operator==(Client another);
 
         void setName(string str);
