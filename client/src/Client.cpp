@@ -7,10 +7,20 @@
 
 #include "Client.hpp"
 
-Client::Client()
-{
+Client::Client(string name) {
+    this->_name = name;
+}
+Client::~Client() {}
+
+bool Client::operator=(Client another) {
+    this->_name = another.getName();
 }
 
-Client::~Client()
-{
+bool Client::operator==(Client another) {
+    if (this->_name != another.getName())
+        return false;
+    return true;
 }
+
+string Client::getName(void) const {return _name;}
+void Client::setName(string str) {this->_name = str;}
