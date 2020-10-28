@@ -6,34 +6,41 @@
 ##
 
 
-NAME		=		r-type_client
+NAME = r-type_client
 
-SRC			=		main.cpp				\
-					src/Client.cpp			\
+SRC = 	main.cpp				\
+		src/Client.cpp			\
+		src/BackgroundSFML.cpp	\
+		src/Player.cpp			\
+		src/VMonster.cpp		\
+		src/WindowHandler.cpp	\
 
-OBJSHARED	=		Client.o				\
 
-OBJ 		=		$(SRC:.cpp=.o)			\
+OBJSHARED =		Client.o	\
 
-CC			= 		g++
+OBJ =	$(SRC:.cpp=.o)	\
 
-CPPFLAGS	=		-I./include
+CC = g++
 
-WALL 		=		-Wall -Wextra -Werror
+CPPFLAGS = -I./include -I./Class
 
-all			:		$(NAME)
+EXT = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system
 
-$(NAME)		:		$(OBJ)
-					$(CC) -o $(NAME) $(OBJ) $(CPPFLAGS) $(WALL)
-					mv $(NAME) ../bin/
+WALL = -Wall -Wextra -Werror
 
-clean		:
-					rm -rf $(OBJ)
-					rm -rf $(OBJSHARED)
+all: $(NAME)
 
-fclean		:		clean
-					rm -rf ../bin/$(NAME)
+$(NAME):	$(OBJ)
+			$(CC) -o $(NAME) $(OBJ) $(CPPFLAGS) $(WALL) $(EXT)
+			mv $(NAME) ../bin/
 
-re			:		fclean all
+clean:
+		rm -rf $(OBJ)
+		rm -rf $(OBJSHARED)
 
-.PHONY		:		all clean fclean re
+fclean: clean
+		rm -rf ../bin/$(NAME)
+
+re:	fclean all
+
+.PHONY:	all clean fclean re

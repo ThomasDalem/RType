@@ -10,3 +10,9 @@ r-type_client
 *.rar
 *.zip
 *.tar
+
+# Env
+*.o
+*.gcno
+*.gcda
+vgcore.*
