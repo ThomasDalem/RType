@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "ErrorHandler.hpp"
 #include "WindowHandler.hpp"
 
 using namespace std;
@@ -19,18 +20,6 @@ vector<string> getArgs(char **av) {
     for (size_t i = 0; av && av[i]; i ++)
         args.push_back(string(av[i]));
     return args;
-}
-
-bool isDisplayEnv(char **env) {
-    vector<string> myEnv = getArgs(env);
-
-    if (myEnv.size() == 0)
-        return false;
-    for (size_t i = 0; i < myEnv.size(); i ++) {
-        if (string(env[i]).find("DISPLAY=:") != string::npos)
-            return true;
-    }
-    return false;
 }
 
 int main(int ac, char **av, char **env) {

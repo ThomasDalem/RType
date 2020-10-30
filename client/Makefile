@@ -9,8 +9,12 @@
 NAME = r-type_client
 
 SRC = 	main.cpp				\
-		src/Client.cpp			\
+		\
+		src/ImageSFML.cpp		\
+		\
 		src/BackgroundSFML.cpp	\
+		src/Client.cpp			\
+		src/ErrorHandler.cpp	\
 		src/Player.cpp			\
 		src/VMonster.cpp		\
 		src/WindowHandler.cpp	\
