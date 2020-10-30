@@ -21,6 +21,7 @@ class Player {
 
     private:
         string _name;
+        size_t health;
 
     protected:
 };

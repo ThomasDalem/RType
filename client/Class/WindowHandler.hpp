@@ -8,6 +8,7 @@
 #include "Sfml.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
+#include "BackgroundSFML.hpp"
 
 using namespace std;
 class WindowHandler {
@@ -24,6 +25,7 @@ class WindowHandler {
         size_t getWidth(void) const;
         string getTitle(void) const;
         size_t getHeight(void) const;
+        Background *getBackground(void) const;
 
         //Graphics Data
         void rmText(size_t row);
@@ -40,6 +42,7 @@ class WindowHandler {
         string _title;
         size_t _width;
         size_t _height;
+        Background *_background;
 
         vector<shared_ptr<TextSfml>> _texts;
         shared_ptr<sf::RenderWindow> _window;
