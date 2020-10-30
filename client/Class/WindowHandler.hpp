@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
 using namespace std;
@@ -14,24 +15,33 @@ class WindowHandler {
         WindowHandler(size_t width, size_t height, string name, size_t fps = 60);
         ~WindowHandler();
 
-        void setFramerate(size_t fps) const;
-
+        //Setter
         void setTitle(string title);
         void setWidth(size_t width);
         void setHeight(size_t height);
 
+        //Getter
         size_t getWidth(void) const;
         string getTitle(void) const;
         size_t getHeight(void) const;
 
+        //Graphics Data
+        void rmText(size_t row);
+        void rmImage(size_t row);
+        void addText(TextSfml news);
+        void addImage(ImageSFML news);
+
+        //Window data
         bool isOpen(void) const;
         void display(void) const;
+        void setFramerate(size_t fps) const;
 
     private:
+        string _title;
         size_t _width;
         size_t _height;
-        string _title;
 
+        vector<shared_ptr<TextSfml>> _texts;
         shared_ptr<sf::RenderWindow> _window;
         vector<shared_ptr<ImageSFML>> _images;
 

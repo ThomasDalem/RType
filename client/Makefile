@@ -11,6 +11,7 @@ NAME = r-type_client
 SRC = 	main.cpp				\
 		\
 		src/ImageSFML.cpp		\
+		src/TextSFML.cpp		\
 		\
 		src/BackgroundSFML.cpp	\
 		src/Client.cpp			\
