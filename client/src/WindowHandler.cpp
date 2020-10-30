@@ -19,7 +19,7 @@ void WindowHandler::display(void) const {
 void WindowHandler::rmText(size_t row) {
     size_t i = 0;
 
-    for (; i < this->_texts.size() && i < row; i ++);
+    for (; i < _texts.size() && i < row; i ++);
     _texts.erase(_texts.begin() + i);
 }
 

@@ -22,8 +22,7 @@ vector<string> getArgs(char **av) {
     return args;
 }
 
-int main(int ac, char **av, char **env) {
-    vector<string> args = getArgs(av);
+void core(vector<string> av) {
     WindowHandler windowhdl(1200, 600, "R-Type");
 
     windowhdl.setFramerate(50);
@@ -31,5 +30,13 @@ int main(int ac, char **av, char **env) {
         windowhdl.display();
     }
     windowhdl.~WindowHandler();
+}
+
+int main(int ac, char **argv, char **env) {
+    vector<string> av = getArgs(argv);
+
+    if (!ErrorHandler().isDisplayEnv(env))
+        return 84;
+    core(av);
     return 0;
 }

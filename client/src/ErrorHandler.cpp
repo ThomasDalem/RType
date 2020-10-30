@@ -4,6 +4,9 @@
 #include "ErrorHandler.hpp"
 
 using namespace std;
+ErrorHandler::ErrorHandler() {}
+ErrorHandler::~ErrorHandler() {}
+
 static vector<string> getArgs(char **av) {
     vector<string> args;
 
