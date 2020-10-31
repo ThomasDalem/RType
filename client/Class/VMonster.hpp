@@ -25,6 +25,7 @@ class VMonster {
         void shoot(void);
 
     private:
+        size_t id;
         size_t health;
         shared_ptr<ImageSFML> _image;
 
