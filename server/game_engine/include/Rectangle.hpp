@@ -10,13 +10,15 @@
 
 #include <iostream>
 
-struct Rectangle
-{
-    size_t x;
-    size_t y;
-    size_t L;
-    size_t l;
-};
+namespace game_engine {
+    struct Rectangle
+    {
+        size_t x;
+        size_t y;
+        size_t L;
+        size_t l;
+    };
+}
 
 #endif /* !RECTANGLE_HPP_ */
 

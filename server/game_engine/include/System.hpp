@@ -10,13 +10,15 @@
 
 #include <iostream>
 
-class System {
-    public:
-        System();
-        ~System();
+namespace game_engine {
+    class System {
+        public:
+            System();
+            ~System();
 
-    protected:
-    private:
-};
+        protected:
+        private:
+    };
+}
 
 #endif /* !SYSTEM_HPP_ */

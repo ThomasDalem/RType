@@ -2,15 +2,11 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-PAR-5-1-rtype-romeo.talovici
 ** File description:
-** Sytem
+** PowerUp
 */
 
-#include "System.hpp"
+#include "PowerUp.hpp"
 
-System::System()
-{
-}
-
-System::~System()
+game_engine::PowerUp::PowerUp()
 {
 }

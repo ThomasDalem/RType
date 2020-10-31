@@ -46,14 +46,14 @@ all: $(NAME)
 
 $(NAME):	$(OBJ)
 			$(CC) -o $(NAME) $(OBJ) $(CPPFLAGS) $(WALL) $(EXT)
-			mv $(NAME) ../bin/
+			mv $(NAME) ../
 
 clean:
 		rm -rf $(OBJ)
 		rm -rf $(OBJSHARED)
 
 fclean: clean
-		rm -rf ../bin/$(NAME)
+		rm -rf ../$(NAME)
 
 re:	fclean all
 

@@ -15,8 +15,15 @@
 #include <string>
 #include <fstream>
 
-struct Health
-{
-    size_t healthPoint;
-};
+namespace game_engine {
+    struct Health
+    {
+        Health(size_t healthPoint_ct)
+        : healthPoint(healthPoint_ct)
+        {}
+
+        size_t healthPoint;
+    };
+}
+
 #endif /* !HEALTH_HPP_ */

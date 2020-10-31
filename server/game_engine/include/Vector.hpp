@@ -10,9 +10,12 @@
 
 #include <iostream>
 
-struct Vector {
-    size_t x;
-    size_t y;
-};
+namespace game_engine {
+    struct Vector {
+        size_t x;
+        size_t y;
+    };
+}
+
 #endif /* !VECTOR_HPP_ */
 

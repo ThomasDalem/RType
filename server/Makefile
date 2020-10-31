@@ -5,11 +5,20 @@
 ## Makefile
 ##
 
+GAME_ENGINE_PATH	=	game_engine/src
 
 NAME		=		r-type_server
 
-SRC			=		main.cpp				\
-					src/Server.cpp			\
+SRC			=		main.cpp											\
+					src/Server.cpp										\
+					$(GAME_ENGINE_PATH)/System.cpp						\
+					$(GAME_ENGINE_PATH)/Entities/Bullet.cpp				\
+					$(GAME_ENGINE_PATH)/Entities/DestroyableTile.cpp	\
+					$(GAME_ENGINE_PATH)/Entities/Enemy.cpp				\
+					$(GAME_ENGINE_PATH)/Entities/Environment.cpp		\
+					$(GAME_ENGINE_PATH)/Entities/Player.cpp				\
+					$(GAME_ENGINE_PATH)/Entities/PowerUp.cpp			\
+					$(GAME_ENGINE_PATH)/Entities/StageObstacle.cpp		\
 
 OBJSHARED	=		Server.o				\
 
@@ -17,7 +26,7 @@ OBJ 		=		$(SRC:.cpp=.o)			\
 
 CC			= 		g++
 
-CPPFLAGS	=		-I./include
+CPPFLAGS	=		-I./game_engine/include -I./Class -I./game_engine/include/Entities
 
 WALL 		=		-Wall -Wextra -Werror
 
@@ -25,14 +34,14 @@ all			:		$(NAME)
 
 $(NAME)		:		$(OBJ)
 					$(CC) -o $(NAME) $(OBJ) $(CPPFLAGS) $(WALL)
-					mv $(NAME) ../bin/
+					mv $(NAME) ../
 
 clean		:
 					rm -rf $(OBJ)
 					rm -rf $(OBJSHARED)
 
 fclean		:		clean
-					rm -rf ../bin/$(NAME)
+					rm -rf ../$(NAME)
 
 re			:		fclean all
 
