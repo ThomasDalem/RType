@@ -16,3 +16,11 @@ r-type_client
 *.gcno
 *.gcda
 vgcore.*
+
+# Build
+conan.lock
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
+build/*
