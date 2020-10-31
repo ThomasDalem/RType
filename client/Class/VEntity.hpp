@@ -9,6 +9,8 @@
 #include "ImageSFML.hpp"
 
 using namespace std;
+enum Type {Monster, Player, Bullet, Obstacle};
+
 class VEntitie {
     public:
         VEntitie();
@@ -16,6 +18,7 @@ class VEntitie {
 
     private:
         size_t id;
+        Type _type;
         shared_ptr<ImageSFML> _image;
 
     protected:
