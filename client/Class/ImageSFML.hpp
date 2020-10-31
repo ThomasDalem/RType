@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-PAR-5-1-rtype-romeo.talovici
+** File description:
+** Image SFML
+*/
+
 #ifndef __IMAGE__
 #define __IMAGE__
 

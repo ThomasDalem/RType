@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-PAR-5-1-rtype-romeo.talovici
+** File description:
+** Window Handker
+*/
+
 #ifndef __WindowHandler__
 #define __WindowHandler__
 

@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** B-CPP-501-PAR-5-1-rtype-romeo.talovici
+** File description:
+** Text SFML
+*/
+
 #include "TextSFML.hpp"
 
 TextSfml::TextSfml(std::string value, std::string font, sf::Color color = sf::Color::White, int x = 0, int y = 0) {
