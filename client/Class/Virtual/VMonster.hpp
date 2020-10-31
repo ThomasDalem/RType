@@ -20,7 +20,7 @@ class VMonster : VEntitie {
         VMonster();
         ~VMonster();
 
-        bool operator=(VMonster another);
+        void operator=(VMonster another);
         bool operator==(VMonster another);
 
         void shoot(void);

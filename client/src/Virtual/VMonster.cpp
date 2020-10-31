@@ -10,7 +10,7 @@
 VMonster::VMonster() {}
 VMonster::~VMonster() {}
 
-bool VMonster::operator=(VMonster another) {
+void VMonster::operator=(VMonster another) {
     health = another.health;
     _image = make_shared<ImageSFML>(another._image->getPath());
 }
