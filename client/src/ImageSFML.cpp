@@ -9,19 +9,20 @@
 #include "ImageSFML.hpp"
 
 using namespace std;
-
-ImageSFML::ImageSFML(string path)
-{
+ImageSFML::ImageSFML(string path) {
+    _path = path;
     _texture = new sf::Texture;
 
     if (!_texture->loadFromFile(path))
         cout << "Loading Ressource Failed" << endl;
     _sprite.setTexture(*_texture);
 }
+ImageSFML::~ImageSFML() {}
 
-void ImageSFML::setTexture(string path)
-{
+void ImageSFML::setTexture(string path) {
     if (!_texture->loadFromFile(path))
         cout << "Loading Ressource Failed" << endl;
     _sprite.setTexture(*_texture);
 }
+
+string ImageSFML::getPath() const {return _path;}

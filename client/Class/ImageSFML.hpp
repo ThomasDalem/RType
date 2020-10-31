@@ -20,13 +20,15 @@ class ImageSFML {
         ~ImageSFML() {}
 
         void destroyTexture();
+        string getPath() const;
         void setTexture(string filepath);
         void setPosition(sf::Vector2f pos) { _sprite.setPosition(pos); }
         sf::Sprite getSprite() const { return (_sprite); }
 
     private:
-        sf::Texture *_texture;
+        string _path;
         sf::Sprite _sprite;
+        sf::Texture *_texture;
 };
 
 #endif

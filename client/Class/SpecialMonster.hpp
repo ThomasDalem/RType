@@ -2,31 +2,31 @@
 ** EPITECH PROJECT, 2020
 ** B-CPP-501-PAR-5-1-rtype-romeo.talovici
 ** File description:
-** Virtual Monster
+** Monster
 */
 
-#ifndef __VirtualMonster__
-#define __VirtualMonster__
+#ifndef __SpecialMonster__
+#define __SpecialMonster__
 
 #include <memory>
 #include <iostream>
 
-#include "VEntity.hpp"
+#include "VMonster.hpp"
 #include "ImageSFML.hpp"
 
 using namespace std;
-class VMonster : VEntitie {
+class SMonster : VMonster {
     public:
-        VMonster();
-        ~VMonster();
+        SMonster();
+        ~SMonster();
 
-        bool operator=(VMonster another);
-        bool operator==(VMonster another);
+        bool operator=(SMonster another);
+        bool operator==(SMonster another);
 
         void shoot(void);
 
     private:
-        // size_t id;
+        size_t id;
         size_t health;
         shared_ptr<ImageSFML> _image;
 
