@@ -10,14 +10,19 @@ NAME = r-type_client
 
 SRC = 	main.cpp				\
 		\
-		src/ImageSFML.cpp		\
-		src/TextSFML.cpp		\
+		src/SFML/ImageSFML.cpp		\
+		src/SFML/TextSFML.cpp		\
+		src/SFML/BackgroundSFML.cpp	\
 		\
-		src/BackgroundSFML.cpp	\
+		src/Entities/Player.cpp		\
+		src/Entities/Monster.cpp	\
+		src/Entities/SMonster.cpp	\
+		\
+		src/Virtual/VMonster.cpp	\
+		src/Virtual/VEntitie.cpp	\
+		\
 		src/Client.cpp			\
 		src/ErrorHandler.cpp	\
-		src/Player.cpp			\
-		src/VMonster.cpp		\
 		src/WindowHandler.cpp	\
 
 
@@ -27,7 +32,11 @@ OBJ =	$(SRC:.cpp=.o)	\
 
 CC = g++
 
-CPPFLAGS = -I./include -I./Class
+CPPFLAGS =	-I./include			\
+			-I./Class			\
+			-I./Class/Entities	\
+			-I./Class/SFML		\
+			-I./Class/Virtual	\
 
 EXT = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system
 

@@ -17,7 +17,7 @@ using namespace std;
 class ImageSFML {
     public:
         ImageSFML(string filepath);
-        ~ImageSFML() {}
+        ~ImageSFML();
 
         void destroyTexture();
         string getPath() const;
