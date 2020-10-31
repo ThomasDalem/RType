@@ -8,6 +8,8 @@
 #ifndef SYSTEM_HPP_
 #define SYSTEM_HPP_
 
+#include <iostream>
+
 class System {
     public:
         System();
