@@ -26,7 +26,7 @@ void WindowHandler::display(void) const {
     for (size_t i = 0; i < _images.size(); i ++)
         _window->draw(*_images[i]->getSprite());
     for (size_t i = 0; i < _texts.size(); i ++)
-        _window->draw(_texts[i]->_data);
+        _window->draw(*_texts[i]->getData());
 
     _window->display();
     _window->clear();
@@ -46,23 +46,22 @@ void WindowHandler::rmImage(size_t row) {
     _images.erase(_images.begin() + i);
 }
 
-void WindowHandler::isEvent(void) {
+void WindowHandler::isEvent(Player &player) {
     sf::Event event;
 
     while (_window->pollEvent(event)) {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed) {
-            cout << "[SEND] DISCONNECTED" << endl;
-            _window->close();
-        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-            cout << "[SEND] HAUT" << endl;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
+            _window->close(); // [SEND] DISCONNECTED
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y - 5)); // [SEND] HAUT
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            cout << "[SEND] BAS" << endl;
+            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y + 5)); // [SEND] BAS
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            cout << "[SEND] DROITE" << endl;
+            player.setPosition(sf::Vector2f(player.getPosition().x + 5, player.getPosition().y)); // [SEND] DROITE
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            cout << "[SEND] GAUCHE" << endl;
+            player.setPosition(sf::Vector2f(player.getPosition().x - 5, player.getPosition().y)); // [SEND] GAUCHE
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            cout << "[SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !" << endl;
+            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y)); // [SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !
     }
 }
 
@@ -74,6 +73,7 @@ void WindowHandler::setTitle(string title) {this->_title = title;}
 bool WindowHandler::isOpen(void) const {return _window->isOpen();}
 void WindowHandler::setHeight(size_t height) {this->_height = height;}
 Background *WindowHandler::getBackground(void) const {return this->_background;}
+shared_ptr<sf::RenderWindow> WindowHandler::getWindow(void) const {return _window;}
 void WindowHandler::setFramerate(size_t fps) const {_window->setFramerateLimit(fps);}
 void WindowHandler::addText(TextSfml news) {_texts.push_back(make_shared<TextSfml>(news));}
 void WindowHandler::addImage(ImageSFML news) {_images.push_back(make_shared<ImageSFML>(news));}

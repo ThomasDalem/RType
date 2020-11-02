@@ -19,18 +19,18 @@ Background::~Background() {}
 void Background::move(void) {
     if (this->_movement) {
         this->_position -= 3;
-        if (this->_position < _refresh) {
+        if (this->_position < _refresh)
             this->_position = 0;
-            cout << "Background Update" << endl;
-        }
         _image->setPosition(sf::Vector2f(_position, 0));
     }
 }
-void Background::stop(void) const {_movement == false;}
+
 void Background::speedUp(int sp) {
     if (sp == 0)
         _movement = false;
     else
         _refresh = sp;
 }
+
+void Background::stop(void) {_movement = false;}
 shared_ptr<ImageSFML> Background::getImage(void) const {return _image;}

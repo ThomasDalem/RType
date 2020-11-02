@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "Player.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 #include "BackgroundSFML.hpp"
@@ -33,6 +34,7 @@ class WindowHandler {
         string getTitle(void) const;
         size_t getHeight(void) const;
         Background *getBackground(void) const;
+        shared_ptr<sf::RenderWindow> getWindow(void) const;
 
         //Graphics Data
         void rmText(size_t row);
@@ -41,9 +43,9 @@ class WindowHandler {
         void addImage(ImageSFML news);
 
         //Window data
-        void isEvent(void);
         bool isOpen(void) const;
         void display(void) const;
+        void isEvent(Player &player);
         void setFramerate(size_t fps) const;
 
     private:
