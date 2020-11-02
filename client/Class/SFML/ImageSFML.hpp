@@ -22,13 +22,13 @@ class ImageSFML {
         ImageSFML(string filepath);
         ~ImageSFML();
 
-        void destroyTexture();
-        string getPath() const;
+        void destroyTexture(void);
+        string getPath(void) const;
         void setTexture(string filepath);
         void setScale(sf::Vector2f size);
         void setSprite(sf::Sprite newone);
         void setPosition(sf::Vector2f pos);
-        shared_ptr<sf::Sprite> getSprite() const;
+        shared_ptr<sf::Sprite> getSprite(void) const;
 
     private:
         string _path;

@@ -13,6 +13,7 @@ Player::Player() {
 
     _image->getSprite()->setTextureRect(sf::IntRect(0, 0, 33, 17));
     _image->getSprite()->setScale(sf::Vector2f(3, 3));
+    _image->getSprite()->setPosition(sf::Vector2f(250, 250));
 }
 Player::~Player() {}
 

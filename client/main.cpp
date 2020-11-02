@@ -25,10 +25,12 @@ vector<string> getArgs(char **av) {
 
 void core(vector<string> av) {
     Player player;
+    TextSfml Score("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
     WindowHandler windowhdl(1200, 600, "R-Type");
 
     player.setName("JustRoméo");
     windowhdl.setFramerate(50);
+    windowhdl.addText(Score);
     windowhdl.addImage(player.getImage());
     while (windowhdl.isOpen()) {
         windowhdl.isEvent();
