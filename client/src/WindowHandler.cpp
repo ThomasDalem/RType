@@ -51,26 +51,26 @@ void WindowHandler::isEvent(Player &player) {
 
     while (_window->pollEvent(event)) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed) {
-            cout << "[SEND] DISCONNECTED" << endl;
+            // [SEND] DISCONNECTED
             _window->close();
         } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
-            cout << "[SEND] HAUT" << endl;
+            // [SEND] HAUT
             player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y - 5));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-            cout << "[SEND] BAS" << endl;
+            // [SEND] BAS
             player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y + 5));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            cout << "[SEND] DROITE" << endl;
+            // [SEND] DROITE
             player.setPosition(sf::Vector2f(player.getPosition().x + 5, player.getPosition().y));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-            cout << "[SEND] GAUCHE" << endl;
+            // [SEND] GAUCHE
             player.setPosition(sf::Vector2f(player.getPosition().x - 5, player.getPosition().y));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-            cout << "[SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !" << endl;
+            // [SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !
             player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y));
         }
     }

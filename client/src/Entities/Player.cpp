@@ -19,6 +19,7 @@ Player::Player() {
 Player::~Player() {}
 
 void Player::setPosition(sf::Vector2f newpos) {
+    newpos = newpos.x < 0 ? sf::Vector2f(0, newpos.y) : (newpos.y < 0 ? sf::Vector2f(newpos.x, 0) : newpos);
     _pos = newpos;
     _image->getSprite()->setPosition(_pos);
 }
