@@ -17,17 +17,18 @@
 using namespace std;
 class Background {
     public:
-        Background(int refresh = 1920);
+        Background(int refresh = 0);
         ~Background();
 
         void move(void);
         void stop(void) const;
-        void speedUp(size_t sp = 1) const;
+        void speedUp(int sp = 0);
         shared_ptr<ImageSFML> getImage(void) const;
 
     private:
         int _refresh;
         int _position;
+        bool _movement;
         shared_ptr<ImageSFML> _image;
 
     protected:

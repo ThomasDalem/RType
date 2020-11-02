@@ -20,9 +20,14 @@ WindowHandler::~WindowHandler() {
 }
 
 void WindowHandler::display(void) const {
-    _window->draw(_background->getImage()->getSprite());
-
     _background->move();
+
+    _window->draw(_background->getImage()->getSprite());
+    for (size_t i = 0; i < _images.size(); i ++)
+        _window->draw(_images[i]->getSprite());
+    for (size_t i = 0; i < _texts.size(); i ++)
+        _window->draw(_texts[i]->_data);
+
     _window->display();
     _window->clear();
 }
