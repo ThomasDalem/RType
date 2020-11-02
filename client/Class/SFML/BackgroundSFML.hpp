@@ -21,7 +21,7 @@ class Background {
         ~Background();
 
         void move(void);
-        void stop(void) const;
+        void stop(void);
         void speedUp(int sp = 0);
         shared_ptr<ImageSFML> getImage(void) const;
 

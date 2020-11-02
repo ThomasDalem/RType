@@ -14,6 +14,8 @@ SRC = 	main.cpp				\
 		src/SFML/TextSFML.cpp		\
 		src/SFML/BackgroundSFML.cpp	\
 		\
+		src/Menu/Main.cpp			\
+		\
 		src/Entities/Player.cpp		\
 		src/Entities/Monster.cpp	\
 		src/Entities/SMonster.cpp	\
@@ -37,6 +39,7 @@ CPPFLAGS =	-I./include			\
 			-I./Class/Entities	\
 			-I./Class/SFML		\
 			-I./Class/Virtual	\
+			-I./Class/Menu		\
 
 EXT = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system
 

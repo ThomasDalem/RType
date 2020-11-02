@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
 using namespace std;
@@ -26,6 +27,7 @@ class Player {
         size_t getHealth(void) const;
         void setImage(ImageSFML news);
         ImageSFML getImage(void) const;
+        TextSfml getNameText(void) const;
         void setPosition(sf::Vector2f newpos);
         sf::Vector2f getPosition(void) const;
 
@@ -34,6 +36,7 @@ class Player {
         size_t _health;
         sf::Vector2f _pos;
         shared_ptr<ImageSFML> _image;
+        shared_ptr<TextSfml> _textname;
 
     protected:
 };
