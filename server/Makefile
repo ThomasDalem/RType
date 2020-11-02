@@ -12,6 +12,8 @@ NAME		=		r-type_server
 SRC			=		main.cpp											\
 					src/Server.cpp										\
 					$(GAME_ENGINE_PATH)/System.cpp						\
+					$(GAME_ENGINE_PATH)/MoveSystem.cpp					\
+					$(GAME_ENGINE_PATH)/DamageSystem.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/Bullet.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/DestroyableTile.cpp	\
 					$(GAME_ENGINE_PATH)/Entities/Enemy.cpp				\
