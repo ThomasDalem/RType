@@ -18,7 +18,7 @@
 namespace game_engine {
     class Bullet : public IEntities {
         public:
-            Bullet();
+            Bullet(bool _damagePlayer, Vector _direction, Vector _position);
             ~Bullet() {};
 
             int getUniqueID() const {return (_uniqueID);};

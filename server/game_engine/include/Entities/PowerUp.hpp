@@ -17,7 +17,7 @@
 namespace game_engine {
     class PowerUp : public IEntities {
         public:
-            PowerUp();
+            PowerUp(Vector _position);
             ~PowerUp() {};
 
             int getUniqueID() const {return (_uniqueID);};
