@@ -33,7 +33,7 @@ void core(vector<string> av) {
     windowhdl.addText(Score);
     windowhdl.addImage(player.getImage());
     while (windowhdl.isOpen()) {
-        windowhdl.isEvent();
+        windowhdl.isEvent(player);
 
         windowhdl.display();
     }

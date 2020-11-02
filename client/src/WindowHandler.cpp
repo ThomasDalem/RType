@@ -46,23 +46,33 @@ void WindowHandler::rmImage(size_t row) {
     _images.erase(_images.begin() + i);
 }
 
-void WindowHandler::isEvent(void) {
+void WindowHandler::isEvent(Player &player) {
     sf::Event event;
 
     while (_window->pollEvent(event)) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed) {
             cout << "[SEND] DISCONNECTED" << endl;
             _window->close();
-        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
             cout << "[SEND] HAUT" << endl;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y - 5));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
             cout << "[SEND] BAS" << endl;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y + 5));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
             cout << "[SEND] DROITE" << endl;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            player.setPosition(sf::Vector2f(player.getPosition().x + 5, player.getPosition().y));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
             cout << "[SEND] GAUCHE" << endl;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            player.setPosition(sf::Vector2f(player.getPosition().x - 5, player.getPosition().y));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             cout << "[SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !" << endl;
+            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y));
+        }
     }
 }
 
