@@ -9,6 +9,7 @@
 #define PLAYER_HPP_
 
 #include "IEntities.hpp"
+#include "../PlayerColor.hpp"
 #include "../Components/Transform.hpp"
 #include "../Components/Sound.hpp"
 #include "../Components/Health.hpp"
@@ -19,7 +20,7 @@
 namespace game_engine {
     class Player : public IEntities {
         public:
-            Player();
+            Player(Vector _position, PlayerColor playerColor);
             ~Player() {};
 
             int getUniqueID() const {return (_uniqueID);};

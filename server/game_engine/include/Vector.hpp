@@ -12,8 +12,11 @@
 
 namespace game_engine {
     struct Vector {
-        size_t x;
-        size_t y;
+        Vector(int _x, int _y)
+        : x(_x),y(_y)
+        {}
+        int x;
+        int y;
     };
 }
 

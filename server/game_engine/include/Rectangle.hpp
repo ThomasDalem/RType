@@ -13,10 +13,13 @@
 namespace game_engine {
     struct Rectangle
     {
-        size_t x;
-        size_t y;
-        size_t L;
-        size_t l;
+        Rectangle(size_t x, size_t y, size_t L, size_t l)
+        : _x(x), _y(y), _L(L), _l(l)
+        {}
+        size_t _x;
+        size_t _y;
+        size_t _L;
+        size_t _l;
     };
 }
 

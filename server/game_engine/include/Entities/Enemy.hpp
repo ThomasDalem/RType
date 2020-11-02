@@ -19,7 +19,7 @@
 namespace game_engine {
     class Enemy : public IEntities {
         public:
-            Enemy();
+            Enemy(Vector _position);
             ~Enemy() {};
 
             int getUniqueID() const {return (_uniqueID);};

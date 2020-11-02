@@ -18,7 +18,7 @@
 namespace game_engine {
     class DestroyableTile : public IEntities {
         public:
-            DestroyableTile();
+            DestroyableTile(Vector _position);
             ~DestroyableTile() {};
 
             int getUniqueID() const {return (_uniqueID);};
