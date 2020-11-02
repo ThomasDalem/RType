@@ -13,11 +13,11 @@
 namespace game_engine {
     struct Transform
     {
-        Transform(Vector postion_ct, float rotation_ct, Vector direction_ct)
-        : postion(postion_ct), rotation(rotation_ct), direction(direction_ct)
+        Transform(Vector position_ct, float rotation_ct, Vector direction_ct)
+        : position(position_ct), rotation(rotation_ct), direction(direction_ct), oldPosition(position_ct)
         {}
-
-        Vector postion;
+        Vector oldPosition;
+        Vector position;
         float rotation;
         Vector direction;
     };
