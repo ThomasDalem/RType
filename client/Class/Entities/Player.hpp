@@ -8,7 +8,10 @@
 #ifndef __Player__
 #define __Player__
 
+#include <memory>
 #include <iostream>
+
+#include "ImageSFML.hpp"
 
 using namespace std;
 class Player {
@@ -18,10 +21,15 @@ class Player {
 
         void setName(string str);
         string getName(void) const;
+        void setHealth(size_t hlth);
+        size_t getHealth(void) const;
+        void setImage(ImageSFML news);
+        ImageSFML getImage(void) const;
 
     private:
         string _name;
-        size_t health;
+        size_t _health;
+        shared_ptr<ImageSFML> _image;
 
     protected:
 };

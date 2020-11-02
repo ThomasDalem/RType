@@ -22,9 +22,9 @@ WindowHandler::~WindowHandler() {
 void WindowHandler::display(void) const {
     _background->move();
 
-    _window->draw(_background->getImage()->getSprite());
+    _window->draw(*_background->getImage()->getSprite());
     for (size_t i = 0; i < _images.size(); i ++)
-        _window->draw(_images[i]->getSprite());
+        _window->draw(*_images[i]->getSprite());
     for (size_t i = 0; i < _texts.size(); i ++)
         _window->draw(_texts[i]->_data);
 
@@ -44,6 +44,26 @@ void WindowHandler::rmImage(size_t row) {
 
     for (; i < this->_images.size() && i < row; i ++);
     _images.erase(_images.begin() + i);
+}
+
+void WindowHandler::isEvent(void) {
+    sf::Event event;
+
+    while (_window->pollEvent(event)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed) {
+            cout << "[SEND] DISCONNECTED" << endl;
+            _window->close();
+        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            cout << "[SEND] HAUT" << endl;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            cout << "[SEND] BAS" << endl;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+            cout << "[SEND] DROITE" << endl;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+            cout << "[SEND] GAUCHE" << endl;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+            cout << "[SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !" << endl;
+    }
 }
 
 size_t WindowHandler::getWidth(void) const {return _width;}

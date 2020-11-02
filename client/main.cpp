@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "Player.hpp"
 #include "ErrorHandler.hpp"
 #include "WindowHandler.hpp"
 
@@ -23,10 +24,15 @@ vector<string> getArgs(char **av) {
 }
 
 void core(vector<string> av) {
+    Player player;
     WindowHandler windowhdl(1200, 600, "R-Type");
 
+    player.setName("JustRoméo");
     windowhdl.setFramerate(50);
+    windowhdl.addImage(player.getImage());
     while (windowhdl.isOpen()) {
+        windowhdl.isEvent();
+
         windowhdl.display();
     }
     windowhdl.~WindowHandler();

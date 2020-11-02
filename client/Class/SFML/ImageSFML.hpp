@@ -9,9 +9,12 @@
 #define __IMAGE__
 
 #include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+
+#include <memory>
+#include <iostream>
 
 using namespace std;
 class ImageSFML {
@@ -22,13 +25,15 @@ class ImageSFML {
         void destroyTexture();
         string getPath() const;
         void setTexture(string filepath);
-        void setPosition(sf::Vector2f pos) { _sprite.setPosition(pos); }
-        sf::Sprite getSprite() const { return (_sprite); }
+        void setScale(sf::Vector2f size);
+        void setSprite(sf::Sprite newone);
+        void setPosition(sf::Vector2f pos);
+        shared_ptr<sf::Sprite> getSprite() const;
 
     private:
         string _path;
-        sf::Sprite _sprite;
-        sf::Texture *_texture;
+        shared_ptr<sf::Sprite> _sprite;
+        shared_ptr<sf::Texture> _texture;
 };
 
 #endif

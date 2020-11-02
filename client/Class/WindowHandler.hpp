@@ -41,6 +41,7 @@ class WindowHandler {
         void addImage(ImageSFML news);
 
         //Window data
+        void isEvent(void);
         bool isOpen(void) const;
         void display(void) const;
         void setFramerate(size_t fps) const;
