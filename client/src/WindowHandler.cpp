@@ -11,7 +11,7 @@ WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fp
     _width = 0;
     _height = 0;
     _window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 600), "R-Type");
-    _background = new Background();
+    _background = new Background(-1915);
 }
 
 WindowHandler::~WindowHandler() {
@@ -22,6 +22,7 @@ WindowHandler::~WindowHandler() {
 void WindowHandler::display(void) const {
     _window->draw(_background->getImage()->getSprite());
 
+    _background->move();
     _window->display();
     _window->clear();
 }

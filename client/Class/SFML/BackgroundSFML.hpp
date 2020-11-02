@@ -11,20 +11,23 @@
 #include <memory>
 #include <iostream>
 
+#include "Sfml.hpp"
 #include "ImageSFML.hpp"
 
 using namespace std;
 class Background {
     public:
-        Background();
+        Background(int refresh = 1920);
         ~Background();
 
+        void move(void);
         void stop(void) const;
-        void move(void) const;
         void speedUp(size_t sp = 1) const;
         shared_ptr<ImageSFML> getImage(void) const;
 
     private:
+        int _refresh;
+        int _position;
         shared_ptr<ImageSFML> _image;
 
     protected:
