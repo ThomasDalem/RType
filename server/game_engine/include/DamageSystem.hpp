@@ -11,6 +11,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include<tuple>
 #include "Components/Collision.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Health.hpp"
@@ -23,7 +24,10 @@ namespace game_engine
     public:
         DamageSystem();
         ~DamageSystem();
-        void moveSystem(std::map<EntitiesType, std::shared_ptr<Health>, std::shared_ptr<Collision>, std::shared_ptr<Transform>> map);
+        void damageSystem(std::map<int, std::tuple<EntitiesType, std::shared_ptr<Health>, std::shared_ptr<Collision>, std::shared_ptr<Transform>>> entitie,
+                        std::map<int, std::tuple<EntitiesType, std::shared_ptr<Health>, std::shared_ptr<Collision>, std::shared_ptr<Transform>>> bullet);
+        bool isCollision(std::shared_ptr<Collision> entitieCollision, std::shared_ptr<Transform> entitieTransform,
+                        std::shared_ptr<Collision> bulletCollision, std::shared_ptr<Transform> bulletTransform);
 
     protected:
     private:

@@ -15,9 +15,9 @@ game_engine::MoveSystem::~MoveSystem()
 {
 }
 
-void game_engine::MoveSystem::moveSystem(std::map<EntitiesType, std::shared_ptr<Transform>> map)
+void game_engine::MoveSystem::moveSystem(std::map<int, std::shared_ptr<Transform>> map)
 {
-    std::map<EntitiesType, std::shared_ptr<Transform>>::iterator iter;
+    std::map<int, std::shared_ptr<Transform>>::iterator iter;
 
     for (iter = map.begin(); iter != map.end(); ++iter) {
         iter->second->oldPosition = iter->second->position;

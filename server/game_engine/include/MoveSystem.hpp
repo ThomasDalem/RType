@@ -21,7 +21,7 @@ namespace game_engine
     public:
         MoveSystem();
         ~MoveSystem();
-        void moveSystem(std::map<EntitiesType, std::shared_ptr<Transform>> map);
+        void moveSystem(std::map<int, std::shared_ptr<Transform>> map);
 
     protected:
     private:
