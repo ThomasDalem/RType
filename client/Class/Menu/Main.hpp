@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "Button.hpp"
 
 using namespace std;
 class Mainmenu {
@@ -18,6 +19,7 @@ class Mainmenu {
     private:
         bool isMenu;
         string _name;
+        shared_ptr<Button> _play;
 
     protected:
 };
