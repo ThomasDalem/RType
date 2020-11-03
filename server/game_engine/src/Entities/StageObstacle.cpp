@@ -14,5 +14,8 @@ game_engine::StageObstacle::StageObstacle(Vector _position)
     _health = std::make_shared<Health>(1, false);
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 50, 50), false);
     _render = std::make_shared<Render>("./path_to_obstacle sprite", Rectangle(0, 0, 50, 50));
-    _entitesID = EntitiesType::StageObstacle;
+    _entitesID = EntitiesType::STAGEOBSTACLE;
+    _componentList.push_back(_transform);
+    _componentList.push_back(_collision);
+    _componentList.push_back(_render);
 }

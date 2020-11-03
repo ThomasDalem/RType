@@ -18,6 +18,7 @@ namespace game_engine
         COLLISION,
         RENDER,
     };
+
     class AComponents
     {
     public:

@@ -15,5 +15,7 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor)
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 4, 4), false);
     _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 0, 75, 45));
     _deathSound = std::make_shared<Sound>("./path_to_death_sound");
-    _entitesID = EntitiesType::Player;
+    _entitesID = EntitiesType::PLAYER;
+    _invincibility = 0;
+    _speedMultiplicator = 1;
 }

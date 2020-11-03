@@ -9,12 +9,13 @@
 #define MOVEENUM_HPP_
 
 namespace game_engine {
-    enum MoveDirection
+    enum InputEnum
     {
         MoveLeft = 0,
         MoveRight = 1,
         MoveUp = 2,
         MoveDown = 3,
+        Shoot = 4,
     };
 }
 

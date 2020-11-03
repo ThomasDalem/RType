@@ -16,11 +16,12 @@
 namespace game_engine {
     class Environment : public IEntities {
         public:
-            Environment();
+            Environment(Vector _position);
             ~Environment() {};
 
             int getUniqueID() const {return (_uniqueID);};
             EntitiesType getEntitiesID() const {return (_entitesID);};
+            std::vector<std::shared_ptr<AComponents>> getComponentList() const {return (_componentList);};
 
             std::shared_ptr<Transform> getTransform() const {return (_transform);};
             std::shared_ptr<Sound> getMusic() const {return (_music);};
@@ -34,6 +35,7 @@ namespace game_engine {
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Sound> _music;
             std::shared_ptr<Render> _render;
+            std::vector<std::shared_ptr<AComponents>> _componentList;
     };
 }
 

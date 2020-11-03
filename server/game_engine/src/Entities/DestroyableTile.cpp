@@ -14,5 +14,10 @@ game_engine::DestroyableTile::DestroyableTile(Vector _position)
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 100, 50), true);
     _render = std::make_shared<Render>("./path_to_destroyable_tiles sprite", Rectangle(0, 0, 100, 50));
     _deathSound = std::make_shared<Sound>("./path_to_destoryable_tiles_death_sound");
-    _entitesID = EntitiesType::DestroyableTile;
+    _entitesID = EntitiesType::DESTROYABLETILE;
+    _componentList.push_back(_transform);
+    _componentList.push_back(_health);
+    _componentList.push_back(_deathSound);
+    _componentList.push_back(_collision);
+    _componentList.push_back(_render);
 }

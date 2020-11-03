@@ -34,6 +34,12 @@ namespace game_engine
             position.y += _direction.y;
         }
         void setRotation(float newRotation) {rotation = newRotation;}
+
+        void resetToOldPosition() {
+            position.x = oldPosition.x;
+            position.y = oldPosition.y;
+        };
+
     private:
         Vector oldPosition;
         Vector position;

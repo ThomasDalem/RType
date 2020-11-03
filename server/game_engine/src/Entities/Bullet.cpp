@@ -18,5 +18,10 @@ game_engine::Bullet::Bullet(bool _damagePlayer, Vector _direction, Vector _posit
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 4, 4), _damagePlayer);
     _render = std::make_shared<Render>("./path_to_bullet sprite", Rectangle(0, 0, 5, 5));
     _fireSound = std::make_shared<Sound>("./path_to_fire_sound");
-    _entitesID = EntitiesType::Bullet;
+    _entitesID = EntitiesType::BULLET;
+    _componentList.push_back(_transform);
+    _componentList.push_back(_fireSound);
+    _componentList.push_back(_health);
+    _componentList.push_back(_collision);
+    _componentList.push_back(_render);
 }

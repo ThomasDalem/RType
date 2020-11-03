@@ -25,6 +25,7 @@ namespace game_engine {
 
             int getUniqueID() const {return (_uniqueID);};
             EntitiesType getEntitiesID() const {return (_entitesID);};
+            std::vector<std::shared_ptr<AComponents>> getComponentList() const {return (_componentList);};
 
             std::shared_ptr<Transform> getTransform() const {return (_transform);};
             std::shared_ptr<Sound> getDeathSound() const {return (_deathSound);};
@@ -32,6 +33,11 @@ namespace game_engine {
             std::shared_ptr<Collision> getCollision() const {return (_collision);};
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
+
+            float getInvincibility() const {return (_invincibility);};
+            float getSpeedMultiplicator() const {return (_speedMultiplicator);};
+            void setInvincibility(float invincibility) {_invincibility = invincibility;}
+            void setSpeedMultiplicator(float speedMultiplicateur) {_speedMultiplicator = speedMultiplicateur;}
 
         protected:
         private:
@@ -44,6 +50,10 @@ namespace game_engine {
             std::shared_ptr<Shoot> _shoot;
             std::shared_ptr<Collision> _collision;
             std::shared_ptr<Render> _render;
+            std::vector<std::shared_ptr<AComponents>> _componentList;
+
+            float _invincibility;
+            float _speedMultiplicator;
     };
 }
 
