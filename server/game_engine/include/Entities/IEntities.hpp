@@ -9,7 +9,9 @@
 #define IENTITIES_HPP_
 
 #include <memory>
+#include <vector>
 
+#include "../Components/AComponents.hpp"
 #include "../EntitiesEnum.hpp"
 
 namespace game_engine {
@@ -18,6 +20,7 @@ namespace game_engine {
             virtual ~IEntities() = default;
             virtual int getUniqueID() const = 0;
             virtual EntitiesType getEntitiesID() const = 0;
+            virtual std::vector<std::shared_ptr<AComponents>> getComponentList() const = 0;
     };
 }
 

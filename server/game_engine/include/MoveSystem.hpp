@@ -11,20 +11,24 @@
 #include <iostream>
 #include <map>
 #include <memory>
-#include "Components/Transform.hpp"
+#include <vector>
+#include "./Components/Transform.hpp"
 #include "EntitiesEnum.hpp"
+#include "Entities/IEntities.hpp"
 
 namespace game_engine
 {
     class MoveSystem
     {
     public:
-        MoveSystem();
+        MoveSystem(std::vector<std::shared_ptr<IEntities>> &list);
         ~MoveSystem();
-        void moveSystem(std::map<int, std::shared_ptr<Transform>> map);
+        void moveSystem();
 
     protected:
     private:
+        std::vector<std::shared_ptr<IEntities>> &_list;
+        //std::map<int, std::tuple<EntitiesType, std::shared_ptr<Transform>>> _map;
     };
 } // namespace game_engine
 

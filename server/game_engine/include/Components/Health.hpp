@@ -14,16 +14,26 @@
 #include <unordered_map>
 #include <string>
 #include <fstream>
+#include "AComponents.hpp"
 
-namespace game_engine {
-    struct Health
+namespace game_engine
+{
+    class Health : public AComponents
     {
-        Health(size_t healthPoint_ct)
-        : healthPoint(healthPoint_ct)
-        {}
+    public:
+        Health(size_t _healthPoint_ct, bool _isDamageable)
+            : healthPoint(_healthPoint_ct), isDamageable(_isDamageable)
+        {
+            type = ComponentType::HEALTH;
+        }
+        ~Health();
+        size_t getHealthPoint() {return healthPoint;}
+        bool getDamabeable() {return isDamageable;}
 
+    private:
         size_t healthPoint;
+        bool isDamageable;
     };
-}
+} // namespace game_engine
 
 #endif /* !HEALTH_HPP_ */

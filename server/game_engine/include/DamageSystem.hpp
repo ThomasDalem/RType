@@ -31,6 +31,7 @@ namespace game_engine
 
     protected:
     private:
+        std::map<int, std::tuple<EntitiesType, std::shared_ptr<Health>, std::shared_ptr<Collision>, std::shared_ptr<Transform>>> entitie
     };
 } // namespace game_engine
 #endif /* !DAMAGESYSTEM_HPP_ */

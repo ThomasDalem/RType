@@ -23,8 +23,9 @@ void game_engine::DamageSystem::damageSystem(std::map<int, std::tuple<EntitiesTy
     for (iter = entitie.begin(); iter != entitie.end(); ++iter) {
         std::map<int, std::tuple<EntitiesType, std::shared_ptr<Health>, std::shared_ptr<Collision>, std::shared_ptr<Transform>>>::iterator bulletIter;
         for (bulletIter = bullet.begin(); iter != bullet.end(); bulletIter++) {
-            if (isCollision(std::get<2>(iter->second), std::get<3>(iter->second), std::get<2>(bulletIter->second), std::get<3>(bulletIter->second)))
+            if (isCollision(std::get<2>(iter->second), std::get<3>(iter->second), std::get<2>(bulletIter->second), std::get<3>(bulletIter->second)) && std::get<2>(iter->second)->damagePlayer == true)
                 std::get<1>(iter->second)->healthPoint--;
+                std::get<1>(bulletIter->second)->healthPoint--;
         }
     }
 }
