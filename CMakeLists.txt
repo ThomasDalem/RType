@@ -11,6 +11,7 @@ set(SERVER_SRCS
     ./server/game_engine/src/System.cpp
     ./server/game_engine/src/MoveSystem.cpp
     ./server/game_engine/src/DamageSystem.cpp
+    ./server/game_engine/src/CollisionSystem.cpp
     ./server/game_engine/src/Entities/Bullet.cpp
     ./server/game_engine/src/Entities/DestroyableTile.cpp
     ./server/game_engine/src/Entities/Enemy.cpp
@@ -23,7 +24,7 @@ set(SERVER_SRCS
 add_executable(r-type_server ${SERVER_SRCS})
 
 target_link_libraries(r-type_server CONAN_PKG::boost)
-target_include_directories(r-type_server PUBLIC 
+target_include_directories(r-type_server PUBLIC
     ./server/game_engine/include
     ./server/game_engine/include/Entities
     ./server/game_engine/include/Components

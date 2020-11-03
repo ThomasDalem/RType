@@ -23,6 +23,7 @@ namespace game_engine {
 
             int getUniqueID() const {return (_uniqueID);};
             EntitiesType getEntitiesID() const {return (_entitesID);};
+            std::vector<std::shared_ptr<AComponents>> getComponentList() const {return (_componentList);};
 
             std::shared_ptr<Transform> getTransform() const {return (_transform);};
             std::shared_ptr<Sound> getFireSound() const {return (_fireSound);};
@@ -40,6 +41,7 @@ namespace game_engine {
             std::shared_ptr<Health> _health;
             std::shared_ptr<Collision> _collision;
             std::shared_ptr<Render> _render;
+            std::vector<std::shared_ptr<AComponents>> _componentList;
     };
 }
 

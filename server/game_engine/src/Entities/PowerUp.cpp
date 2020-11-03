@@ -15,4 +15,8 @@ game_engine::PowerUp::PowerUp(Vector _position)
     _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 0, 50, 50));
     _sound = std::make_shared<Sound>("./path_to_powerUp_sound");
     _entitesID = EntitiesType::PowerUp;
+    _componentList.push_back(_transform);
+    _componentList.push_back(_collision);
+    _componentList.push_back(_render);
+    _componentList.push_back(_sound);
 }

@@ -13,6 +13,7 @@ SRC			=		main.cpp											\
 					src/Server.cpp										\
 					$(GAME_ENGINE_PATH)/System.cpp						\
 					$(GAME_ENGINE_PATH)/MoveSystem.cpp					\
+					$(GAME_ENGINE_PATH)/CollisionSystem.cpp				\
 					$(GAME_ENGINE_PATH)/DamageSystem.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/Bullet.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/DestroyableTile.cpp	\

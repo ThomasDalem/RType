@@ -16,4 +16,9 @@ game_engine::Enemy::Enemy(Vector _position)
     _render = std::make_shared<Render>("./path_to_ennemy sprite", Rectangle(0, 0, 75, 45));
     _deathSound = std::make_shared<Sound>("./path_to_ennemy_death_sound");
     _entitesID = EntitiesType::Ennemy;
+    _componentList.push_back(_transform);
+    _componentList.push_back(_health);
+    _componentList.push_back(_deathSound);
+    _componentList.push_back(_collision);
+    _componentList.push_back(_render);
 }

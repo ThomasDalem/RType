@@ -18,14 +18,15 @@ namespace game_engine
         COLLISION,
         RENDER,
     };
+
     class AComponents
     {
-    public:
-        AComponents();
-        ~AComponents();
-        ComponentType getType() const;
-    protected:
-        ComponentType type;
+        public:
+            AComponents();
+            ~AComponents();
+            ComponentType getType() const {return (type);};
+        protected:
+            ComponentType type;
     };
 } // namespace game_engine
 #endif /* !ACOMPONENTS_HPP_ */
