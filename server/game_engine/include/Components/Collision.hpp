@@ -16,18 +16,18 @@ namespace game_engine
     class Collision : public AComponents
     {
     public:
-        Collision(Rectangle rectSize_ct, bool damagePlayer_ct)
-            : AComponents(ComponentType::COLLISION), rectSize(rectSize_ct), damagePlayer(damagePlayer_ct)
+        Collision(Rectangle rectSize, bool damagePlayer)
+            : AComponents(ComponentType::COLLISION), _rectSize(rectSize), _damagePlayer(damagePlayer)
         {
-            //type = ComponentType::COLLISION;
+            _type = ComponentType::COLLISION;
         }
         ~Collision() {};
-        Rectangle getRectSize() {return rectSize;}
-        bool getCanDamagePlayer() {return damagePlayer;}
+        Rectangle getRectSize() const {return _rectSize;}
+        bool getCanDamagePlayer() const {return _damagePlayer;}
 
     private:
-        Rectangle rectSize;
-        bool damagePlayer;
+        Rectangle _rectSize;
+        bool _damagePlayer;
     };
 } // namespace game_engine
 

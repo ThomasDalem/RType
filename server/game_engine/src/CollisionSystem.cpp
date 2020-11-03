@@ -27,7 +27,7 @@ void game_engine::CollisionSystem::collisionSystem(std::map<EntitiesType, std::p
                 iter->second.first.get()->resetToOldPosition();
             if (iter->first == EntitiesType::PLAYER && parse->first == EntitiesType::POWERUP &&
                 checkCollision(iter->second, parse->second) == true)
-                printf("Power up touchée");// Je sais pas;
+                printf("Power up touché");// Je sais pas;
         }
     }
 }

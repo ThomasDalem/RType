@@ -16,35 +16,35 @@ namespace game_engine
     class Transform : public AComponents
     {
     public:
-        Transform(Vector position_ct, float rotation_ct, Vector direction_ct)
-            : AComponents(ComponentType::TRANSFORM), position(position_ct), rotation(rotation_ct), direction(direction_ct), oldPosition(position_ct)
+        Transform(Vector position, float rotation, Vector direction)
+            : AComponents(ComponentType::TRANSFORM), _position(position), _rotation(rotation), _direction(direction), _oldPosition(position)
         {
-            //type = ComponentType::TRANSFORM;
+            _type = ComponentType::TRANSFORM;
         }
         ~Transform() {};
-        Vector getOldPosition() const {return oldPosition;}
-        Vector getPosition() const {return position;}
-        float getRotation() const {return rotation;}
-        Vector getDirection() const {return direction;}
+        Vector getOldPosition() const {return _oldPosition;}
+        Vector getPosition() const {return _position;}
+        float getRotation() const {return _rotation;}
+        Vector getDirection() const {return _direction;}
 
-        void setOldPosition(Vector newOldPosition) {oldPosition = newOldPosition;}
-        void changeDirection(Vector newDirection) {direction = newDirection;}
-        void applyDirection(Vector _direction) {
-            position.x += _direction.x;
-            position.y += _direction.y;
+        void setOldPosition(Vector newOldPosition) {_oldPosition = newOldPosition;}
+        void changeDirection(Vector newDirection) {_direction = newDirection;}
+        void applyDirection(Vector direction) {
+            _position.x += direction.x;
+            _position.y += direction.y;
         }
-        void setRotation(float newRotation) {rotation = newRotation;}
+        void setRotation(float newRotation) {_rotation = newRotation;}
 
         void resetToOldPosition() {
-            position.x = oldPosition.x;
-            position.y = oldPosition.y;
+            _position.x = _oldPosition.x;
+            _position.y = _oldPosition.y;
         };
 
     private:
-        Vector oldPosition;
-        Vector position;
-        float rotation;
-        Vector direction;
+        Vector _oldPosition;
+        Vector _position;
+        float _rotation;
+        Vector _direction;
     };
 } // namespace game_engine
 

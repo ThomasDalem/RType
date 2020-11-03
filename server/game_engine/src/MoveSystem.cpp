@@ -26,9 +26,19 @@ void game_engine::MoveSystem::moveSystem()
         for (componentIter = entitieComponent.begin(); componentIter != entitieComponent.end(); ++componentIter) {
             if (componentIter->get()->getType() == ComponentType::TRANSFORM) {
                 Transform *transfromComponent = static_cast<Transform *>(componentIter->get());
-                transfromComponent->setOldPosition(transfromComponent->getPosition());
-                transfromComponent->applyDirection(transfromComponent->getDirection());
+                if (checkGameBorder(*transfromComponent) != true) {
+                    transfromComponent->setOldPosition(transfromComponent->getPosition());
+                    transfromComponent->applyDirection(transfromComponent->getDirection());
+                }
             }
         }
     }
+}
+
+bool game_engine::MoveSystem::checkGameBorder(Transform &transform)
+{
+    if (transform.getPosition().y + transform.getDirection().y < 0 ||
+        transform.getPosition().y + transform.getDirection().y > 1080)
+        return (true);
+    return (false);
 }

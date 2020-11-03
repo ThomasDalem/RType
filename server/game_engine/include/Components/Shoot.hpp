@@ -15,16 +15,17 @@ namespace game_engine
     class Shoot : public AComponents
     {
     public:
-        Shoot(Vector shootDirection_ct, float fireRate_ct)
-            : AComponents(ComponentType::SHOOT), _shootDirection(shootDirection_ct), _fireRate(fireRate_ct)
+        Shoot(Vector shootDirection, float fireRate)
+            : AComponents(ComponentType::SHOOT), _shootDirection(shootDirection), _fireRate(fireRate)
         {
-            //type = ComponentType::SHOOT;
+            _type = ComponentType::SHOOT;
         }
         ~Shoot() {}
         Vector getRectSize() const {return _shootDirection;}
         float getFireRate() const {return _fireRate;}
 
         void setFireRate(float fireRate) {_fireRate = fireRate;}
+
     private:
         Vector _shootDirection;
         float _fireRate;

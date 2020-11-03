@@ -16,15 +16,16 @@ namespace game_engine
     class Sound : public AComponents
     {
     public:
-        Sound(std::string ressourcePath_ct)
-            : AComponents(ComponentType::SOUND), ressourcePath(ressourcePath_ct)
+        Sound(std::string ressourcePath)
+            : AComponents(ComponentType::SOUND), _ressourcePath(ressourcePath)
         {
-            //type = ComponentType::SOUND;
+            _type = ComponentType::SOUND;
         }
         ~Sound() {}
-        std::string getRessourcePath() {return ressourcePath;}
+        std::string getRessourcePath() {return _ressourcePath;}
+
     private:
-        std::string ressourcePath;
+        std::string _ressourcePath;
     };
 } // namespace game_engine
 

@@ -42,7 +42,8 @@ void game_engine::PowerUp::activeIncreaseFireRate(std::shared_ptr<game_engine::P
 
 void game_engine::PowerUp::activeSheild(std::shared_ptr<game_engine::Player> player)
 {
-    player.get()->setInvincibility(player.get()->getInvincibility() + 1);
+    player.get()->getHealth()->setIsDamageable(false);
+    player.get()->setTimeInvincibility(player.get()->getTimeInvincibility() + 1000);
 }
 
 void game_engine::PowerUp::activeSpeedBoost(std::shared_ptr<game_engine::Player> player)

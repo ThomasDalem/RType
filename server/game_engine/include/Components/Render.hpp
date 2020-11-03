@@ -18,18 +18,18 @@ namespace game_engine
     class Render : public AComponents
     {
     public:
-        Render(std::string ressourcePath_ct, Rectangle rect_ct)
-            : AComponents(ComponentType::RENDER), ressourcePath(ressourcePath_ct), rect(rect_ct)
+        Render(std::string ressourcePath, Rectangle rect)
+            : AComponents(ComponentType::RENDER), _ressourcePath(ressourcePath), _rect(rect)
         {
-            type = ComponentType::RENDER;
+            _type = ComponentType::RENDER;
         }
         ~Render() {}
-        std::string getRessourcePath() { return ressourcePath; }
-        Rectangle getRect() { return rect; }
+        std::string getRessourcePath() const { return _ressourcePath; }
+        Rectangle getRect() const { return _rect; }
 
     private:
-        std::string ressourcePath;
-        Rectangle rect;
+        std::string _ressourcePath;
+        Rectangle _rect;
     };
 } // namespace game_engine
 

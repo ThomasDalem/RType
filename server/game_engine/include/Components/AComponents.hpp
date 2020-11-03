@@ -22,11 +22,11 @@ namespace game_engine
     class AComponents
     {
     public:
-        AComponents(ComponentType _type): type(_type) {}
+        AComponents(ComponentType type): _type(type) {}
         //~AComponents();
-        ComponentType getType() const {return type;};
+        ComponentType getType() const {return _type;};
     protected:
-        ComponentType type;
+        ComponentType _type;
     };
 } // namespace game_engine
 #endif /* !ACOMPONENTS_HPP_ */

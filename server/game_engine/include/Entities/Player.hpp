@@ -34,9 +34,9 @@ namespace game_engine {
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
 
-            float getInvincibility() const {return (_invincibility);};
+            float getTimeInvincibility() const {return (_timeInvincibility);};
             float getSpeedMultiplicator() const {return (_speedMultiplicator);};
-            void setInvincibility(float invincibility) {_invincibility = invincibility;}
+            void setTimeInvincibility(size_t timeInvincibility) {_timeInvincibility = timeInvincibility;}
             void setSpeedMultiplicator(float speedMultiplicateur) {_speedMultiplicator = speedMultiplicateur;}
 
         protected:
@@ -52,7 +52,7 @@ namespace game_engine {
             std::shared_ptr<Render> _render;
             std::vector<std::shared_ptr<AComponents>> _componentList;
 
-            float _invincibility;
+            size_t _timeInvincibility;
             float _speedMultiplicator;
     };
 }

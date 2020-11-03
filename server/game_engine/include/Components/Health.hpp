@@ -21,22 +21,25 @@ namespace game_engine
     class Health : public AComponents
     {
     public:
-        Health(size_t _healthPoint_ct, bool _isDamageable)
-            : AComponents(ComponentType::HEALTH), healthPoint(_healthPoint_ct), isDamageable(_isDamageable)
+        Health(size_t healthPoint, bool isDamageable)
+            : AComponents(ComponentType::HEALTH), _healthPoint(healthPoint), _isDamageable(isDamageable)
         {
-            //type = ComponentType::HEALTH;
+            _type = ComponentType::HEALTH;
         }
         ~Health() {}
-        size_t getHealthPoint() const { return healthPoint; }
-        bool getDamabeable() const { return isDamageable; }
+        size_t getHealthPoint() const { return _healthPoint; }
+        bool getDamabeable() const { return _isDamageable; }
+
+        void setIsDamageable(bool isDamageable) {_isDamageable = isDamageable;}
+
         void getDamage() {
-            if (isDamageable)
-                healthPoint--;
+            if (_isDamageable && _healthPoint > 0)
+                _healthPoint--;
         }
 
     private:
-        size_t healthPoint;
-        bool isDamageable;
+        size_t _healthPoint;
+        bool _isDamageable;
     };
 } // namespace game_engine
 

@@ -24,6 +24,7 @@ namespace game_engine
         MoveSystem(std::vector<std::shared_ptr<IEntities>> &list);
         ~MoveSystem();
         void moveSystem();
+        bool checkGameBorder(Transform &transform);
 
     protected:
     private:
