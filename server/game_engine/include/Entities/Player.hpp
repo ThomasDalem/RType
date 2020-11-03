@@ -33,6 +33,8 @@ namespace game_engine {
             std::shared_ptr<Collision> getCollision() const {return (_collision);};
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
+            std::shared_ptr<float> getInvincibility() const {return (_invincibility);};
+            std::shared_ptr<float> getSpeedMultiplicator() const {return (_speedMultiplicator);};
 
         protected:
         private:
@@ -46,6 +48,9 @@ namespace game_engine {
             std::shared_ptr<Collision> _collision;
             std::shared_ptr<Render> _render;
             std::vector<std::shared_ptr<AComponents>> _componentList;
+
+            std::shared_ptr<float> _invincibility;
+            std::shared_ptr<float> _speedMultiplicator;
     };
 }
 

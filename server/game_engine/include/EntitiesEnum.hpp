@@ -11,14 +11,14 @@
 namespace game_engine {
     enum EntitiesType
     {
-        Player = 0,
-        Ennemy = 1,
-        Bullet = 2,
-        Environement = 3,
-        Music = 4,
-        PowerUp = 5,
-        DestroyableTile = 6,
-        StageObstacle = 7,
+        PLAYER = 0,
+        ENNEMY = 1,
+        BULLET = 2,
+        ENVIRONNEMENT = 3,
+        MUSIC = 4,
+        POWERUP = 5,
+        DESTROYABLETILE = 6,
+        STAGEOBSTACLE = 7,
     };
 }
 

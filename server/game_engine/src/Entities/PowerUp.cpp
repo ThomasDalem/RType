@@ -9,6 +9,8 @@
 
 game_engine::PowerUp::PowerUp(Vector _position)
 {
+    _powerUpType = static_cast<PowerUpType>(rand() % PowerUpType::SHIELD + 1)
+
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 50, 50), false);
@@ -19,4 +21,31 @@ game_engine::PowerUp::PowerUp(Vector _position)
     _componentList.push_back(_collision);
     _componentList.push_back(_render);
     _componentList.push_back(_sound);
+}
+
+void game_engine::PowerUp::ActivePowerUp(std::shared_ptr<game_engine::Player> player)
+{
+    if (_powerUpType == PowerUpType::INCREASEFIRERATE)
+        activeIncreaseFireRate(player);
+    if (_powerUpType == PowerUpType::SHIELD)
+        activeSheild(player);
+    if (_powerUpType == PowerUpType::SPEEDBOOST)
+        activeSpeedBoost(player);
+}
+
+#include "Player.hpp"
+
+void game_engine::PowerUp::activeIncreaseFireRate(std::shared_ptr<game_engine::Player> player)
+{
+    player.get()->getShoot()->getFireRate() += 1;
+}
+
+void game_engine::PowerUp::activeSheild(std::shared_ptr<game_engine::Player> player)
+{
+    player.get()->getInvincibility() += 5;
+}
+
+void game_engine::PowerUp::activeSpeedBoost(std::shared_ptr<game_engine::Player> player)
+{
+    player.get()->getSpeedMultiplicator() += 1;
 }

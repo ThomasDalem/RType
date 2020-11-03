@@ -13,8 +13,16 @@
 #include "../Components/Sound.hpp"
 #include "../Components/Collision.hpp"
 #include "../Components/Render.hpp"
+#include "Player.hpp"
 
-namespace game_engine {
+namespace game_engine
+{
+    enum PowerUpType {
+        INCREASEFIRERATE,
+        SPEEDBOOST,
+        SHIELD,
+    };
+
     class PowerUp : public IEntities {
         public:
             PowerUp(Vector _position);
@@ -29,6 +37,11 @@ namespace game_engine {
             std::shared_ptr<Collision> getCollision() const {return (_collision);};
             std::shared_ptr<Render> getRender() const {return (_render);};
 
+            void ActivePowerUp(std::shared_ptr<Player> player);
+            void activeIncreaseFireRate(std::shared_ptr<Player> player);
+            void activeSheild(std::shared_ptr<Player> player);
+            void activeSpeedBoost(std::shared_ptr<Player> player);
+
         protected:
         private:
             int _uniqueID;
@@ -39,6 +52,8 @@ namespace game_engine {
             std::shared_ptr<Collision> _collision;
             std::shared_ptr<Render> _render;
             std::vector<std::shared_ptr<AComponents>> _componentList;
+
+            PowerUpType _powerUpType;
     };
 }
 
