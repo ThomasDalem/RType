@@ -26,16 +26,16 @@ vector<string> getArgs(char **av) {
 
 void core(vector<string> av) {
     Player player;
-    // TextSfml Score("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
     WindowHandler windowhdl(1200, 600, "R-Type");
+    shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     windowhdl.setFramerate(50);
-    // windowhdl.addText(Score);
+    windowhdl.addText(Score);
     player.setName(Mainmenu().loop(windowhdl.getWindow()));
     windowhdl.addImage(player.getImage());
     windowhdl.addText(player.getNameText());
     while (windowhdl.isOpen()) {
-        windowhdl.getWindow()->draw(*player.getNameText().getData());
+        // windowhdl.getWindow()->draw(*player.getNameText()->getData());
         windowhdl.isEvent(player);
         windowhdl.display();
     }

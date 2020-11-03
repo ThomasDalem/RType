@@ -10,6 +10,7 @@ NAME = r-type_client
 
 SRC = 	main.cpp				\
 		\
+		src/SFML/Button.cpp			\
 		src/SFML/ImageSFML.cpp		\
 		src/SFML/TextSFML.cpp		\
 		src/SFML/BackgroundSFML.cpp	\
