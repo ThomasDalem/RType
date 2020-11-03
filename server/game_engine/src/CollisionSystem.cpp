@@ -24,7 +24,7 @@ void game_engine::CollisionSystem::collisionSystem(std::map<EntitiesType, std::p
         for (parse = iter; parse != map.end(); ++parse) {
             if (iter->first == EntitiesType::ENNEMY && parse->first != EntitiesType::PLAYER &&
                 parse->first != EntitiesType::POWERUP && checkCollision(iter->second, parse->second) == true)
-                iter->second.first.get()->getPosition() = iter->second.first.get()->getOldPosition();
+                iter->second.first.get()->resetToOldPosition();
             if (iter->first == EntitiesType::PLAYER && parse->first == EntitiesType::POWERUP &&
                 checkCollision(iter->second, parse->second) == true)
                 printf("Power up touchée");// Je sais pas;

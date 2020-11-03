@@ -37,15 +37,15 @@ void game_engine::PowerUp::ActivePowerUp(std::shared_ptr<game_engine::Player> pl
 
 void game_engine::PowerUp::activeIncreaseFireRate(std::shared_ptr<game_engine::Player> player)
 {
-    player.get()->getShoot()->getFireRate() += 1;
+    player.get()->getShoot()->setFireRate(player.get()->getShoot()->getFireRate() + 1);
 }
 
 void game_engine::PowerUp::activeSheild(std::shared_ptr<game_engine::Player> player)
 {
-    player.get()->getInvincibility() += 5;
+    player.get()->setInvincibility(player.get()->getInvincibility() + 1);
 }
 
 void game_engine::PowerUp::activeSpeedBoost(std::shared_ptr<game_engine::Player> player)
 {
-    player.get()->getSpeedMultiplicator() += 1;
+    player.get()->setSpeedMultiplicator(player.get()->getSpeesetSpeedMultiplicator() + 1);
 }
