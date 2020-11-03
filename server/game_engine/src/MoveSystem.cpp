@@ -22,7 +22,7 @@ void game_engine::MoveSystem::moveSystem()
 
     for (iter = _list.begin(); iter != _list.end(); ++iter) {
         entitieComponent = iter->get()->getComponentList();
-        std::vector<std::shared_ptr<game_engine::AComponents>>::iterator componentIter;
+        std::vector<std::shared_ptr<AComponents>>::iterator componentIter;
         for (componentIter = entitieComponent.begin(); componentIter != entitieComponent.end(); ++componentIter) {
             if (componentIter->get()->getType() == ComponentType::TRANSFORM) {
                 Transform *transfromComponent = static_cast<Transform *>(componentIter->get());

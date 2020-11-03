@@ -21,9 +21,9 @@ namespace game_engine
     class AComponents
     {
     public:
-        AComponents();
-        ~AComponents();
-        ComponentType getType() const;
+        AComponents(ComponentType _type): type(_type) {}
+        //~AComponents();
+        ComponentType getType() const {return type;};
     protected:
         ComponentType type;
     };

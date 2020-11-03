@@ -17,9 +17,9 @@ namespace game_engine
     {
     public:
         Collision(Rectangle rectSize_ct, bool damagePlayer_ct)
-            : rectSize(rectSize_ct), damagePlayer(damagePlayer_ct)
+            : AComponents(ComponentType::COLLISION), rectSize(rectSize_ct), damagePlayer(damagePlayer_ct)
         {
-            type = ComponentType::COLLISION;
+            //type = ComponentType::COLLISION;
         }
         ~Collision() {};
         Rectangle getRectSize() {return rectSize;}

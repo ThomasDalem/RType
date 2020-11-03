@@ -22,13 +22,17 @@ namespace game_engine
     {
     public:
         Health(size_t _healthPoint_ct, bool _isDamageable)
-            : healthPoint(_healthPoint_ct), isDamageable(_isDamageable)
+            : AComponents(ComponentType::HEALTH), healthPoint(_healthPoint_ct), isDamageable(_isDamageable)
         {
-            type = ComponentType::HEALTH;
+            //type = ComponentType::HEALTH;
         }
-        ~Health();
-        size_t getHealthPoint() {return healthPoint;}
-        bool getDamabeable() {return isDamageable;}
+        ~Health() {}
+        size_t getHealthPoint() const { return healthPoint; }
+        bool getDamabeable() const { return isDamageable; }
+        void getDamage() {
+            if (isDamageable)
+                healthPoint--;
+        }
 
     private:
         size_t healthPoint;

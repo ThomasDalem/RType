@@ -17,9 +17,9 @@ namespace game_engine
     {
     public:
         Sound(std::string ressourcePath_ct)
-            : ressourcePath(ressourcePath_ct)
+            : AComponents(ComponentType::SOUND), ressourcePath(ressourcePath_ct)
         {
-            type = ComponentType::SOUND;
+            //type = ComponentType::SOUND;
         }
         ~Sound() {}
         std::string getRessourcePath() {return ressourcePath;}

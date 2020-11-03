@@ -16,9 +16,9 @@ namespace game_engine
     {
     public:
         Shoot(Vector shootDirection_ct, float fireRate_ct)
-            : shootDirection(shootDirection_ct), fireRate(fireRate_ct)
+            : AComponents(ComponentType::SHOOT), shootDirection(shootDirection_ct), fireRate(fireRate_ct)
         {
-            type = ComponentType::SHOOT;
+            //type = ComponentType::SHOOT;
         }
         ~Shoot() {}
         Vector getRectSize() {return shootDirection;}

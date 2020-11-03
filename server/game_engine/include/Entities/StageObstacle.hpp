@@ -12,6 +12,7 @@
 #include "../Components/Transform.hpp"
 #include "../Components/Collision.hpp"
 #include "../Components/Render.hpp"
+#include "../Components/Health.hpp"
 
 namespace game_engine {
     class StageObstacle : public IEntities {
@@ -30,7 +31,7 @@ namespace game_engine {
         private:
             int _uniqueID;
             EntitiesType _entitesID;
-
+            std::shared_ptr<Health> _health;
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Collision> _collision;
             std::shared_ptr<Render> _render;

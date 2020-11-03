@@ -19,7 +19,7 @@ namespace game_engine
     {
     public:
         Render(std::string ressourcePath_ct, Rectangle rect_ct)
-            : ressourcePath(ressourcePath_ct), rect(rect_ct)
+            : AComponents(ComponentType::RENDER), ressourcePath(ressourcePath_ct), rect(rect_ct)
         {
             type = ComponentType::RENDER;
         }
