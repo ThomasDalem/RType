@@ -11,11 +11,11 @@ WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fp
     _width = 0;
     _height = 0;
     _window = make_shared<sf::RenderWindow>(sf::VideoMode(1200, 600), "R-Type");
-    _background = new Background();
+    _background = make_shared<Background>(-1914);
 
     auto appIcon = sf::Image {};
-     if (!appIcon.loadFromFile("resources/sprites/icon.png"))
-            cout << "Loading Ressource Failed" << endl;
+    if (!appIcon.loadFromFile("resources/sprites/icon.png"))
+        cout << "Loading Ressource Failed" << endl;
     _window->setIcon(appIcon.getSize().x, appIcon.getSize().y, appIcon.getPixelsPtr());
 }
 
@@ -25,11 +25,13 @@ WindowHandler::~WindowHandler() {
 }
 
 void WindowHandler::display(void) const {
-    if (!_window->isOpen())
-        return;
     _background->move();
 
     _window->draw(*_background->getImage()->getSprite());
+    for (size_t i = 0; i < _images.size() && i < _images.size(); i ++)
+        _window->draw(*_images[i]->getSprite());
+    for (size_t i = 0; i < _texts.size() && i < _texts.size(); i ++)
+        _window->draw(*_texts[i]->getData());
 
     _window->display();
     _window->clear();
@@ -52,7 +54,7 @@ void WindowHandler::rmImage(size_t row) {
 void WindowHandler::isEvent(Player &player) {
     sf::Event event;
 
-    while (_window->pollEvent(event) && _window->isOpen()) {
+    while (_window->pollEvent(event)) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
             _window->close(); // [SEND] DISCONNECTED
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
@@ -75,7 +77,8 @@ void WindowHandler::setWidth(size_t width) {this->_width = width;}
 void WindowHandler::setTitle(string title) {this->_title = title;}
 bool WindowHandler::isOpen(void) const {return _window->isOpen();}
 void WindowHandler::setHeight(size_t height) {this->_height = height;}
-Background *WindowHandler::getBackground(void) const {return this->_background;}
+shared_ptr<Background> WindowHandler::getBackground(void) const {return _background;}
+shared_ptr<sf::RenderWindow> WindowHandler::getWindow(void) const {return _window;}
 void WindowHandler::setFramerate(size_t fps) const {_window->setFramerateLimit(fps);}
-void WindowHandler::addText(TextSfml news) {_texts.push_back(make_shared<TextSfml>(news));}
-void WindowHandler::addImage(ImageSFML news) {_images.push_back(make_shared<ImageSFML>(news));}
+void WindowHandler::addText(shared_ptr<TextSfml> news) {_texts.push_back(news);}
+void WindowHandler::addImage(shared_ptr<ImageSFML> news) {_images.push_back(news);}

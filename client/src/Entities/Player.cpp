@@ -32,10 +32,11 @@ void Player::setName(string str) {
     _name = str;
     _textname->setString(_name);
 }
+
 string Player::getName(void) const {return _name;}
 void Player::setHealth(size_t hlth) {_health = hlth;}
 size_t Player::getHealth(void) const {return _health;}
-ImageSFML Player::getImage(void) const {return *_image;}
 sf::Vector2f Player::getPosition(void) const {return _pos;}
-TextSfml Player::getNameText(void) const {return *_textname;}
+shared_ptr<ImageSFML> Player::getImage(void) const {return _image;}
+shared_ptr<TextSfml> Player::getNameText(void) const {return _textname;}
 void Player::setImage(ImageSFML news) {_image = make_shared<ImageSFML>(news);}

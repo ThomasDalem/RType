@@ -26,10 +26,10 @@ class Player {
         void setHealth(size_t hlth);
         size_t getHealth(void) const;
         void setImage(ImageSFML news);
-        ImageSFML getImage(void) const;
-        TextSfml getNameText(void) const;
-        void setPosition(sf::Vector2f newpos);
         sf::Vector2f getPosition(void) const;
+        void setPosition(sf::Vector2f newpos);
+        shared_ptr<ImageSFML> getImage(void) const;
+        shared_ptr<TextSfml> getNameText(void) const;
 
     private:
         string _name;

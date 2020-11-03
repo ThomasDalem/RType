@@ -48,8 +48,7 @@ void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
                 _name = _name + " ";
             // else if (event.key.code == 58 || event.key.code == 48)
             //     isMenu = false;
-        }
-        if (_play->isClicked(event))
+        } if (_play->isClicked(event))
             isMenu = false;
     }
 }

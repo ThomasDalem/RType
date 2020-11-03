@@ -33,14 +33,14 @@ class WindowHandler {
         size_t getWidth(void) const;
         string getTitle(void) const;
         size_t getHeight(void) const;
-        Background *getBackground(void) const;
+        shared_ptr<Background> getBackground(void) const;
         shared_ptr<sf::RenderWindow> getWindow(void) const;
 
         //Graphics Data
         void rmText(size_t row);
         void rmImage(size_t row);
-        void addText(TextSfml news);
-        void addImage(ImageSFML news);
+        void addText(shared_ptr<TextSfml> news);
+        void addImage(shared_ptr<ImageSFML> news);
 
         //Window data
         bool isOpen(void) const;
@@ -52,8 +52,8 @@ class WindowHandler {
         string _title;
         size_t _width;
         size_t _height;
-        Background *_background;
 
+        shared_ptr<Background> _background;
         vector<shared_ptr<TextSfml>> _texts;
         shared_ptr<sf::RenderWindow> _window;
         vector<shared_ptr<ImageSFML>> _images;
