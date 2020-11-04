@@ -7,9 +7,10 @@
 
 #include "Player.hpp"
 
-game_engine::Player::Player(Vector _position, PlayerColor playerColor)
+game_engine::Player::Player(int clientID, Vector _position, PlayerColor playerColor)
 {
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
+    _clientID = clientID;
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
     _health = std::make_shared<Health>(1, true);
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 4, 4), false);

@@ -14,7 +14,9 @@ SRC			=		main.cpp											\
 					$(GAME_ENGINE_PATH)/System.cpp						\
 					$(GAME_ENGINE_PATH)/MoveSystem.cpp					\
 					$(GAME_ENGINE_PATH)/CollisionSystem.cpp				\
+					$(GAME_ENGINE_PATH)/SpawnSystem.cpp					\
 					$(GAME_ENGINE_PATH)/DamageSystem.cpp				\
+					$(GAME_ENGINE_PATH)/Exception.cpp					\
 					$(GAME_ENGINE_PATH)/Entities/Bullet.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/DestroyableTile.cpp	\
 					$(GAME_ENGINE_PATH)/Entities/Enemy.cpp				\

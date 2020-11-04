@@ -21,14 +21,11 @@ void game_engine::DamageSystem::damageSystem()
     std::vector<std::shared_ptr<IEntities>>::iterator playerIter;
     std::vector<std::shared_ptr<AComponents>> playerComponent;
     std::vector<std::shared_ptr<AComponents>>::iterator playerComponentIter;
-
     Transform *transfromComponent;
     Collision *collisionComponent;
     Health *healthComponent;
-
     std::vector<std::shared_ptr<IEntities>>::iterator ennemyIter;
     std::vector<std::shared_ptr<AComponents>> ennemyComponent;
-
     std::vector<std::shared_ptr<IEntities>>::iterator objectIter;
     std::vector<std::shared_ptr<AComponents>> objectComponent;
 
@@ -53,6 +50,39 @@ void game_engine::DamageSystem::damageSystem()
         for (ennemyIter = _ennemy.begin(); ennemyIter != _ennemy.end(); ennemyIter++) {
             ennemyComponent = ennemyIter->get()->getComponentList();
             if (checkCollisionWithEnnemy(transfromComponent, collisionComponent, objectComponent) == true)
+                healthComponent->getDamage();
+        }
+    }
+    ennemyDamageSystem();
+}
+
+void game_engine::DamageSystem::ennemyDamageSystem()
+{
+    std::vector<std::shared_ptr<IEntities>>::iterator ennemyIter;
+    std::vector<std::shared_ptr<AComponents>> ennemyComponent;
+    std::vector<std::shared_ptr<AComponents>>::iterator ennemyComponentIter;
+    Transform *transfromComponent;
+    Collision *collisionComponent;
+    Health *healthComponent;
+    std::vector<std::shared_ptr<IEntities>>::iterator objectIter;
+    std::vector<std::shared_ptr<AComponents>> objectComponent;
+
+    for (ennemyIter = _ennemy.begin(); ennemyIter != _ennemy.end(); ennemyIter++)
+    {
+        ennemyComponent = ennemyIter->get()->getComponentList();
+        for (ennemyComponentIter = ennemyComponent.begin(); ennemyComponentIter != ennemyComponent.end(); ennemyComponentIter++)
+        {
+            if (ennemyComponentIter->get()->getType() == ComponentType::TRANSFORM)
+                transfromComponent = static_cast<Transform *>(ennemyComponentIter->get());
+            if (ennemyComponentIter->get()->getType() == ComponentType::COLLISION)
+                collisionComponent = static_cast<Collision *>(ennemyComponentIter->get());
+            if (ennemyComponentIter->get()->getType() == ComponentType::HEALTH)
+                healthComponent = static_cast<Health *>(ennemyComponentIter->get());
+        }
+        for (objectIter = _object.begin(); objectIter != _object.end(); objectIter++)
+        {
+            objectComponent = objectIter->get()->getComponentList();
+            if (checkCollisionWithObject(transfromComponent, collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
         }
     }

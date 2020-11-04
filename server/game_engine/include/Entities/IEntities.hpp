@@ -10,7 +10,7 @@
 
 #include <memory>
 #include <vector>
-
+#include "../Exception.hpp"
 #include "../Components/AComponents.hpp"
 #include "../EntitiesEnum.hpp"
 

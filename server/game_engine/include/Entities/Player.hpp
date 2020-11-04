@@ -20,7 +20,7 @@
 namespace game_engine {
     class Player : public IEntities {
         public:
-            Player(Vector _position, PlayerColor playerColor);
+            Player(int clientID, Vector _position, PlayerColor playerColor);
             ~Player() {};
 
             int getUniqueID() const {return (_uniqueID);};
@@ -42,6 +42,7 @@ namespace game_engine {
         protected:
         private:
             int _uniqueID;
+            int _clientID;
             EntitiesType _entitesID;
 
             std::shared_ptr<Transform> _transform;
