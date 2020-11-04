@@ -32,7 +32,11 @@ void core(vector<string> av) {
 
     windowhdl.setFramerate(50);
     windowhdl.addText(Score);
-    player.setName(RoomMenu(Mainmenu().loop(windowhdl.getWindow())).loop(windowhdl.getWindow()));
+    switch (Mainmenu().loop(windowhdl.getWindow(), player)) {
+        case Creating: RoomMenu().creatingGame(windowhdl.getWindow(), player); break;
+        case Room: RoomMenu().loop(windowhdl.getWindow(), player); break;
+        default: break;
+    }
     windowhdl.addImage(player.getImage());
     windowhdl.addText(player.getNameText());
     while (windowhdl.isOpen()) {

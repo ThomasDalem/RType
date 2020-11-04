@@ -26,13 +26,14 @@ RoomMenu::RoomMenu(string name) {
 }
 RoomMenu::~RoomMenu() {}
 
-string RoomMenu::loop(shared_ptr<sf::RenderWindow> _window) {
+ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     ImageSFML back("./resources/sprites/mainbackground.png");
-    TextSfml name_txt("Pseudo: " + _name, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
+    TextSfml name_txt("Pseudo: " + player.getName(), "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
+    _name = player.getName();
     _window->setFramerateLimit(60);
     while(_window->isOpen() && isMenu) {
-        EventHandler(_window);
+        EventHandler(_window, player);
 
         name_txt.setString("Pseudo: " + _name);
         name_txt.setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
@@ -43,11 +44,14 @@ string RoomMenu::loop(shared_ptr<sf::RenderWindow> _window) {
             roomlist[i]->drawButton(_window);
         _window->display();
         _window->clear();
+
+        if (player.getRoom() != -1)
+            break;
     }
-    return _name;
+    return player.getRoom() > 0 ? Salle : Back;
 }
 
-void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
+void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
 
     while(_window->pollEvent(event)) {
@@ -62,7 +66,33 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
                 _name = _name + " ";
         } for (size_t i = 0; i < roomlist.size(); i ++) {
             if (roomlist[i]->isClicked(event))
-                cout << "Clicked on room " << i + 1 << endl;
+                player.setRoom(i + 1);
         }
     }
+}
+
+ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &player) {
+    string roomname = "Partie de " + player.getName();
+    ImageSFML back("./resources/sprites/mainbackground.png");
+    ImageSFML P1("./resources/sprites/mainbackground.png");
+    ImageSFML P2("./resources/sprites/mainbackground.png");
+    ImageSFML P3("./resources/sprites/mainbackground.png");
+    ImageSFML P4("./resources/sprites/mainbackground.png");
+    TextSfml name_txt(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
+
+    _name = roomname;
+    _window->setFramerateLimit(60);
+    while(_window->isOpen()) {
+        EventHandler(_window, player);
+
+        name_txt.setString("Nom de la Partie: " + _name);
+        name_txt.setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
+
+        _window->draw(*back.getSprite());
+        _window->draw(*name_txt.getData());
+
+        _window->display();
+        _window->clear();
+    }
+    return player.getRoom() == 0 ? Continue : Back;
 }

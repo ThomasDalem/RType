@@ -4,20 +4,24 @@
 
 Mainmenu::Mainmenu() {
     _name = "";
-    isMenu = true;
-    _play = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 250), sf::Vector2f(250, 100));
+    isHost = false;
+    isJoin = false;
+    _host = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 250), sf::Vector2f(250, 100));
+    _join = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 400), sf::Vector2f(250, 100));
 
-    _play->setColor(sf::Color::Black, sf::Color::White, 5);
-    _play->setText("./resources/fonts/2MASS.otf", "Play", 75, sf::Color::White);
+    _host->setColor(sf::Color::Black, sf::Color::White, 5);
+    _join->setColor(sf::Color::Black, sf::Color::White, 5);
+    _host->setText("./resources/fonts/2MASS.otf", "Host", 75, sf::Color::White);
+    _join->setText("./resources/fonts/2MASS.otf", "Join", 75, sf::Color::White);
 }
 Mainmenu::~Mainmenu() {}
 
-string Mainmenu::loop(shared_ptr<sf::RenderWindow> _window) {
+ReturnMain Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     ImageSFML back("./resources/sprites/mainbackground.png");
     TextSfml name_txt("Pseudo: " + _name, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     _window->setFramerateLimit(60);
-    while(_window->isOpen() && isMenu) {
+    while(_window->isOpen() && !isHost && !isJoin) {
         EventHandler(_window);
 
         name_txt.setString("Pseudo: " + _name);
@@ -25,11 +29,13 @@ string Mainmenu::loop(shared_ptr<sf::RenderWindow> _window) {
 
         _window->draw(*back.getSprite());
         _window->draw(*name_txt.getData());
-        _play->drawButton(_window);
+        _host->drawButton(_window);
+        _join->drawButton(_window);
         _window->display();
         _window->clear();
     }
-    return _name;
+    player.setName(_name);
+    return isJoin ? Room : (isHost ? Creating : Quit);
 }
 
 void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
@@ -47,7 +53,9 @@ void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
                 _name = _name + " ";
             // else if (event.key.code == 58 || event.key.code == 48)
             //     isMenu = false;
-        } if (_play->isClicked(event))
-            isMenu = false;
+        } if (_host->isClicked(event))
+            isHost = true;
+        else if (_join->isClicked(event))
+            isJoin = true;
     }
 }
