@@ -13,6 +13,7 @@
 #include <memory>
 #include "Components/Transform.hpp"
 #include "Components/Collision.hpp"
+#include "Entities/PowerUp.hpp"
 #include "EntitiesEnum.hpp"
 #include "Entities/IEntities.hpp"
 

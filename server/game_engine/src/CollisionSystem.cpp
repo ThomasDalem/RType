@@ -28,24 +28,26 @@ void game_engine::CollisionSystem::collisionSystem()
 
     std::vector<std::shared_ptr<IEntities>>::iterator powerUpIter;
     std::vector<std::shared_ptr<AComponents>> powerUpComponent;
-
+    PowerUp *powerUp;
     for (playerIter = _player.begin(); playerIter != _player.end(); playerIter++)
     {
         playerComponent = playerIter->get()->getComponentList();
-        for (playerComponentIter = playerComponent.begin(); playerComponentIter != playerComponent.end(); playerComponentIter++)
-        {
+        for (playerComponentIter = playerComponent.begin(); playerComponentIter != playerComponent.end(); playerComponentIter++) {
             if (playerComponentIter->get()->getType() == ComponentType::TRANSFORM)
                 transfromComponent = static_cast<Transform *>(playerComponentIter->get());
             if (playerComponentIter->get()->getType() == ComponentType::COLLISION)
                 collisionComponent = static_cast<Collision *>(playerComponentIter->get());
         }
-        for (powerUpIter = _powerUp.begin(); powerUpIter != _powerUp.end(); powerUpIter++)
-        {
+        for (powerUpIter = _powerUp.begin(); powerUpIter != _powerUp.end(); powerUpIter++) {
             powerUpComponent = powerUpIter->get()->getComponentList();
-            if (collisionWithPowerUp(transfromComponent, collisionComponent, powerUpComponent) == true)
+            if (collisionWithPowerUp(transfromComponent, collisionComponent, powerUpComponent) == true) {
+                powerUp = static_cast<PowerUp *>(powerUpIter->get());
+                //powerUp->ActivePowerUp(playerIter->get());
                 printf("Power up touché");// Je sais pas;
+            }
         }
     }
+    ennemyCollisionSystem();
 }
 
 void game_engine::CollisionSystem::ennemyCollisionSystem()
@@ -70,13 +72,12 @@ void game_engine::CollisionSystem::ennemyCollisionSystem()
                 if (ennemyComponentIter->get()->getType() == ComponentType::COLLISION)
                     collisionComponent = static_cast<Collision *>(ennemyComponentIter->get());
             }
-        }
-        for (objectIter = _objectAndEnnemy.begin(); objectIter != _objectAndEnnemy.begin(); objectIter++) {
-            if (objectIter->get()->getEntitiesID() == EntitiesType::DESTROYABLETILE ||
-                objectIter->get()->getEntitiesID() == EntitiesType::STAGEOBSTACLE || objectIter->get()->getEntitiesID() == EntitiesType::ENNEMY) {
-                ennemyComponent = ennemyIter->get()->getComponentList();
-                if (ennemyCollisionWithObject(transfromComponent, collisionComponent, ennemyComponent))
-                    printf("here\n");
+            for (objectIter = _objectAndEnnemy.begin(); objectIter != _objectAndEnnemy.begin(); objectIter++) {
+                objectComponent = objectIter->get()->getComponentList();
+                if (ennemyCollisionWithObject(transfromComponent, collisionComponent, objectComponent)) {
+                    transfromComponent->resetToOldPosition();
+                    std::cout << "move ennemy to old" << std::endl;
+                }
             }
         }
     }
