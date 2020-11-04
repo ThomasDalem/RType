@@ -44,7 +44,9 @@ void game_engine::MoveSystem::applyMovement()
 bool game_engine::MoveSystem::checkGameBorder(Transform &transform)
 {
     if (transform.getPosition().y + transform.getDirection().y < 0 ||
-        transform.getPosition().y + transform.getDirection().y > 1080)
+        transform.getPosition().y + transform.getDirection().y > 1080 ||
+        transform.getPosition().x + transform.getDirection().x > 1920 ||
+        transform.getPosition().x + transform.getDirection().x < 0)
         return (true);
     return (false);
 }

@@ -34,8 +34,8 @@ namespace game_engine
     public:
         SpawnSystem(std::vector<std::shared_ptr<IEntities>> &entities);
         ~SpawnSystem();
-        void loadEnnemyLibrary();
-        void spawnEnnemy();
+        void loadEnemyLibrary();
+        void spawnEnemy();
         void newPlayer(int clientID);
 
         void spawnObstacle();
