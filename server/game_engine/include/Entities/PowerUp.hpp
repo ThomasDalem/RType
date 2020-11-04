@@ -37,10 +37,10 @@ namespace game_engine
             std::shared_ptr<Collision> getCollision() const {return (_collision);};
             std::shared_ptr<Render> getRender() const {return (_render);};
 
-            void ActivePowerUp(std::shared_ptr<Player> player);
-            void activeIncreaseFireRate(std::shared_ptr<Player> player);
-            void activeSheild(std::shared_ptr<Player> player);
-            void activeSpeedBoost(std::shared_ptr<Player> player);
+            void activePowerUp(Player &player);
+            void activeIncreaseFireRate(Player &player);
+            void activeSheild(Player &player);
+            void activeSpeedBoost(Player &player);
 
         protected:
         private:

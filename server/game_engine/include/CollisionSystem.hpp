@@ -21,22 +21,22 @@ namespace game_engine
 {
     class CollisionSystem {
         public:
-            CollisionSystem(std::vector<std::shared_ptr<IEntities>> &player, std::vector<std::shared_ptr<IEntities>> &powerUp, std::vector<std::shared_ptr<IEntities>> &objectAndEnnemy);
+            CollisionSystem(std::vector<std::shared_ptr<IEntities>> &player, std::vector<std::shared_ptr<IEntities>> &powerUp, std::vector<std::shared_ptr<IEntities>> &objectAndEnemy);
             ~CollisionSystem();
 
             void collisionSystem();
             void ennemyCollisionSystem();
-            bool ennemyCollisionWithObject(Transform *playerTransfromComponent, Collision *playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> powerUpComponent);
-            bool collisionWithPowerUp(Transform *playerTransfromComponent, Collision *playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> powerUpComponent);
+            bool ennemyCollisionWithObject(Transform &playerTransfromComponent, Collision &playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> powerUpComponent);
+            bool collisionWithPowerUp(Transform &playerTransfromComponent, Collision &playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> powerUpComponent);
             void collisionWithObstable();
-            bool checkCollision(Transform *playerTransform, Collision *playerCollision,
-                                Transform *objectTransform, Collision *objectCollision);
+            bool checkCollision(Transform &playerTransform, Collision &playerCollision,
+                                Transform &objectTransform, Collision &objectCollision);
 
         protected:
         private:
             std::vector<std::shared_ptr<IEntities>> &_player;
             std::vector<std::shared_ptr<IEntities>> &_powerUp;
-            std::vector<std::shared_ptr<IEntities>> &_objectAndEnnemy;
+            std::vector<std::shared_ptr<IEntities>> &_objectAndEnemy;
     };
 } // namespace game_engine
 

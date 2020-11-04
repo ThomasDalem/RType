@@ -44,12 +44,12 @@ void game_engine::DamageSystem::damageSystem()
         for (objectIter = _object.begin(); objectIter != _object.end(); objectIter++)
         {
             objectComponent = objectIter->get()->getComponentList();
-            if (checkCollisionWithObject(transfromComponent, collisionComponent, objectComponent) == true)
+            if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
         }
         for (ennemyIter = _ennemy.begin(); ennemyIter != _ennemy.end(); ennemyIter++) {
             ennemyComponent = ennemyIter->get()->getComponentList();
-            if (checkCollisionWithEnnemy(transfromComponent, collisionComponent, objectComponent) == true)
+            if (checkCollisionWithEnemy(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
         }
     }
@@ -82,14 +82,14 @@ void game_engine::DamageSystem::ennemyDamageSystem()
         for (objectIter = _object.begin(); objectIter != _object.end(); objectIter++)
         {
             objectComponent = objectIter->get()->getComponentList();
-            if (checkCollisionWithObject(transfromComponent, collisionComponent, objectComponent) == true)
+            if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
         }
     }
 }
 
-bool game_engine::DamageSystem::checkCollisionWithObject(Transform *playerTransfromComponent,
-                                                         Collision *playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent)
+bool game_engine::DamageSystem::checkCollisionWithObject(Transform &playerTransfromComponent,
+                                                         Collision &playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent)
 {
     std::vector<std::shared_ptr<AComponents>>::iterator objectComponentIter;
     Transform *objectTransfromComponent;
@@ -104,15 +104,15 @@ bool game_engine::DamageSystem::checkCollisionWithObject(Transform *playerTransf
         if (objectComponentIter->get()->getType() == ComponentType::HEALTH)
             objectHealthComponent = static_cast<Health *>(objectComponentIter->get());
     }
-    if (checkCollision(playerTransfromComponent, playerCollisionComponent, objectTransfromComponent, objectCollisionComponent) && objectCollisionComponent->getCanDamagePlayer() == true) {
+    if (checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent) && objectCollisionComponent->getCanDamagePlayer() == true) {
         objectHealthComponent->getDamage();
         return (true);
     }
     return (false);
 }
 
-bool game_engine::DamageSystem::checkCollisionWithEnnemy(Transform *playerTransfromComponent,
-                                                         Collision *playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent)
+bool game_engine::DamageSystem::checkCollisionWithEnemy(Transform &playerTransfromComponent,
+                                                         Collision &playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent)
 {
     std::vector<std::shared_ptr<AComponents>>::iterator ennemyComponentIter;
     Transform *objectTransfromComponent;
@@ -127,7 +127,7 @@ bool game_engine::DamageSystem::checkCollisionWithEnnemy(Transform *playerTransf
         if (ennemyComponentIter->get()->getType() == ComponentType::HEALTH)
             objectHealthComponent = static_cast<Health *>(ennemyComponentIter->get());
     }
-    if (checkCollision(playerTransfromComponent, playerCollisionComponent, objectTransfromComponent, objectCollisionComponent) && objectCollisionComponent->getCanDamagePlayer() == true) {
+    if (checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent) && objectCollisionComponent->getCanDamagePlayer() == true) {
         objectHealthComponent->getDamage();
         return (true);
     }
@@ -135,26 +135,26 @@ bool game_engine::DamageSystem::checkCollisionWithEnnemy(Transform *playerTransf
 }
 
 
-bool game_engine::DamageSystem::checkCollision(Transform *playerTransform, Collision *playerCollision,
-                                               Transform *objectTransform, Collision *objectCollision)
+bool game_engine::DamageSystem::checkCollision(Transform &playerTransform, Collision &playerCollision,
+                                               Transform &objectTransform, Collision &objectCollision)
 {
-    Vector end_pos_rect1 = Vector((playerTransform->getPosition().x + playerCollision->getRectSize().L), (playerTransform->getPosition().y + playerCollision->getRectSize().l));
-    Vector end_pos_rect2 = Vector((objectTransform->getPosition().x + objectCollision->getRectSize().L), (objectTransform->getPosition().y + objectCollision->getRectSize().l));
+    Vector end_pos_rect1 = Vector((playerTransform.getPosition().x + playerCollision.getRectSize().L), (playerTransform.getPosition().y + playerCollision.getRectSize().l));
+    Vector end_pos_rect2 = Vector((objectTransform.getPosition().x + objectCollision.getRectSize().L), (objectTransform.getPosition().y + objectCollision.getRectSize().l));
 
-    if (playerTransform->getPosition().x >= objectTransform->getPosition().x && playerTransform->getPosition().x <= end_pos_rect2.x &&
-        playerTransform->getPosition().y >= objectTransform->getPosition().y && playerTransform->getPosition().y <= end_pos_rect2.y)
+    if (playerTransform.getPosition().x >= objectTransform.getPosition().x && playerTransform.getPosition().x <= end_pos_rect2.x &&
+        playerTransform.getPosition().y >= objectTransform.getPosition().y && playerTransform.getPosition().y <= end_pos_rect2.y)
         return (true);
-    if (playerTransform->getPosition().x >= objectTransform->getPosition().x && playerTransform->getPosition().x <= end_pos_rect2.x &&
-        end_pos_rect1.y >= objectTransform->getPosition().y && end_pos_rect1.y <= end_pos_rect2.y)
+    if (playerTransform.getPosition().x >= objectTransform.getPosition().x && playerTransform.getPosition().x <= end_pos_rect2.x &&
+        end_pos_rect1.y >= objectTransform.getPosition().y && end_pos_rect1.y <= end_pos_rect2.y)
         return (true);
-    if (end_pos_rect1.x >= objectTransform->getPosition().x && end_pos_rect1.x <= end_pos_rect2.x &&
-        playerTransform->getPosition().y >= objectTransform->getPosition().y && playerTransform->getPosition().y <= end_pos_rect2.y)
+    if (end_pos_rect1.x >= objectTransform.getPosition().x && end_pos_rect1.x <= end_pos_rect2.x &&
+        playerTransform.getPosition().y >= objectTransform.getPosition().y && playerTransform.getPosition().y <= end_pos_rect2.y)
         return (true);
-    if (end_pos_rect1.x >= objectTransform->getPosition().x && end_pos_rect1.x <= end_pos_rect2.x &&
-        end_pos_rect1.y >= objectTransform->getPosition().y && end_pos_rect1.y <= end_pos_rect2.y)
+    if (end_pos_rect1.x >= objectTransform.getPosition().x && end_pos_rect1.x <= end_pos_rect2.x &&
+        end_pos_rect1.y >= objectTransform.getPosition().y && end_pos_rect1.y <= end_pos_rect2.y)
         return (true);
-    if (end_pos_rect2.x >= playerTransform->getPosition().x && end_pos_rect2.x <= end_pos_rect1.x &&
-        end_pos_rect2.y >= playerTransform->getPosition().y && end_pos_rect2.y <= end_pos_rect1.y)
+    if (end_pos_rect2.x >= playerTransform.getPosition().x && end_pos_rect2.x <= end_pos_rect1.x &&
+        end_pos_rect2.y >= playerTransform.getPosition().y && end_pos_rect2.y <= end_pos_rect1.y)
         return (true);
     return (false);
 }

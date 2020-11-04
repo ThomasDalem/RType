@@ -20,7 +20,6 @@ SRC			=		main.cpp											\
 					$(GAME_ENGINE_PATH)/Entities/Bullet.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/DestroyableTile.cpp	\
 					$(GAME_ENGINE_PATH)/Entities/Enemy.cpp				\
-					$(GAME_ENGINE_PATH)/Entities/Environment.cpp		\
 					$(GAME_ENGINE_PATH)/Entities/Player.cpp				\
 					$(GAME_ENGINE_PATH)/Entities/PowerUp.cpp			\
 					$(GAME_ENGINE_PATH)/Entities/StageObstacle.cpp		\

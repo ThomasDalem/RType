@@ -12,7 +12,7 @@ namespace game_engine {
     enum EntitiesType
     {
         PLAYER = 0,
-        ENNEMY = 1,
+        ENEMY = 1,
         BULLET = 2,
         ENVIRONNEMENT = 3,
         MUSIC = 4,

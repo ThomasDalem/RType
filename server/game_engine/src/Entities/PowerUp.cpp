@@ -23,7 +23,7 @@ game_engine::PowerUp::PowerUp(Vector _position)
     _componentList.push_back(_sound);
 }
 
-void game_engine::PowerUp::ActivePowerUp(std::shared_ptr<game_engine::Player> player)
+void game_engine::PowerUp::activePowerUp(game_engine::Player &player)
 {
     if (_powerUpType == PowerUpType::INCREASEFIRERATE)
         activeIncreaseFireRate(player);
@@ -35,18 +35,18 @@ void game_engine::PowerUp::ActivePowerUp(std::shared_ptr<game_engine::Player> pl
 
 #include "Player.hpp"
 
-void game_engine::PowerUp::activeIncreaseFireRate(std::shared_ptr<game_engine::Player> player)
+void game_engine::PowerUp::activeIncreaseFireRate(game_engine::Player &player)
 {
-    player.get()->getShoot()->setFireRate(player.get()->getShoot()->getFireRate() + 1);
+    player.getShoot()->setFireRate(player.getShoot()->getFireRate() + 1);
 }
 
-void game_engine::PowerUp::activeSheild(std::shared_ptr<game_engine::Player> player)
+void game_engine::PowerUp::activeSheild(game_engine::Player &player)
 {
-    player.get()->getHealth()->setIsDamageable(false);
-    player.get()->setTimeInvincibility(player.get()->getTimeInvincibility() + 1000);
+    player.getHealth()->setIsDamageable(false);
+    player.setTimeInvincibility(player.getTimeInvincibility() + 1000);
 }
 
-void game_engine::PowerUp::activeSpeedBoost(std::shared_ptr<game_engine::Player> player)
+void game_engine::PowerUp::activeSpeedBoost(game_engine::Player &player)
 {
-    player.get()->setSpeedMultiplicator(player.get()->getSpeedMultiplicator() + 1);
+    player.setSpeedMultiplicator(player.getSpeedMultiplicator() + 1);
 }
