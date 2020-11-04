@@ -20,7 +20,7 @@
 namespace game_engine {
     class Player : public IEntities {
         public:
-            Player(int clientID, Vector _position, PlayerColor playerColor);
+            Player(Vector _position, PlayerColor playerColor, int clientID);
             ~Player() {};
 
             int getUniqueID() const {return (_uniqueID);};

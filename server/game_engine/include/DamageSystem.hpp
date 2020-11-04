@@ -26,6 +26,7 @@ namespace game_engine
     public:
         DamageSystem(std::vector<std::shared_ptr<IEntities>> &player, std::vector<std::shared_ptr<IEntities>> &ennemy, std::vector<std::shared_ptr<IEntities>> &object);
         ~DamageSystem();
+
         void damageSystem();
         void ennemyDamageSystem();
         bool checkCollisionWithObject(Transform *transfromComponent, Collision *collisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent);

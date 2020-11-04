@@ -48,5 +48,5 @@ void game_engine::SpawnSystem::spawnEnnemy()
 
 void game_engine::SpawnSystem::newPlayer(int clientID)
 {
-    std::shared_ptr<Player> newPlayer = std::make_shared<Player>(clientID, Vector(50, 500), PlayerColor::Green);
+    std::shared_ptr<Player> newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, clientID);
 }

@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-game_engine::Player::Player(int clientID, Vector _position, PlayerColor playerColor)
+game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID)
 {
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _clientID = clientID;
