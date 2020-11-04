@@ -54,6 +54,7 @@ namespace game_engine {
 
             size_t _timeInvincibility;
             float _speedMultiplicator;
+            int _clientID;
     };
 }
 

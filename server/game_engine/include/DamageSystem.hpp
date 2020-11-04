@@ -11,7 +11,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
-#include<tuple>
+#include <tuple>
 #include "Components/Collision.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Health.hpp"
@@ -26,6 +26,7 @@ namespace game_engine
     public:
         DamageSystem(std::vector<std::shared_ptr<IEntities>> &player, std::vector<std::shared_ptr<IEntities>> &ennemy, std::vector<std::shared_ptr<IEntities>> &object);
         ~DamageSystem();
+
         void damageSystem();
         bool checkCollisionWithObject(Transform *transfromComponent, Collision *collisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent);
         bool checkCollisionWithEnnemy(Transform *transfromComponent, Collision *collisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent);

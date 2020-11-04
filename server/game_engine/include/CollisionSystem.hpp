@@ -14,18 +14,23 @@
 #include "Components/Transform.hpp"
 #include "Components/Collision.hpp"
 #include "EntitiesEnum.hpp"
+#include "Entities/IEntities.hpp"
 
 namespace game_engine
 {
     class CollisionSystem {
         public:
-            CollisionSystem();
+            CollisionSystem(std::vector<std::shared_ptr<IEntities>> &player, std::vector<std::shared_ptr<IEntities>> &powerUp, std::vector<std::shared_ptr<IEntities>> &objectAndEnnemy);
             ~CollisionSystem();
-            void collisionSystem(std::map<EntitiesType, std::pair<std::shared_ptr<Transform>, std::shared_ptr<Collision>>> map);
-            bool checkCollision(std::pair<std::shared_ptr<Transform>, std::shared_ptr<Collision>> rect1, std::pair<std::shared_ptr<Transform>, std::shared_ptr<Collision>> rect2);
+
+            void collisionSystem();
+            //bool checkCollision(std::pair<std::shared_ptr<Transform>, std::shared_ptr<Collision>> *rect1, std::pair<std::shared_ptr<Transform>, std::shared_ptr<Collision>> rect2);
 
         protected:
         private:
+            std::vector<std::shared_ptr<IEntities>> &_player;
+            std::vector<std::shared_ptr<IEntities>> &_powerUp;
+            std::vector<std::shared_ptr<IEntities>> &_objectAndEnnemy;
     };
 } // namespace game_engine
 

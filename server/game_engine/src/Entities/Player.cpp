@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-game_engine::Player::Player(Vector _position, PlayerColor playerColor)
+game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID)
 {
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
@@ -18,4 +18,5 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor)
     _entitesID = EntitiesType::PLAYER;
     _timeInvincibility = 0;
     _speedMultiplicator = 1;
+    _clientID = clientID
 }
