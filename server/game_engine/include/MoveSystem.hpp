@@ -25,6 +25,7 @@ namespace game_engine
         ~MoveSystem();
         void moveSystem();
         bool checkGameBorder(Transform &transform);
+        void applyMovement();
 
     protected:
     private:

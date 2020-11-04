@@ -35,6 +35,12 @@ void game_engine::MoveSystem::moveSystem()
     }
 }
 
+
+void game_engine::MoveSystem::applyMovement()
+{
+    
+}
+
 bool game_engine::MoveSystem::checkGameBorder(Transform &transform)
 {
     if (transform.getPosition().y + transform.getDirection().y < 0 ||

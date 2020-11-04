@@ -12,7 +12,9 @@
 #include <map>
 #include <memory>
 #include <tuple>
-#include<dirent.h>
+#include <cstdio>
+#include <ctime>
+#include <dirent.h>
 #include "Components/Collision.hpp"
 #include "Components/Transform.hpp"
 #include "Components/Health.hpp"
@@ -20,6 +22,8 @@
 #include "Entities/IEntities.hpp"
 #include "Entities/Enemy.hpp"
 #include "Entities/Player.hpp"
+#include "Entities/StageObstacle.hpp"
+#include "Entities/DestroyableTile.hpp"
 #include "./DDLoader.hpp"
 
 
@@ -34,8 +38,13 @@ namespace game_engine
         void spawnEnnemy();
         void newPlayer(int clientID);
 
+        void spawnObstacle();
+        void addObstacle();
+
     protected:
     private:
+        std::clock_t blockSpawnClock;
+        double blockSpawnTime;
         std::vector<std::shared_ptr<IEntities>> &_entities;
     };
 } // namespace game_engine

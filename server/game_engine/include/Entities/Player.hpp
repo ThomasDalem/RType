@@ -16,6 +16,7 @@
 #include "../Components/Shoot.hpp"
 #include "../Components/Collision.hpp"
 #include "../Components/Render.hpp"
+#include "../InputEnum.hpp"
 
 namespace game_engine {
     class Player : public IEntities {
@@ -44,6 +45,7 @@ namespace game_engine {
             int _uniqueID;
             int _clientID;
             EntitiesType _entitesID;
+            std::vector<InputEnum> inputBuffer;
 
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Sound> _deathSound;
