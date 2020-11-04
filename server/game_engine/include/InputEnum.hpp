@@ -11,11 +11,12 @@
 namespace game_engine {
     enum InputEnum
     {
+        NOTHING = -1,
         MOVELEFT = 0,
         MOVERIGHT = 1,
         MOVEUP = 2,
         MOVEDOWN = 3,
-        SHOOT = 4,
+        SHOOTINPUT = 4,
     };
 }
 

@@ -12,9 +12,13 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include "./Entities/Player.hpp"
+#include "./Entities/Enemy.hpp"
+
 #include "./Components/Transform.hpp"
 #include "EntitiesEnum.hpp"
 #include "Entities/IEntities.hpp"
+#include "./EntitiesParser.hpp"
 
 namespace game_engine
 {
@@ -26,6 +30,8 @@ namespace game_engine
         void moveSystem();
         bool checkGameBorder(Transform &transform);
         void applyMovement();
+        void changePlayerDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);
+        void changeEnnemyDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy);
 
     protected:
     private:

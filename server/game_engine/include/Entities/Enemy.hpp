@@ -15,6 +15,7 @@
 #include "../Components/Shoot.hpp"
 #include "../Components/Collision.hpp"
 #include "../Components/Render.hpp"
+#include "../InputEnum.hpp"
 
 namespace game_engine {
     class Enemy : public IEntities {
@@ -25,7 +26,17 @@ namespace game_engine {
             int getUniqueID() const {return (_uniqueID);};
             EntitiesType getEntitiesID() const {return (_entitesID);};
             std::vector<std::shared_ptr<AComponents>> getComponentList() const {return (_componentList);};
+            std::vector<InputEnum> getInputBuffer() const {return (inputBuffer);};
 
+            InputEnum getFirstEnum() const {
+                if (!inputBuffer.empty())
+                    return (inputBuffer[0]);
+                return (InputEnum::NOTHING);
+            }
+            void popFirstInput() {
+                if (!inputBuffer.empty())
+                    inputBuffer.erase(inputBuffer.begin());
+            };
             std::shared_ptr<Transform> getTransform() const {return (_transform);};
             std::shared_ptr<Sound> getDeathSound() const {return (_deathSound);};
             std::shared_ptr<Health> getHealth() const {return (_health);};
@@ -37,6 +48,7 @@ namespace game_engine {
         private:
             int _uniqueID;
             EntitiesType _entitesID;
+            std::vector<InputEnum> inputBuffer; 
 
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Sound> _deathSound;
