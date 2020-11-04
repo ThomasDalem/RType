@@ -1,18 +1,32 @@
-#include "Main.hpp"
+#include "Room.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
-Mainmenu::Mainmenu() {
+static int num = 0;
+
+void addItems(vector<shared_ptr<Button>> &roomlist) {
+    roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (num * 110)), sf::Vector2f(250, 100)));
+    roomlist[num]->setColor(sf::Color::Black, sf::Color::White, 5);
+    roomlist[num]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(num + 1), 75, sf::Color::White);
+    num += 1;
+}
+
+RoomMenu::RoomMenu(string name) {
     _name = "";
     isMenu = true;
-    _play = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 250), sf::Vector2f(250, 100));
 
-    _play->setColor(sf::Color::Black, sf::Color::White, 5);
-    _play->setText("./resources/fonts/2MASS.otf", "Play", 75, sf::Color::White);
+    // A REMOVE -- POUR TEST
+    addItems(roomlist);
+    addItems(roomlist);
+    addItems(roomlist);
+    addItems(roomlist);
+    addItems(roomlist);
+    addItems(roomlist);
+    // FIN DU REMOVE -- POUR TEST
 }
-Mainmenu::~Mainmenu() {}
+RoomMenu::~RoomMenu() {}
 
-string Mainmenu::loop(shared_ptr<sf::RenderWindow> _window) {
+string RoomMenu::loop(shared_ptr<sf::RenderWindow> _window) {
     ImageSFML back("./resources/sprites/mainbackground.png");
     TextSfml name_txt("Pseudo: " + _name, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
@@ -25,14 +39,15 @@ string Mainmenu::loop(shared_ptr<sf::RenderWindow> _window) {
 
         _window->draw(*back.getSprite());
         _window->draw(*name_txt.getData());
-        _play->drawButton(_window);
+        for (size_t i = 0; i < roomlist.size(); i ++)
+            roomlist[i]->drawButton(_window);
         _window->display();
         _window->clear();
     }
     return _name;
 }
 
-void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
+void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
     sf::Event event;
 
     while(_window->pollEvent(event)) {
@@ -45,9 +60,9 @@ void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
                 _name = _name + (char)(event.key.code + 97);
             else if (event.key.code == 57)
                 _name = _name + " ";
-            // else if (event.key.code == 58 || event.key.code == 48)
-            //     isMenu = false;
-        } if (_play->isClicked(event))
-            isMenu = false;
+        } for (size_t i = 0; i < roomlist.size(); i ++) {
+            if (roomlist[i]->isClicked(event))
+                cout << "Clicked on room " << i + 1 << endl;
+        }
     }
 }
