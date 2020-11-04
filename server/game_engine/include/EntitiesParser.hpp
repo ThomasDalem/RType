@@ -23,9 +23,8 @@ namespace game_engine {
                 int i = 0;
 
                 for (listEntitiesIter = listEntities.begin(); listEntitiesIter != listEntities.end(); listEntitiesIter++) {
-                    if (checkEntities(listEntitiesIter, typeList) == true) {
+                    if (checkEntities(listEntitiesIter, typeList) == true)
                         newListEntities.push_back(listEntities[i]);
-                    }
                     i++;
                 }
                 return (newListEntities);
@@ -33,13 +32,9 @@ namespace game_engine {
 
             static bool checkEntities(std::vector<std::shared_ptr<IEntities>>::iterator entitie, std::vector<EntitiesType> typeList)
             {
-                std::vector<EntitiesType>::iterator typeListIter;
-                int i = 0;
-
-                for (typeListIter = typeList.begin(); typeListIter != typeList.end(); typeListIter++) {
-                    if (entitie->get()->getEntitiesID() == typeListIter[i])
+                for (int i = 0; i < typeList.size(); i++) {
+                    if (entitie->get()->getEntitiesID() == typeList[i])
                         return (true);
-                    i++;
                 }
                 return (false);
             }

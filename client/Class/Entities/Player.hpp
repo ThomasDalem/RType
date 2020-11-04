@@ -22,6 +22,8 @@ class Player {
         ~Player();
 
         void setName(string str);
+        void setRoom(int room);
+        int getRoom(void) const;
         string getName(void) const;
         void setHealth(size_t hlth);
         size_t getHealth(void) const;
@@ -32,6 +34,7 @@ class Player {
         shared_ptr<TextSfml> getNameText(void) const;
 
     private:
+        int _room;
         string _name;
         size_t _health;
         sf::Vector2f _pos;

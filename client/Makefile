@@ -16,6 +16,7 @@ SRC = 	main.cpp				\
 		src/SFML/BackgroundSFML.cpp	\
 		\
 		src/Menu/Main.cpp			\
+		src/Menu/Room.cpp			\
 		\
 		src/Entities/Player.cpp		\
 		src/Entities/Monster.cpp	\

@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "Room.hpp"
 #include "Main.hpp"
 #include "Player.hpp"
 #include "ErrorHandler.hpp"
@@ -26,16 +27,19 @@ vector<string> getArgs(char **av) {
 
 void core(vector<string> av) {
     Player player;
-    WindowHandler windowhdl(1200, 600, "R-Type");
+    WindowHandler windowhdl(1910, 1070, "R-Type");
     shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     windowhdl.setFramerate(50);
     windowhdl.addText(Score);
-    player.setName(Mainmenu().loop(windowhdl.getWindow()));
+    switch (Mainmenu().loop(windowhdl.getWindow(), player)) {
+        case Creating: RoomMenu().creatingGame(windowhdl.getWindow(), player); break;
+        case Room: RoomMenu().loop(windowhdl.getWindow(), player); break;
+        default: break;
+    }
     windowhdl.addImage(player.getImage());
     windowhdl.addText(player.getNameText());
     while (windowhdl.isOpen()) {
-        // windowhdl.getWindow()->draw(*player.getNameText()->getData());
         windowhdl.isEvent(player);
         windowhdl.display();
     }

@@ -8,6 +8,7 @@
 #include "Player.hpp"
 
 Player::Player() {
+    _room = -1;
     _name = "";
     _pos = sf::Vector2f(250, 250);
     _image = make_shared<ImageSFML>("./resources/sprites/r-typesheet42.gif");
@@ -33,6 +34,8 @@ void Player::setName(string str) {
     _textname->setString(_name);
 }
 
+void Player::setRoom(int room) {_room = room;}
+int Player::getRoom(void) const {return _room;}
 string Player::getName(void) const {return _name;}
 void Player::setHealth(size_t hlth) {_health = hlth;}
 size_t Player::getHealth(void) const {return _health;}

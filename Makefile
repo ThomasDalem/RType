@@ -8,6 +8,7 @@
 all		:
 				make -C ./server
 				make -C ./client
+				make -C ./lib
 
 server	:
 				make re -C ./server
@@ -15,14 +16,19 @@ server	:
 client	:
 				make re -C ./client
 
+lib		:
+				make re -C ./lib
+
 clean	:
 				make clean -C ./server
 				make clean -C ./client
+				make clean -C ./lib
 
 fclean	:
 				make fclean -C ./server
 				make fclean -C ./client
+				make fclean -C ./lib
 
 re		:		fclean all
 
-.PHONY: server client all clean fclean re
+.PHONY: server client lib all clean fclean re
