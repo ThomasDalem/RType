@@ -15,12 +15,12 @@ game_engine::SpawnSystem::~SpawnSystem()
 {
 }
 
-void game_engine::SpawnSystem::loadEnnemyLibrary()
+void game_engine::SpawnSystem::loadEnemyLibrary()
 {
 
 }
 
-void game_engine::SpawnSystem::spawnEnnemy()
+void game_engine::SpawnSystem::spawnEnemy()
 {
     // DDloader<Enemy> ennemyLoader;
     // DIR *pDIR;

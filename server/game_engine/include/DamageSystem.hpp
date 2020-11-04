@@ -29,10 +29,10 @@ namespace game_engine
 
         void damageSystem();
         void ennemyDamageSystem();
-        bool checkCollisionWithObject(Transform *transfromComponent, Collision *collisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent);
-        bool checkCollisionWithEnnemy(Transform *transfromComponent, Collision *collisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent);
+        bool checkCollisionWithObject(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent);
+        bool checkCollisionWithEnemy(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent);
         bool isCollision();
-        bool checkCollision(Transform *playerTransfrom, Collision * playerCollision, Transform *objectTransform, Collision *objectCollision);
+        bool checkCollision(Transform &playerTransfrom, Collision & playerCollision, Transform &objectTransform, Collision &objectCollision);
 
     protected:
     private:
