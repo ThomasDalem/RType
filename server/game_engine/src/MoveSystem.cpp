@@ -65,6 +65,8 @@ void game_engine::MoveSystem::changePlayerDirection(std::vector<std::shared_ptr<
                 player->getTransform()->changeDirection(Vector(5, 0));
             player->popFirstInput();
         }
+        else
+            player->getTransform()->changeDirection(Vector(0, 0));
     }
 }
 void game_engine::MoveSystem::changeEnnemyDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy)
@@ -85,6 +87,8 @@ void game_engine::MoveSystem::changeEnnemyDirection(std::vector<std::shared_ptr<
                 ennemy->getTransform()->changeDirection(Vector(5, 0));
             ennemy->popFirstInput();
         }
+        else
+            ennemy->getTransform()->changeDirection(Vector(0, 0));
     }
 }
 

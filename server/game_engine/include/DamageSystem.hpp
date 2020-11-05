@@ -31,6 +31,7 @@ namespace game_engine
         void ennemyDamageSystem();
         bool checkCollisionWithObject(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent);
         bool checkCollisionWithEnemy(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent);
+        bool checkCollisionWithAllieBullet(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> bulletComponent);
         bool isCollision();
         bool checkCollision(Transform &playerTransfrom, Collision & playerCollision, Transform &objectTransform, Collision &objectCollision);
 

@@ -22,9 +22,11 @@
 #include "Entities/IEntities.hpp"
 #include "Entities/Enemy.hpp"
 #include "Entities/Player.hpp"
+#include "Entities/Bullet.hpp"
 #include "Entities/StageObstacle.hpp"
 #include "Entities/DestroyableTile.hpp"
 #include "./DDLoader.hpp"
+#include "EntitiesParser.hpp"
 
 
 namespace game_engine
@@ -37,11 +39,14 @@ namespace game_engine
         void loadEnemyLibrary();
         void spawnEnemy();
         void newPlayer(int clientID);
+        void checkEntitieShoot();
+        void checkPlayerShoot(std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);
+        void checkEnnemyShoot(std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy, std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);
 
         void spawnObstacle();
         void addObstacle();
 
-    protected:
+    protected: 
     private:
         std::clock_t blockSpawnClock;
         double blockSpawnTime;

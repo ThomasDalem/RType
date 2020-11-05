@@ -82,7 +82,7 @@ void game_engine::DamageSystem::ennemyDamageSystem()
         for (objectIter = _object.begin(); objectIter != _object.end(); objectIter++)
         {
             objectComponent = objectIter->get()->getComponentList();
-            if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
+            if (objectIter->get()->getEntitiesID() == EntitiesType::BULLET && checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
         }
     }
@@ -104,7 +104,7 @@ bool game_engine::DamageSystem::checkCollisionWithObject(Transform &playerTransf
         if (objectComponentIter->get()->getType() == ComponentType::HEALTH)
             objectHealthComponent = static_cast<Health *>(objectComponentIter->get());
     }
-    if (checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent) && objectCollisionComponent->getCanDamagePlayer() == true) {
+    if (objectCollisionComponent->getCanDamagePlayer() == true && checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent)) {
         objectHealthComponent->getDamage();
         return (true);
     }
@@ -127,8 +127,31 @@ bool game_engine::DamageSystem::checkCollisionWithEnemy(Transform &playerTransfr
         if (ennemyComponentIter->get()->getType() == ComponentType::HEALTH)
             objectHealthComponent = static_cast<Health *>(ennemyComponentIter->get());
     }
-    if (checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent) && objectCollisionComponent->getCanDamagePlayer() == true) {
+    if (objectCollisionComponent->getCanDamagePlayer() == true && checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent)) {
         objectHealthComponent->getDamage();
+        return (true);
+    }
+    return (false);
+}
+
+bool game_engine::DamageSystem::checkCollisionWithAllieBullet(Transform &playerTransfromComponent,
+                                                         Collision &playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> bulletComponent)
+{
+    std::vector<std::shared_ptr<AComponents>>::iterator bulletComponentIter;
+    Transform *bulletTransfromComponent;
+    Collision *bulletCollisionComponent;
+    Health *bulletHealthComponent;
+
+    for (bulletComponentIter = bulletComponent.begin(); bulletComponentIter != bulletComponent.end(); ++bulletComponentIter) {
+        if (bulletComponentIter->get()->getType() == ComponentType::TRANSFORM)
+            bulletTransfromComponent = static_cast<Transform *>(bulletComponentIter->get());
+        if (bulletComponentIter->get()->getType() == ComponentType::COLLISION)
+            bulletCollisionComponent = static_cast<Collision *>(bulletComponentIter->get());
+        if (bulletComponentIter->get()->getType() == ComponentType::HEALTH)
+            bulletHealthComponent = static_cast<Health *>(bulletComponentIter->get());
+    }
+    if (bulletCollisionComponent->getCanDamagePlayer() == false && checkCollision(playerTransfromComponent, playerCollisionComponent, *bulletTransfromComponent, *bulletCollisionComponent)) {
+        bulletHealthComponent->getDamage();
         return (true);
     }
     return (false);
