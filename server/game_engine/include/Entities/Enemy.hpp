@@ -44,11 +44,13 @@ namespace game_engine {
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
 
+            virtual void pathEnemy() {};
+
         protected:
         private:
             int _uniqueID;
             EntitiesType _entitesID;
-            std::vector<InputEnum> inputBuffer; 
+            std::vector<InputEnum> inputBuffer;
 
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Sound> _deathSound;

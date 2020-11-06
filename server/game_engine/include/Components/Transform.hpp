@@ -34,6 +34,7 @@ namespace game_engine
             _position.y += direction.y;
         }
         void setRotation(float newRotation) {_rotation = newRotation;}
+        void setNewDirection(Vector newDirection) {_direction = newDirection;}
 
         void resetToOldPosition() {
             _position.x = _oldPosition.x;

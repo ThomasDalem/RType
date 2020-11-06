@@ -17,7 +17,7 @@ OBJ 			=		$(SRC:.cpp=.o)
 
 CC				= 		g++
 
-CPPFLAGS		=		-I./ -I../../server/game_engine/include/Entities
+CPPFLAGS		=		-I./ -I../../server/game_engine/include/Entities -I../../server/game_engine/include
 
 all				:		$(NAME)
 

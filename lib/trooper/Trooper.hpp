@@ -8,11 +8,17 @@
 #ifndef TROOPER_HPP_
 #define TROOPER_HPP_
 
+#include "../../server/game_engine/include/Entities/Enemy.hpp"
+#include "../../server/game_engine/include/Vector.hpp"
+#include <vector>
+#include <memory>
+
 namespace enemies {
-    class Trooper {
+    class Trooper : public game_engine::Enemy {
         public:
-            Trooper();
+            Trooper(game_engine::Vector position);
             ~Trooper();
+            void pathEnemy();
 
         protected:
         private:

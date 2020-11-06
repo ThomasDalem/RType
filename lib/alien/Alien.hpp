@@ -8,11 +8,17 @@
 #ifndef ALIEN_HPP_
 #define ALIEN_HPP_
 
+#include "../../server/game_engine/include/Entities/Enemy.hpp"
+#include "../../server/game_engine/include/Vector.hpp"
+#include <vector>
+#include <memory>
+
 namespace enemies {
-    class Alien {
+    class Alien : public game_engine::Enemy {
         public:
-            Alien();
+            Alien(game_engine::Vector position);
             ~Alien();
+            void pathEnemy();
 
         protected:
         private:

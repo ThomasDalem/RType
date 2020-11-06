@@ -7,7 +7,7 @@
 
 #include "BattleShip.hpp"
 
-enemies::BattleShip::BattleShip()
+enemies::BattleShip::BattleShip(game_engine::Vector position) : game_engine::Enemy(position)
 {
 }
 
@@ -15,7 +15,12 @@ enemies::BattleShip::~BattleShip()
 {
 }
 
-extern "C" enemies::BattleShip *entryPoint()
+void enemies::BattleShip::pathEnemy()
 {
-    return (new enemies::BattleShip());
+    this->getTransform()->setNewDirection(game_engine::Vector(0, 2));
+}
+
+extern "C" enemies::BattleShip *entryPoint(game_engine::Vector position)
+{
+    return (new enemies::BattleShip(position));
 }

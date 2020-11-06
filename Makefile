@@ -31,4 +31,4 @@ fclean	:
 
 re		:		fclean all
 
-.PHONY: server client lib all clean fclean re
+.PHONY: server client libc all clean fclean re
