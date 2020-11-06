@@ -50,7 +50,18 @@ void game_engine::SpawnSystem::spawnEnemy()
 
 void game_engine::SpawnSystem::newPlayer(int clientID)
 {
-    std::shared_ptr<Player> newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, clientID);
+    std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer;
+    std::shared_ptr<Player> newPlayer;
+
+    EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities, newListPlayer);
+    if (newListPlayer.size() == 0)
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, clientID);
+    if (newListPlayer.size() == 1)
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Blue, clientID);
+    if (newListPlayer.size() == 2)
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Red, clientID);
+    if (newListPlayer.size() == 3)
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, clientID);
     _entities.push_back(newPlayer);
 }
 
