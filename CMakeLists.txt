@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(r-type)
 
-include(${CMAKE_BINARY_DIR}/../conanbuildinfo.cmake)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
 # ==== SERVER ====
@@ -15,25 +15,27 @@ set(SERVER_SRCS
     ./server/game_engine/src/Entities/Bullet.cpp
     ./server/game_engine/src/Entities/DestroyableTile.cpp
     ./server/game_engine/src/Entities/Enemy.cpp
-    ./server/game_engine/src/Entities/Environment.cpp
     ./server/game_engine/src/Entities/Player.cpp
     ./server/game_engine/src/Entities/PowerUp.cpp
     ./server/game_engine/src/Entities/StageObstacle.cpp
+    ./server/src/NetUDPServer.cpp
 )
 
 add_executable(r-type_server ${SERVER_SRCS})
 
 target_link_libraries(r-type_server CONAN_PKG::boost)
 target_include_directories(r-type_server PUBLIC
+    ${CONAN_INCLUDE_DIRS_BOOST}
     ./server/game_engine/include
     ./server/game_engine/include/Entities
     ./server/game_engine/include/Components
+    ./server/include/
 )
 
 # ==== CLIENT ====
 
 set(CLIENT_SRCS
-    ./client/src/main.cpp
+    ./client/main.cpp
     ./client/src/Client.cpp
     ./client/src/ErrorHandler.cpp
     ./client/src/WindowHandler.cpp
@@ -43,16 +45,23 @@ set(CLIENT_SRCS
     ./client/src/SFML/BackgroundSFML.cpp
     ./client/src/SFML/ImageSFML.cpp
     ./client/src/SFML/TextSFML.cpp
+    ./client/src/SFML/Button.cpp
     ./client/src/Virtual/VEntitie.cpp
     ./client/src/Virtual/VMonster.cpp
+    ./client/src/Menu/Main.cpp
+    ./client/src/Menu/Room.cpp
+    ./client/src/Network/NetUDPClient.cpp
 )
 
-add_executable(r-type_server ${SERVER_SRCS})
+add_executable(r-type_client ${CLIENT_SRCS})
 
-target_link_libraries(r-type_server CONAN_PKG::boost)
-target_include_directories(r-type_server PUBLIC
+target_link_libraries(r-type_client CONAN_PKG::boost CONAN_PKG::sfml)
+target_include_directories(r-type_client PUBLIC
+    ${CONAN_INCLUDE_DIRS_BOOST}
+    ${CONAN_INCLUDE_DIRS_SFML}
     ./client/include
     ./client/Class/Entities/
+    ./client/Class/Menu/
     ./client/Class/
     ./client/Class/SFML/
     ./client/Class/Virtual/
