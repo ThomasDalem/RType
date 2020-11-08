@@ -17,6 +17,7 @@
 #include "Components/Health.hpp"
 #include "EntitiesEnum.hpp"
 #include "Entities/IEntities.hpp"
+#include "EntitiesParser.hpp"
 
 
 namespace game_engine
@@ -29,8 +30,9 @@ namespace game_engine
 
         void damageSystem();
         void ennemyDamageSystem();
+        void environnementDamageSystem();
+        void getDamageComponent(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Collision *collisionComponent, Health *healthComponent);
         bool checkCollisionWithObject(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> objectComponent);
-        bool checkCollisionWithEnemy(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> ennemyComponent);
         bool checkCollisionWithAllieBullet(Transform &transfromComponent, Collision &collisionComponent, std::vector<std::shared_ptr<AComponents>> bulletComponent);
         bool isCollision();
         bool checkCollision(Transform &playerTransfrom, Collision & playerCollision, Transform &objectTransform, Collision &objectCollision);

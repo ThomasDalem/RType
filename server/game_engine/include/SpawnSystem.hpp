@@ -36,6 +36,7 @@ namespace game_engine
     public:
         SpawnSystem(std::vector<std::shared_ptr<IEntities>> &entities);
         ~SpawnSystem();
+        void spawnSystem();
         void loadEnemyLibrary();
         void spawnEnemy();
         void newPlayer(int clientID);

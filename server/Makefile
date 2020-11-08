@@ -11,6 +11,7 @@ NAME		=		r-type_server
 
 SRC			=		main.cpp											\
 					src/Server.cpp										\
+					$(GAME_ENGINE_PATH)/GameLoop.cpp					\
 					$(GAME_ENGINE_PATH)/System.cpp						\
 					$(GAME_ENGINE_PATH)/MoveSystem.cpp					\
 					$(GAME_ENGINE_PATH)/CollisionSystem.cpp				\

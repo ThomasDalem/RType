@@ -28,6 +28,7 @@ namespace game_engine
         MoveSystem(std::vector<std::shared_ptr<IEntities>> &list);
         ~MoveSystem();
         void moveSystem();
+        void moveEntitie();
         bool checkGameBorder(Transform &transform);
         void applyMovement();
         void changePlayerDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);

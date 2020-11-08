@@ -17,12 +17,18 @@ game_engine::MoveSystem::~MoveSystem()
 
 void game_engine::MoveSystem::moveSystem()
 {
+    applyMovement();
+    moveEntitie();
+}
+
+void game_engine::MoveSystem::moveEntitie()
+{
     std::vector<std::shared_ptr<IEntities>>::iterator iter;
     std::vector<std::shared_ptr<AComponents>> entitieComponent;
+    std::vector<std::shared_ptr<AComponents>>::iterator componentIter;
 
     for (iter = _list.begin(); iter != _list.end(); ++iter) {
         entitieComponent = iter->get()->getComponentList();
-        std::vector<std::shared_ptr<AComponents>>::iterator componentIter;
         for (componentIter = entitieComponent.begin(); componentIter != entitieComponent.end(); ++componentIter) {
             if (componentIter->get()->getType() == ComponentType::TRANSFORM) {
                 Transform *transfromComponent = static_cast<Transform *>(componentIter->get());

@@ -17,6 +17,13 @@ game_engine::SpawnSystem::~SpawnSystem()
 {
 }
 
+void game_engine::SpawnSystem::spawnSystem()
+{
+    //spawnEnemy();
+    spawnObstacle();
+    checkEntitieShoot();
+}
+
 void game_engine::SpawnSystem::loadEnemyLibrary()
 {
 
