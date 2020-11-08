@@ -15,7 +15,6 @@
 
 namespace network
 {
-
     enum class Event : std::uint8_t
     {
         MOVE,
@@ -27,8 +26,8 @@ namespace network
     struct UDPMessage
     {
         int playerID;
-        Event event;
         int value;
+        Event event;
     };
 }
 #endif /* !NETCOMMON_HPP_ */

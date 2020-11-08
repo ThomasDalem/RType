@@ -23,7 +23,7 @@ namespace network
         void sendMessage(UDPMessage const& message, boost::asio::ip::udp::endpoint const& endpoint);
         void broadcastMessage(UDPMessage &message);
         bool hasMessages() const;
-        std::unique_ptr<UDPMessage> getFirstMessage();
+        std::unique_ptr<std::pair<UDPMessage, boost::asio::ip::udp::endpoint>> getFirstMessage();
 
     private:
         void receiveMessage();
@@ -37,7 +37,7 @@ namespace network
         boost::asio::ip::udp::endpoint _senderEndpoint;
         char _data[MAX_MESSAGE_LENGTH];
         std::vector<boost::asio::ip::udp::endpoint> _clients;
-        std::queue<std::unique_ptr<UDPMessage>> _messages;
+        std::queue<std::unique_ptr<std::pair<UDPMessage, boost::asio::ip::udp::endpoint>>> _messages;
     };
 }
 

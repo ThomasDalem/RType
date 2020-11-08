@@ -41,15 +41,17 @@ namespace network
             std::bind(&NetUDPServer::handleMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    void NetUDPServer::handleMessage(boost::system::error_code const &ec, std::size_t receivedBytes)
+    void NetUDPServer::handleMessage(boost::system::error_code const& ec, std::size_t receivedBytes)
     {
-        std::unique_ptr<UDPMessage> message = std::make_unique<UDPMessage>();
+        std::unique_ptr<std::pair<UDPMessage, boost::asio::ip::udp::endpoint>> message =
+            std::make_unique<std::pair<UDPMessage, boost::asio::ip::udp::endpoint>>();
 
         if (!newClientExist()) {
             _clients.push_back(_senderEndpoint);
         }
         if (!ec && receivedBytes == sizeof(UDPMessage)) {
-            std::memcpy(message.get(), _data, sizeof(UDPMessage));
+            std::memcpy(&message.get()->first, _data, sizeof(UDPMessage));
+            message->second = _senderEndpoint;
             _messages.push(std::move(message));
         }
         receiveMessage();
@@ -60,13 +62,12 @@ namespace network
         return !_messages.empty();
     }
 
-    std::unique_ptr<UDPMessage> NetUDPServer::getFirstMessage()
+    std::unique_ptr<std::pair<UDPMessage, asio::ip::udp::endpoint>> NetUDPServer::getFirstMessage()
     {
-        std::unique_ptr<UDPMessage> messageSave = std::move(_messages.front());
+        std::unique_ptr<std::pair<UDPMessage, asio::ip::udp::endpoint>> messageSave = std::move(_messages.front());
         _messages.pop();
         return std::move(messageSave);
     }
-
 
     bool NetUDPServer::newClientExist() const
     {
