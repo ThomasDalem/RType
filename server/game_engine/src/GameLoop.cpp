@@ -7,8 +7,20 @@
 
 #include "GameLoop.hpp"
 
-game_engine::GameLoop::GameLoop(std::vector<std::shared_ptr<IEntities>> &entities): _entities(entities)
+game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities)
 {
+    _entities = entities;
+    moveSystem = MoveSystem(entities);
+    deathSystem = DeathSystem(entities);
+    spawnSystem = SpawnSystem(entities);
+    collisionSystem = CollisionSystem(
+        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, entities),
+        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::POWERUP}, entities),
+        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, entities));
+    damageSystem = DamageSystem(
+        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, entities),
+        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY}, entities),
+        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, entities));
 }
 
 game_engine::GameLoop::~GameLoop()
@@ -17,10 +29,9 @@ game_engine::GameLoop::~GameLoop()
 
 bool game_engine::GameLoop::areTherePlayers()
 {
-    std::vector<std::shared_ptr<game_engine::IEntities>> playersList;
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList;
 
-    EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities, playersList);
-    if (playersList.empty())
+    if (EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities)->empty())
         return (false);
     //get message, parse
     //send message

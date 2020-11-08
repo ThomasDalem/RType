@@ -10,7 +10,6 @@
 
 #include <iostream>
 #include <vector>
-#include <ncurses.h>
 #include <unordered_map>
 #include <string>
 #include <fstream>

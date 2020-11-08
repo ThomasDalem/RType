@@ -25,19 +25,20 @@ namespace game_engine
     class MoveSystem
     {
     public:
-        MoveSystem(std::vector<std::shared_ptr<IEntities>> &list);
+        MoveSystem();
+        MoveSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> list);
         ~MoveSystem();
+        MoveSystem &operator=(const MoveSystem &moveSystem);
         void moveSystem();
         void moveEntitie();
         bool checkGameBorder(Transform &transform);
         void applyMovement();
-        void changePlayerDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);
-        void changeEnnemyDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy);
+        void changePlayerDirection(std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer);
+        void changeEnnemyDirection(std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListEnnemy);
 
     protected:
     private:
-        std::vector<std::shared_ptr<IEntities>> &_list;
-        //std::map<int, std::tuple<EntitiesType, std::shared_ptr<Transform>>> _map;
+        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _list;
     };
 } // namespace game_engine
 

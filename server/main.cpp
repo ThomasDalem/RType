@@ -5,15 +5,6 @@
 ** main
 */
 
-#include "IEntities.hpp"
-#include "EntitiesParser.hpp"
-#include "EntitiesEnum.hpp"
-#include "Vector.hpp"
-#include "Bullet.hpp"
-#include "Player.hpp"
-#include "Enemy.hpp"
-#include "PlayerColor.hpp"
-
 int main()
 {
     // std::vector<std::shared_ptr<game_engine::IEntities>> listEntities;

@@ -17,14 +17,15 @@
 namespace game_engine {
     class EntitiesParser {
         public:
-            static std::vector<std::shared_ptr<IEntities>> &getEntities(std::vector<EntitiesType> typeList, std::vector<std::shared_ptr<IEntities>> &listEntities, std::vector<std::shared_ptr<IEntities>> &newListEntities)
+            static std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> getEntities(std::vector<EntitiesType> typeList, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> &listEntities)
             {
+                std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListEntities;
                 std::vector<std::shared_ptr<IEntities>>::iterator listEntitiesIter;
                 int i = 0;
 
-                for (listEntitiesIter = listEntities.begin(); listEntitiesIter != listEntities.end(); listEntitiesIter++) {
+                for (listEntitiesIter = listEntities->begin(); listEntitiesIter != listEntities->end(); listEntitiesIter++) {
                     if (checkEntities(listEntitiesIter, typeList) == true)
-                        newListEntities.push_back(listEntities[i]);
+                        newListEntities->push_back(listEntities->at(i));
                     i++;
                 }
                 return (newListEntities);

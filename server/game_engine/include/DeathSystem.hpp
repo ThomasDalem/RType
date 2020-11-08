@@ -33,14 +33,16 @@ namespace game_engine
     class DeathSystem
     {
     public:
-        DeathSystem(std::vector<std::shared_ptr<IEntities>> &entities);
+        DeathSystem();
+        DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
         ~DeathSystem();
+        DeathSystem &operator=(const DeathSystem &deathSystem);
         void deathSystem();
         bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
 
     protected:
     private:
-        std::vector<std::shared_ptr<IEntities>> &_entities;
+        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
     };
 } // namespace game_engine
 

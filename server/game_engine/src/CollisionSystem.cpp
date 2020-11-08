@@ -7,14 +7,26 @@
 
 #include "CollisionSystem.hpp"
 
-game_engine::CollisionSystem::CollisionSystem(std::vector<std::shared_ptr<IEntities>> &player, std::vector<std::shared_ptr<IEntities>> &powerUp,
-    std::vector<std::shared_ptr<IEntities>> &objectAndEnemy)
+game_engine::CollisionSystem::CollisionSystem()
+{
+}
+
+game_engine::CollisionSystem::CollisionSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> player, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> powerUp,
+    std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> objectAndEnemy)
     : _player(player), _powerUp(powerUp), _objectAndEnemy(objectAndEnemy)
 {
 }
 
 game_engine::CollisionSystem::~CollisionSystem()
 {
+}
+
+game_engine::CollisionSystem &game_engine::CollisionSystem::operator=(const game_engine::CollisionSystem &collisionSystem)
+{
+    _player = collisionSystem._player;
+    _powerUp = collisionSystem._powerUp;
+    _objectAndEnemy = collisionSystem._objectAndEnemy;
+    return (*this);
 }
 
 void game_engine::CollisionSystem::collisionSystem()
@@ -28,7 +40,7 @@ void game_engine::CollisionSystem::collisionSystem()
 
     std::vector<std::shared_ptr<IEntities>>::iterator powerUpIter;
     std::vector<std::shared_ptr<AComponents>> powerUpComponent;
-    for (playerIter = _player.begin(); playerIter != _player.end(); playerIter++)
+    for (playerIter = _player->begin(); playerIter != _player->end(); playerIter++)
     {
         playerComponent = playerIter->get()->getComponentList();
         for (playerComponentIter = playerComponent.begin(); playerComponentIter != playerComponent.end(); playerComponentIter++) {
@@ -37,13 +49,13 @@ void game_engine::CollisionSystem::collisionSystem()
             if (playerComponentIter->get()->getType() == ComponentType::COLLISION)
                 collisionComponent = static_cast<Collision *>(playerComponentIter->get());
         }
-        for (powerUpIter = _powerUp.begin(); powerUpIter != _powerUp.end(); powerUpIter++) {
+        for (powerUpIter = _powerUp->begin(); powerUpIter != _powerUp->end(); powerUpIter++) {
             powerUpComponent = powerUpIter->get()->getComponentList();
             if (collisionWithPowerUp(*transfromComponent, *collisionComponent, powerUpComponent) == true) {
                 PowerUp *powerUpEntitie = static_cast<PowerUp *>(powerUpIter->get());
                 Player *playerEntitie = static_cast<Player *>(playerIter->get());
                 powerUpEntitie->activePowerUp(*playerEntitie);
-                _powerUp.erase(powerUpIter);
+                _powerUp->erase(powerUpIter);
                 printf("Power up touché");// Je sais pas;
             }
         }
@@ -64,7 +76,7 @@ void game_engine::CollisionSystem::ennemyCollisionSystem()
     std::vector<std::shared_ptr<AComponents>> objectComponent;
     std::vector<std::shared_ptr<AComponents>>::iterator objectComponentIter;
 
-    for (ennemyIter = _objectAndEnemy.begin(); ennemyIter != _objectAndEnemy.end(); ennemyIter++) {
+    for (ennemyIter = _objectAndEnemy->begin(); ennemyIter != _objectAndEnemy->end(); ennemyIter++) {
        if (ennemyIter->get()->getEntitiesID() == EntitiesType::ENEMY) {
            ennemyComponent = ennemyIter->get()->getComponentList();
             for (ennemyComponentIter = ennemyComponent.begin(); ennemyComponentIter != ennemyComponent.end(); ennemyComponentIter++) {
@@ -73,7 +85,7 @@ void game_engine::CollisionSystem::ennemyCollisionSystem()
                 if (ennemyComponentIter->get()->getType() == ComponentType::COLLISION)
                     collisionComponent = static_cast<Collision *>(ennemyComponentIter->get());
             }
-            for (objectIter = _objectAndEnemy.begin(); objectIter != _objectAndEnemy.begin(); objectIter++) {
+            for (objectIter = _objectAndEnemy->begin(); objectIter != _objectAndEnemy->begin(); objectIter++) {
                 objectComponent = objectIter->get()->getComponentList();
                 if (ennemyCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent)) {
                     transfromComponent->resetToOldPosition();

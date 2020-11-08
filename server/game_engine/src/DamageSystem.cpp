@@ -7,13 +7,26 @@
 
 #include "DamageSystem.hpp"
 
-game_engine::DamageSystem::DamageSystem(std::vector<std::shared_ptr<IEntities>> &player,
-                                        std::vector<std::shared_ptr<IEntities>> &ennemy, std::vector<std::shared_ptr<IEntities>> &object) : _player(player), _ennemy(ennemy), _object(object)
+game_engine::DamageSystem::DamageSystem()
+{
+}
+
+game_engine::DamageSystem::DamageSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> player,
+                                        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> ennemy, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> object) : _player(player), _ennemy(ennemy), _object(object)
 {
 }
 
 game_engine::DamageSystem::~DamageSystem()
 {
+}
+
+
+game_engine::DamageSystem &game_engine::DamageSystem::operator=(const game_engine::DamageSystem &damageSystem)
+{
+    _player = damageSystem._player;
+    _ennemy = damageSystem._ennemy;
+    _object = damageSystem._object;
+    return (*this);
 }
 
 void game_engine::DamageSystem::damageSystem()
@@ -29,16 +42,16 @@ void game_engine::DamageSystem::damageSystem()
     std::vector<std::shared_ptr<IEntities>>::iterator objectIter;
     std::vector<std::shared_ptr<AComponents>> objectComponent;
 
-    for (playerIter = _player.begin(); playerIter != _player.end(); playerIter++)
+    for (playerIter = _player->begin(); playerIter != _player->end(); playerIter++)
     {
         playerComponent = playerIter->get()->getComponentList();
         getDamageComponent(playerComponent, transfromComponent, collisionComponent, healthComponent);
-        for (objectIter = _object.begin(); objectIter != _object.end(); objectIter++) {
+        for (objectIter = _object->begin(); objectIter != _object->end(); objectIter++) {
             objectComponent = objectIter->get()->getComponentList();
             if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
         }
-        for (ennemyIter = _ennemy.begin(); ennemyIter != _ennemy.end(); ennemyIter++) {
+        for (ennemyIter = _ennemy->begin(); ennemyIter != _ennemy->end(); ennemyIter++) {
             ennemyComponent = ennemyIter->get()->getComponentList();
             if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
@@ -59,10 +72,10 @@ void game_engine::DamageSystem::ennemyDamageSystem()
     std::vector<std::shared_ptr<IEntities>>::iterator objectIter;
     std::vector<std::shared_ptr<AComponents>> objectComponent;
 
-    for (ennemyIter = _ennemy.begin(); ennemyIter != _ennemy.end(); ennemyIter++) {
+    for (ennemyIter = _ennemy->begin(); ennemyIter != _ennemy->end(); ennemyIter++) {
         ennemyComponent = ennemyIter->get()->getComponentList();
         getDamageComponent(ennemyComponent, transfromComponent, collisionComponent, healthComponent);
-        for (objectIter = _object.begin(); objectIter != _object.end(); objectIter++) {
+        for (objectIter = _object->begin(); objectIter != _object->end(); objectIter++) {
             objectComponent = objectIter->get()->getComponentList();
             if (objectIter->get()->getEntitiesID() == EntitiesType::BULLET && checkCollisionWithAllieBullet(*transfromComponent, *collisionComponent, objectComponent) == true)
                 healthComponent->getDamage();
@@ -72,7 +85,7 @@ void game_engine::DamageSystem::ennemyDamageSystem()
 
 void game_engine::DamageSystem::environnementDamageSystem()
 {
-    std::vector<std::shared_ptr<game_engine::IEntities>> bulletList;
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> bulletList;
     std::vector<std::shared_ptr<IEntities>>::iterator bulletIter;
     std::vector<std::shared_ptr<AComponents>> bulletComponents;
     Transform *transfromComponent;
@@ -81,13 +94,13 @@ void game_engine::DamageSystem::environnementDamageSystem()
     std::vector<std::shared_ptr<IEntities>>::iterator envIter;
     std::vector<std::shared_ptr<AComponents>> envComponent;
 
-    EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET}, _object, bulletList);
-    for (bulletIter = bulletList.begin(); bulletIter != bulletList.end(); bulletIter++) {
+    bulletList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET}, _object);
+    for (bulletIter = bulletList->begin(); bulletIter != bulletList->end(); bulletIter++) {
         bulletComponents = bulletIter->get()->getComponentList();
         getDamageComponent(bulletComponents, transfromComponent, collisionComponent, healthComponent);
-        for (envIter = _object.begin(); envIter != _object.end(); envIter++) {
+        for (envIter = _object->begin(); envIter != _object->end(); envIter++) {
             envComponent = envIter->get()->getComponentList();
-            if (envIter->get()->getEntitiesID() != EntitiesType::BULLET && checkCollisionWithObject(*transfromComponent, *collisionComponent, envComponent) == true)
+            if (envIter->get()->getEntitiesID() != EntitiesType::BULLET && checkCollisionWithAllieBullet(*transfromComponent, *collisionComponent, envComponent) == true)
                 healthComponent->getDamage();
         }
     }
@@ -102,7 +115,7 @@ bool game_engine::DamageSystem::checkCollisionWithObject(Transform &playerTransf
     Health *objectHealthComponent;
 
     getDamageComponent(objectComponent, objectTransfromComponent, objectCollisionComponent, objectHealthComponent);
-    if (objectCollisionComponent->getCanDamagePlayer() == true && checkCollisionWithAllieBullet(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent)) {
+    if (objectCollisionComponent->getCanDamagePlayer() == true && checkCollision(playerTransfromComponent, playerCollisionComponent, *objectTransfromComponent, *objectCollisionComponent)) {
         objectHealthComponent->getDamage();
         return (true);
     }

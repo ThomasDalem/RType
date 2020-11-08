@@ -34,24 +34,26 @@ namespace game_engine
     class SpawnSystem
     {
     public:
-        SpawnSystem(std::vector<std::shared_ptr<IEntities>> &entities);
+        SpawnSystem();
+        SpawnSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
         ~SpawnSystem();
+        SpawnSystem &operator=(const SpawnSystem &deathSystem);
         void spawnSystem();
         void loadEnemyLibrary();
         void spawnEnemy();
         void newPlayer(int clientID);
         void checkEntitieShoot();
-        void checkPlayerShoot(std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);
-        void checkEnnemyShoot(std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy, std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer);
+        void checkPlayerShoot(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListPlayer);
+        void checkEnnemyShoot(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListEnnemy, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListPlayer);
 
         void spawnObstacle();
         void addObstacle();
 
-    protected: 
+    protected:
     private:
         std::clock_t blockSpawnClock;
         double blockSpawnTime;
-        std::vector<std::shared_ptr<IEntities>> &_entities;
+        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
     };
 } // namespace game_engine
 

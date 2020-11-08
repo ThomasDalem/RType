@@ -7,12 +7,23 @@
 //bite
 #include "MoveSystem.hpp"
 
-game_engine::MoveSystem::MoveSystem(std::vector<std::shared_ptr<IEntities>> &list): _list(list)
+
+game_engine::MoveSystem::MoveSystem()
+{
+}
+
+game_engine::MoveSystem::MoveSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> list): _list(list)
 {
 }
 
 game_engine::MoveSystem::~MoveSystem()
 {
+}
+
+game_engine::MoveSystem &game_engine::MoveSystem::operator=(const game_engine::MoveSystem &moveSystem)
+{
+    _list = moveSystem._list;
+    return (*this);
 }
 
 void game_engine::MoveSystem::moveSystem()
@@ -27,7 +38,7 @@ void game_engine::MoveSystem::moveEntitie()
     std::vector<std::shared_ptr<AComponents>> entitieComponent;
     std::vector<std::shared_ptr<AComponents>>::iterator componentIter;
 
-    for (iter = _list.begin(); iter != _list.end(); ++iter) {
+    for (iter = _list->begin(); iter != _list->end(); ++iter) {
         entitieComponent = iter->get()->getComponentList();
         for (componentIter = entitieComponent.begin(); componentIter != entitieComponent.end(); ++componentIter) {
             if (componentIter->get()->getType() == ComponentType::TRANSFORM) {
@@ -44,21 +55,16 @@ void game_engine::MoveSystem::moveEntitie()
 
 void game_engine::MoveSystem::applyMovement()
 {
-    std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer;
-    std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy;
-
-    EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _list, newListPlayer);
-    EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY}, _list, newListEnnemy);
-    changePlayerDirection(newListPlayer);
-    changeEnnemyDirection(newListEnnemy);
+    changePlayerDirection(EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _list));
+    changeEnnemyDirection(EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY}, _list));
 }
 
-void game_engine::MoveSystem::changePlayerDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListPlayer)
+void game_engine::MoveSystem::changePlayerDirection(std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer)
 {
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listPlayerIter;
     game_engine::Player *player;
 
-    for (listPlayerIter = newListPlayer.begin(); listPlayerIter != newListPlayer.end(); listPlayerIter++) {
+    for (listPlayerIter = newListPlayer->begin(); listPlayerIter != newListPlayer->end(); listPlayerIter++) {
         player = static_cast<Player *>(listPlayerIter->get());
         if (player->getFirstEnum() != InputEnum::NOTHING && player->getFirstEnum() != InputEnum::SHOOTINPUT) {
             if (player->getFirstEnum() == InputEnum::MOVEDOWN)
@@ -75,12 +81,12 @@ void game_engine::MoveSystem::changePlayerDirection(std::vector<std::shared_ptr<
             player->getTransform()->changeDirection(Vector(0, 0));
     }
 }
-void game_engine::MoveSystem::changeEnnemyDirection(std::vector<std::shared_ptr<game_engine::IEntities>> newListEnnemy)
+void game_engine::MoveSystem::changeEnnemyDirection(std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListEnnemy)
 {
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEnnemyIter;
     game_engine::Enemy *ennemy;
 
-    for (listEnnemyIter = newListEnnemy.begin(); listEnnemyIter != newListEnnemy.end(); listEnnemyIter++) {
+    for (listEnnemyIter = newListEnnemy->begin(); listEnnemyIter != newListEnnemy->end(); listEnnemyIter++) {
         ennemy = static_cast<Enemy *>(listEnnemyIter->get());
         if (ennemy->getFirstEnum() != InputEnum::NOTHING && ennemy->getFirstEnum() != InputEnum::SHOOTINPUT) {
             if (ennemy->getFirstEnum() == InputEnum::MOVEDOWN)

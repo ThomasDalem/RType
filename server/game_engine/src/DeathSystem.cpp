@@ -7,12 +7,22 @@
 
 #include "DeathSystem.hpp"
 
-game_engine::DeathSystem::DeathSystem(std::vector<std::shared_ptr<IEntities>> &entities) : _entities(entities)
+game_engine::DeathSystem::DeathSystem()
+{
+}
+
+game_engine::DeathSystem::DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities) : _entities(entities)
 {
 }
 
 game_engine::DeathSystem::~DeathSystem()
 {
+}
+
+game_engine::DeathSystem &game_engine::DeathSystem::operator=(const game_engine::DeathSystem &deathSystem)
+{
+    _entities = deathSystem._entities;
+    return (*this);
 }
 
 void game_engine::DeathSystem::deathSystem()
@@ -22,12 +32,12 @@ void game_engine::DeathSystem::deathSystem()
     std::vector<std::shared_ptr<AComponents>> entitieComponent;
     std::vector<std::shared_ptr<AComponents>>::iterator entitieComponentIter;
 
-    for (listEntitieIter = _entities.begin(); listEntitieIter != _entities.end(); listEntitieIter++) {
+    for (listEntitieIter = _entities->begin(); listEntitieIter != _entities->end(); listEntitieIter++) {
         if (listEntitieIter->get()->getEntitiesID() != EntitiesType::STAGEOBSTACLE && listEntitieIter->get()->getEntitiesID() != EntitiesType::MUSIC
             && listEntitieIter->get()->getEntitiesID() != EntitiesType::ENVIRONNEMENT) {
             entitieComponent = listEntitieIter->get()->getComponentList();
             if (isDead(entitieComponent))
-                listEntitieIter = _entities.erase(listEntitieIter);
+                listEntitieIter = _entities->erase(listEntitieIter);
         }
     }
 }
