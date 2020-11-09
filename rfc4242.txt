@@ -1,0 +1,105 @@
+R-TYPE Working Group                                                        Roméo TALOVICI
+Request for Comments: 4242                                                  Alexandre PEREIRA
+                                                                            Tony MARINI
+                                                                            Thomas DALEM
+
+                                RTYPE TRANSFERT PROTOCOL (RTP)
+
+1.   INTRODUCTION
+
+    The R-TYPE project is an multiplayer game project where clients (games) communicate
+    and send data via a server. It uses UDP for ingame data and TCP for connection
+    information.
+
+2.   STRUCTURE
+
+    The client/server structure is MUST be made as followed:
+
+                                    /----------\       /------\
+                                    |  server  |-------|client|
+                                    | UDP  TCP |       \------/
+                                    \----------/
+                                      |      |
+                                      |      |
+                                      /      \
+                                     /        \
+                                 /------\    /------\
+                                 |client|    |client|
+                                 \------/    \------/
+
+    Each client MUST have an UDP and TCP connection to the server.
+
+3.   PROTOCOLS
+
+    3.1   TCP PROTOCOL
+        
+        The TCP connection MUST only be used by the clients to connect to the server and
+        for sending information in the game lobby.
+        It MUST send the following structure to communicate:
+
+            struct TCPdata
+            {
+                TCPEvent event;
+                char data[MAX_BODY_LENGTH];
+            }
+        
+        The TCPEvent is an enum and MUST contain the following options:
+
+            - ERROR         -- Inform the receiver that an error occured
+
+            - OK            -- Informs the receiver that his command is successful
+
+            - CONNECT       -- Server->Clients = Someone connected
+
+            - DISCONNECT    -- Client->Server  = The client is disconnecting
+                               Server->Clients = Someone is disconnecting
+
+            - START         -- Client->Server  = Starts the game
+                            -- Server->Clients = The game is starting
+
+        The data string can contain multiple information, for example : the player username,
+        some bytes containing information on the player ship...
+
+        After receiving some data the server MUST respond with an TCPEvent OK or ERROR.
+        The client MUST also respond with an TCPEvent OK or ERROR after receiving data
+        from the server.
+
+    3.2   UDP PROTOCOL
+
+        The UDP protocol MUST be used to send ingame data.
+        It MUST send the following structure to communicate:
+
+            struct UDPMessage
+            {
+                int playerID;
+                int value[10];
+                Event event;
+            }
+
+        The playerID is the unique ID linked to each player. It is used to differenciate
+        players when sending information to other clients.
+
+        The value data is information needed by the server or the client and is linked to the
+        event, see next description for more information.
+
+        Event is an enum and MUST contain the following options:
+
+            - MOVE          -- Server->Clients  = Move a sprite
+                                value = [posX, posY]
+                            -- Client->Server   = Player is moving
+                                value = [posX, posY]
+
+            - SHOOT         -- Client->Server   = Player is shooting
+                                value = [posX, posY, isStarting=0 or 1]
+
+            - ADD           -- Server->Clients  = A new sprite is created
+                                value = [posX, posY, spritePathID, spriteID]
+
+            - REMOVE        -- Server->Clients  = A sprite is removed
+                                value = [spriteID]
+
+            - HEALTH        -- Server->Client   = The player health is changing
+                                value = [isAdding=0 or 1, value]
+
+            - SCORE         -- Server->Client   = The score of a player is changing
+                                value = [isAdding=0 or 1, value]

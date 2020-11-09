@@ -25,6 +25,9 @@ set(SERVER_SRCS
     ./server/game_engine/src/Entities/PowerUp.cpp
     ./server/game_engine/src/Entities/StageObstacle.cpp
     ./server/src/NetUDPServer.cpp
+    ./server/src/NetTCPServer.cpp
+    ./server/src/NetTCPRoom.cpp
+    ./server/src/NetTCPServerClient.cpp
 )
 
 add_executable(r-type_server ${SERVER_SRCS})
@@ -55,6 +58,7 @@ set(CLIENT_SRCS
     ./client/src/Menu/Main.cpp
     ./client/src/Menu/Room.cpp
     ./client/src/Network/NetUDPClient.cpp
+    ./client/src/Network/NetTCPClient.cpp
 )
 
 add_executable(r-type_client ${CLIENT_SRCS})

@@ -10,8 +10,9 @@
 
 #include <cstdint>
 #include <boost/asio.hpp>
-#include "../../game_engine/include/EntitiesEnum.hpp"
+
 #define MAX_MESSAGE_LENGTH 1024
+#define MAX_BODY_LENGTH 1024
 
 namespace network
 {
@@ -23,11 +24,24 @@ namespace network
         REMOVE
     };
 
+    enum class TCPEvent : std::uint8_t
+    {
+        CONNECT,
+        DISCONNECT,
+        START
+    };
+
     struct UDPMessage
     {
         int playerID;
         int value[10];
         Event event;
+    };
+
+    struct TCPMessage
+    {
+        TCPEvent event;
+        char data[MAX_BODY_LENGTH];
     };
 
     struct UDPClientMessage

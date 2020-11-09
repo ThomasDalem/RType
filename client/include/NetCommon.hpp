@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2020
-** B-CPP-501-PAR-5-1-rtype-romeo.talovici
+** boost_asio_test
 ** File description:
 ** NetCommon
 */
@@ -12,6 +12,7 @@
 #include <boost/asio.hpp>
 
 #define MAX_MESSAGE_LENGTH 1024
+#define MAX_BODY_LENGTH 1024
 
 namespace network
 {
@@ -23,11 +24,33 @@ namespace network
         REMOVE
     };
 
+    enum class TCPEvent : std::uint8_t
+    {
+        CONNECT,
+        DISCONNECT,
+        START
+    };
+
     struct UDPMessage
     {
         int playerID;
         int value[10];
         Event event;
+    };
+
+    struct TCPMessage
+    {
+        TCPEvent event;
+        char data[MAX_BODY_LENGTH];
+    };
+
+    struct UDPClientMessage
+    {
+        int entitieType;
+        int uniqueID;
+        int pos[5];
+        float rotation;
+        int spriteRectangle[10];
     };
 }
 #endif /* !NETCOMMON_HPP_ */
