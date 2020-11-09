@@ -11,8 +11,7 @@ game_engine::DamageSystem::DamageSystem()
 {
 }
 
-game_engine::DamageSystem::DamageSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> player,
-                                        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> ennemy, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> object) : _player(player), _ennemy(ennemy), _object(object)
+game_engine::DamageSystem::DamageSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> list) : _entities(list)
 {
 }
 
@@ -30,6 +29,14 @@ game_engine::DamageSystem &game_engine::DamageSystem::operator=(const game_engin
 }
 
 void game_engine::DamageSystem::damageSystem()
+{
+    _player = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
+    _ennemy = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY}, _entities);
+    _object = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, _entities);
+    applyDamage();
+}
+
+void game_engine::DamageSystem::applyDamage()
 {
     std::vector<std::shared_ptr<IEntities>>::iterator playerIter;
     std::vector<std::shared_ptr<AComponents>> playerComponent;
@@ -85,7 +92,7 @@ void game_engine::DamageSystem::ennemyDamageSystem()
 
 void game_engine::DamageSystem::environnementDamageSystem()
 {
-    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> bulletList;
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> bulletList = std::make_shared<std::vector<std::shared_ptr<IEntities>>>();
     std::vector<std::shared_ptr<IEntities>>::iterator bulletIter;
     std::vector<std::shared_ptr<AComponents>> bulletComponents;
     Transform *transfromComponent;

@@ -19,10 +19,9 @@ namespace game_engine {
         public:
             static std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> getEntities(std::vector<EntitiesType> typeList, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> &listEntities)
             {
-                std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListEntities;
+                std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListEntities = std::make_shared<std::vector<std::shared_ptr<IEntities>>>();
                 std::vector<std::shared_ptr<IEntities>>::iterator listEntitiesIter;
                 int i = 0;
-
                 for (listEntitiesIter = listEntities->begin(); listEntitiesIter != listEntities->end(); listEntitiesIter++) {
                     if (checkEntities(listEntitiesIter, typeList) == true)
                         newListEntities->push_back(listEntities->at(i));

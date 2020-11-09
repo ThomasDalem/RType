@@ -68,7 +68,7 @@ void game_engine::SpawnSystem::spawnEnemy()
 
 void game_engine::SpawnSystem::newPlayer(int clientID)
 {
-    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer;
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer = std::make_shared<std::vector<std::shared_ptr<IEntities>>>();
     std::shared_ptr<Player> newPlayer;
 
     newListPlayer = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
