@@ -27,6 +27,8 @@ namespace game_engine
         std::string getRessourcePath() const { return _ressourcePath; }
         Rectangle getRect() const { return _rect; }
 
+        void setRect(Rectangle rect) {_rect = rect;};
+
     private:
         std::string _ressourcePath;
         Rectangle _rect;
