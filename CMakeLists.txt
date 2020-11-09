@@ -52,8 +52,6 @@ set(CLIENT_SRCS
     ./client/src/SFML/ImageSFML.cpp
     ./client/src/SFML/TextSFML.cpp
     ./client/src/SFML/Button.cpp
-    ./client/src/Virtual/VEntitie.cpp
-    ./client/src/Virtual/VMonster.cpp
     ./client/src/Menu/Main.cpp
     ./client/src/Menu/Room.cpp
     ./client/src/Network/NetUDPClient.cpp
@@ -66,9 +64,8 @@ target_include_directories(r-type_client PUBLIC
     ${CONAN_INCLUDE_DIRS_BOOST}
     ${CONAN_INCLUDE_DIRS_SFML}
     ./client/include
+    ./client/Class/
     ./client/Class/Entities/
     ./client/Class/Menu/
-    ./client/Class/
     ./client/Class/SFML/
-    ./client/Class/Virtual/
 )

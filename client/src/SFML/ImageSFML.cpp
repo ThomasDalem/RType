@@ -18,7 +18,9 @@ ImageSFML::ImageSFML(string path) {
         cout << "Loading Ressource Failed" << endl;
     _sprite->setTexture(*_texture);
 }
-ImageSFML::~ImageSFML() {}
+ImageSFML::~ImageSFML() {
+    _texture->~Texture();
+}
 
 void ImageSFML::setTexture(string path) {
     if (!_texture->loadFromFile(path))

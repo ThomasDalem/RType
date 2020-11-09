@@ -13,6 +13,7 @@
 #include "Room.hpp"
 #include "Main.hpp"
 #include "Player.hpp"
+#include "Client.hpp"
 #include "NetCommon.hpp"
 #include "ErrorHandler.hpp"
 #include "NetUDPClient.hpp"
@@ -20,41 +21,30 @@
 
 using namespace std;
 void core(vector<string> av) {
-    Player player;
-    shared_ptr<network::UDPMessage> lastinput;
-    shared_ptr<WindowHandler> windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
-    network::NetUDPClient net("127.0.0.1", "8081");
+    Client client;
+
     network::UDPMessage msg = {1, {84}, network::Event::ADD};
     shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
-    windowhdl->setFramerate(50);
-    windowhdl->addText(Score);
-    switch (Mainmenu().loop(windowhdl->getWindow(), player)) {
-        case Creating: RoomMenu().creatingGame(windowhdl->getWindow(), player); break;
-        case Room: RoomMenu().loop(windowhdl->getWindow(), player); break;
+    client.getWindowHandler()->addText(Score);
+    switch (Mainmenu().loop(client.getWindowHandler()->getWindow(), *client.getPlayer(0))) {
+        case Creating: RoomMenu().creatingGame(client.getWindowHandler()->getWindow(), *client.getPlayer(0)); break;
+        case Room: RoomMenu().loop(client.getWindowHandler()->getWindow(), *client.getPlayer(0)); break;
         default: break;
     }
-    windowhdl->addImage(player.getImage());
-    windowhdl->addText(player.getNameText());
+    client.getWindowHandler()->addImage(client.getPlayer(0)->getImage());
+    client.getWindowHandler()->addText(client.getPlayer(0)->getNameText());
 
-    net.sendMessage(msg);
-    while (windowhdl->isOpen()) {
-        while (net.hasMessages()) {
-            unique_ptr<network::UDPMessage> message = net.getFirstMessage();
+    client.getNetwork()->sendMessage(msg);
+    while (client.getWindowHandler()->isOpen()) {
+        while (client.getNetwork()->hasMessages()) {
+            unique_ptr<network::UDPMessage> message = client.getNetwork()->getFirstMessage();
 
             cout << "MESSAGES: " << int(message->event) << ", " << message->playerID << ", " << message->value << endl;
-        } switch (windowhdl->isEvent(player)) {
-            case Input::Left: *lastinput = {13, {-1, 0}, network::Event::MOVE}; net.sendMessage(*lastinput); break;
-            case Input::Right: *lastinput = {13, {1, 0}, network::Event::MOVE}; net.sendMessage(*lastinput); break;
-            case Input::Up: *lastinput = {13, {0, -1}, network::Event::MOVE}; net.sendMessage(*lastinput); break;
-            case Input::Down: *lastinput = {13, {0, 1}, network::Event::MOVE}; net.sendMessage(*lastinput); break;
-            case Input::Shoot: *lastinput = {13, {}, network::Event::SHOOT}; net.sendMessage(*lastinput); break;
-            // case Input::Escape: windowhdl->~WindowHandler(); break;
-            default: continue;
         }
-        windowhdl->display();
+        client.formatInput(0);
+        client.getWindowHandler()->display();
     }
-    windowhdl->~WindowHandler();
 }
 
 int main(int ac, char **argv, char **env) {
