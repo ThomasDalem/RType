@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-NAME			=		alien.so
+NAME			=		lib_alien.so
 
 SRC				=		Alien.cpp										\
 						../../server/game_engine/src/Entities/Enemy.cpp	\

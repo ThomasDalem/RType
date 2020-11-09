@@ -9,6 +9,31 @@
 
 game_engine::SpawnSystem::SpawnSystem()
 {
+    DIR *pDIR;
+    std::string file;
+    struct dirent *entry;
+    DDloader<game_engine::Enemy> libLoader;
+    std::vector<std::string> enemyLib;
+
+    pDIR = opendir("./lib");
+    if (pDIR == nullptr)
+        throw (Exception("Can't find ennemy directory"));
+    while (entry = readdir(pDIR)) {
+        file.assign(entry->d_name);
+        if (file.find(".so") != std::string::npos) {
+            file.insert(0, "./lib/");
+            enemyLib.push_back(file);
+        }
+    }
+    closedir(pDIR);
+
+    if (enemyLib.size() == 0)
+        throw (Exception("No library found in ennemy directory"));
+    for (int i = 0; i < 3; i++) {
+        if (libLoader.loadLibrary(enemyLib[i].c_str()) == 84)
+            throw (Exception("can't load"));
+        _enemyLoader.push_back(libLoader);
+    }
 }
 
 game_engine::SpawnSystem::SpawnSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities): _entities(entities)
@@ -19,6 +44,10 @@ game_engine::SpawnSystem::SpawnSystem(std::shared_ptr<std::vector<std::shared_pt
 
 game_engine::SpawnSystem::~SpawnSystem()
 {
+    int size = _enemyLoader.size();
+
+    for (int i = 0; i < size; i++)
+        _enemyLoader[i].closeLibrary();
 }
 
 game_engine::SpawnSystem &game_engine::SpawnSystem::operator=(const game_engine::SpawnSystem &spawnSystem)
@@ -30,40 +59,16 @@ game_engine::SpawnSystem &game_engine::SpawnSystem::operator=(const game_engine:
 
 void game_engine::SpawnSystem::spawnSystem()
 {
-    //spawnEnemy();
+    spawnEnemy();
     spawnObstacle();
     checkEntitieShoot();
 }
 
-void game_engine::SpawnSystem::loadEnemyLibrary()
-{
-    DDloader<Enemy> ennemyLoader;
-    DIR *pDIR;
-    std::vector<std::string> ennemyLib;
-    std::string file;
-    struct dirent *entry;
-    //int ennemySelected;
-
-    pDIR = opendir("../../../lib");
-    if (pDIR == nullptr)
-        throw (Exception("Can't find ennemy directory"));
-    while (entry = readdir(pDIR)) {
-        file.assign(entry->d_name);
-        std::cout << file.c_str() << std::endl;
-        /*if (file.find(".so") != std::string::npos) {
-            file.insert(0, "./ennemyLib/");
-            ennemyLib.push_back(file);
-        }*/
-    }
-    // closedir(pDIR);
-    // if (ennemyLib.size() == 0)
-    //     throw (Exception("No library found in ennemy directory"));
-    // ennemySelected = rand() % ennemyLib.size();
-    // ennemyLoader.loadLibrary(ennemyLib[ennemySelected].c_str());
-}
-
 void game_engine::SpawnSystem::spawnEnemy()
 {
+    //int x = rand() % _enemyLoader.size();
+
+    //_enemyLoader[x].getInstance("entryPoint", Vector(0, 0));
 }
 
 void game_engine::SpawnSystem::newPlayer(int clientID)

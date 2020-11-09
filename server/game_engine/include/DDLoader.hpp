@@ -39,13 +39,10 @@ class DDloader
 
         std::shared_ptr<T> getInstance(const char *name, game_engine::Vector position)
         {
-            std::shared_ptr<T> newClass;
-
             *(void **)(&this->entryPoint) = dlsym(this->handle, name);
             if (entryPoint == nullptr)
                 return (nullptr);
-            //newClass = std::make_shared<T>((T *)(*entryPoint)(position));
-            return (newClass);
+            return (static_cast<std::shared_ptr<T>>((T *)(*entryPoint)(position)));
         }
 
     protected:

@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-NAME			=		battleship.so
+NAME			=		lib_battleship.so
 
 SRC				=		BattleShip.cpp									\
 						../../server/game_engine/src/Entities/Enemy.cpp	\
