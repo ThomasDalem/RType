@@ -26,10 +26,12 @@ class Client {
         bool operator==(Client another);
 
         shared_ptr<Player> getPlayer(size_t) const;
-        void formatInput(size_t, shared_ptr<network::NetUDPClient>, shared_ptr<WindowHandler>);
+        shared_ptr<WindowHandler> getWindowHandler(void) const;
+        void formatInput(size_t, shared_ptr<network::NetUDPClient>);
 
     private:
         vector<shared_ptr<Player>> _players;
+        shared_ptr<WindowHandler> _windowhdl;
 
     protected:
 };

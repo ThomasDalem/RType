@@ -24,31 +24,29 @@ void core(vector<string> av) {
     Client client;
 
     network::UDPMessage msg = {1, {84}, network::Event::ADD};
-    shared_ptr<WindowHandler> windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     shared_ptr<network::NetUDPClient> net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
-    windowhdl->setFramerate(50);
-    windowhdl->addText(Score);
-    switch (Mainmenu().loop(windowhdl->getWindow(), *client.getPlayer(0))) {
-        case Creating: RoomMenu().creatingGame(windowhdl->getWindow(), *client.getPlayer(0)); break;
-        case Room: RoomMenu().loop(windowhdl->getWindow(), *client.getPlayer(0)); break;
+    client.getWindowHandler()->addText(Score);
+    switch (Mainmenu().loop(client.getWindowHandler()->getWindow(), *client.getPlayer(0))) {
+        case Creating: RoomMenu().creatingGame(client.getWindowHandler()->getWindow(), *client.getPlayer(0)); break;
+        case Room: RoomMenu().loop(client.getWindowHandler()->getWindow(), *client.getPlayer(0)); break;
         default: break;
     }
-    windowhdl->addImage(client.getPlayer(0)->getImage());
-    windowhdl->addText(client.getPlayer(0)->getNameText());
+    client.getWindowHandler()->addImage(client.getPlayer(0)->getImage());
+    client.getWindowHandler()->addText(client.getPlayer(0)->getNameText());
 
     net->sendMessage(msg);
-    while (windowhdl->isOpen()) {
+    while (client.getWindowHandler()->isOpen()) {
         while (net->hasMessages()) {
             unique_ptr<network::UDPMessage> message = net->getFirstMessage();
 
             cout << "MESSAGES: " << int(message->event) << ", " << message->playerID << ", " << message->value << endl;
         }
-        client.formatInput(0, net, windowhdl);
-        windowhdl->display();
+        client.formatInput(0, net);
+        client.getWindowHandler()->display();
     }
-    windowhdl->~WindowHandler();
+    client.getWindowHandler()->~WindowHandler();
 }
 
 int main(int ac, char **argv, char **env) {
