@@ -15,29 +15,28 @@
 
 namespace network
 {
-    class NetUDPClient
-    {
-    public:
-        NetUDPClient(std::string const &ip, std::string const &port);
-        ~NetUDPClient();
+    class NetUDPClient {
+        public:
+            NetUDPClient(std::string const &ip, std::string const &port);
+            ~NetUDPClient();
 
-        void sendMessage(UDPMessage const &message);
-        bool hasMessages() const;
-        std::unique_ptr<UDPMessage> getFirstMessage();
+            void sendMessage(UDPMessage const &message);
+            bool hasMessages() const;
+            std::unique_ptr<UDPMessage> getFirstMessage();
 
-    private:
-        void receiveMessage();
-        void handleMessage(boost::system::error_code const& ec, std::size_t receivedBytes);
+        private:
+            void receiveMessage();
+            void handleMessage(boost::system::error_code const& ec, std::size_t receivedBytes);
 
-    private:
-        std::thread _thread;
-        boost::asio::io_context _context;
-        boost::asio::ip::udp::socket _socket;
-        boost::asio::ip::udp::resolver _resolver;
-        boost::asio::ip::udp::resolver::results_type _endpoints;
-        boost::asio::ip::udp::endpoint _endpoint;
-        char _data[MAX_MESSAGE_LENGTH];
-        std::queue<std::unique_ptr<UDPMessage>> _messages;
+        private:
+            std::thread _thread;
+            boost::asio::io_context _context;
+            boost::asio::ip::udp::socket _socket;
+            boost::asio::ip::udp::resolver _resolver;
+            boost::asio::ip::udp::resolver::results_type _endpoints;
+            boost::asio::ip::udp::endpoint _endpoint;
+            char _data[MAX_MESSAGE_LENGTH];
+            std::queue<std::unique_ptr<UDPMessage>> _messages;
     };
 }
 

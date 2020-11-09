@@ -19,15 +19,17 @@
 #include "BackgroundSFML.hpp"
 
 using namespace std;
+enum Input {Left, Right, Up, Down, Shoot, Nothing};
+
 class WindowHandler {
     public:
-        WindowHandler(size_t width, size_t height, string name, size_t fps = 60);
+        WindowHandler(size_t, size_t, string, size_t = 60);
         ~WindowHandler();
 
         //Setter
-        void setTitle(string title);
-        void setWidth(size_t width);
-        void setHeight(size_t height);
+        void setTitle(string);
+        void setWidth(size_t);
+        void setHeight(size_t);
 
         //Getter
         size_t getWidth(void) const;
@@ -37,16 +39,16 @@ class WindowHandler {
         shared_ptr<sf::RenderWindow> getWindow(void) const;
 
         //Graphics Data
-        void rmText(size_t row);
-        void rmImage(size_t row);
-        void addText(shared_ptr<TextSfml> news);
-        void addImage(shared_ptr<ImageSFML> news);
+        void rmText(size_t);
+        void rmImage(size_t);
+        void addText(shared_ptr<TextSfml>);
+        void addImage(shared_ptr<ImageSFML>);
 
         //Window data
         bool isOpen(void) const;
+        Input isEvent(Player &);
         void display(void) const;
-        void isEvent(Player &player);
-        void setFramerate(size_t fps) const;
+        void setFramerate(size_t) const;
 
     private:
         string _title;
