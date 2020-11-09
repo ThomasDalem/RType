@@ -83,7 +83,7 @@ void game_engine::GameLoop::sendToClients()
         clientMessage.pos[0] = player->getHealth()->getHealthPoint();
         clientMessage.pos[1] = player->getScore();
         clientMessage.rotation = 0;
-        clientMessage.spriteRectangle[0]
+        clientMessage.spriteRectangle[0];
     }
 }
 

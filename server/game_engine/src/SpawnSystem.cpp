@@ -40,6 +40,8 @@ game_engine::SpawnSystem::SpawnSystem(std::shared_ptr<std::vector<std::shared_pt
 {
     blockSpawnClock = std::clock();
     blockSpawnClock = 0.5;
+    enemySpawnClock = std::clock();
+    enemySpawnClock = 2;
 }
 
 game_engine::SpawnSystem::~SpawnSystem()
@@ -66,9 +68,15 @@ void game_engine::SpawnSystem::spawnSystem()
 
 void game_engine::SpawnSystem::spawnEnemy()
 {
-    //int x = rand() % _enemyLoader.size();
+    double timePassed = std::clock() - enemySpawnClock;
+    int enemyChancetoSpawn;
 
-    //_enemyLoader[x].getInstance("entryPoint", Vector(0, 0));
+    if (timePassed > enemySpawnTime) {
+        enemySpawnClock = std::clock();
+        enemySpawnClock = 2;
+        int x = rand() % _enemyLoader.size();
+        _entities->push_back(_enemyLoader[x].getInstance("entryPoint", Vector(1920, (rand() % 990) + 50)));
+    }
 }
 
 void game_engine::SpawnSystem::newPlayer(int clientID)
@@ -90,15 +98,14 @@ void game_engine::SpawnSystem::newPlayer(int clientID)
 
 void game_engine::SpawnSystem::spawnObstacle()
 {
-    double timePassed = clock() - blockSpawnClock;
+    double timePassed = std::clock() - blockSpawnClock;
     int obstacleChancetoSpawn;
     int nbObstacletoSpawn;
     int upOrDownSpawn;
-    int upStart = 50;
-    int downStart = 1040;
 
     if (timePassed > blockSpawnTime) {
-        blockSpawnClock = clock();
+        blockSpawnClock = std::clock();
+        blockSpawnClock = 0.5;
         _entities->push_back(std::make_shared<StageObstacle>(Vector(0, 1920)));
         _entities->push_back(std::make_shared<StageObstacle>(Vector(1030, 1920)));
         addObstacle();
