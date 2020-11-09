@@ -5,17 +5,48 @@
 ** main
 */
 
+#include <dlfcn.h>
+#include <stdio.h>
+#include <cstddef>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <tuple>
+#include <cstdio>
+#include <ctime>
+#include <dirent.h>
+
+#include "Vector.hpp"
+
+#include "DDLoader.hpp"
+#include "Enemy.hpp"
+
 int main()
 {
-    // std::vector<std::shared_ptr<game_engine::IEntities>> listEntities;
-    // std::vector<std::shared_ptr<game_engine::IEntities>> newListEntities;
+    DDloader<game_engine::Enemy> ennemyLoader;
+    DIR *pDIR;
+    std::vector<std::string> ennemyLib;
+    std::string file;
+    struct dirent *entry;
+    //int ennemySelected;
 
-    // listEntities.push_back(std::make_shared<game_engine::Bullet>(true, game_engine::Vector(0, 0), game_engine::Vector(0, 0)));
-    // listEntities.push_back(std::make_shared<game_engine::Bullet>(true, game_engine::Vector(0, 0), game_engine::Vector(0, 0)));
-    // listEntities.push_back(std::make_shared<game_engine::Player>(game_engine::Vector(0, 0), game_engine::PlayerColor::Blue, 0));
-    // listEntities.push_back(std::make_shared<game_engine::Enemy>(game_engine::Vector(0, 0)));
-    // listEntities.push_back(std::make_shared<game_engine::Bullet>(true, game_engine::Vector(0, 0), game_engine::Vector(0, 0)));
-
-    // newListEntities = game_engine::EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET, game_engine::EntitiesType::ENEMY}, listEntities, newListEntities);
+    pDIR = opendir("./lib");
+    if (pDIR == nullptr)
+        throw (Exception("Can't find ennemy directory"));
+    while (entry = readdir(pDIR)) {
+        file.assign(entry->d_name);
+        if (file.find(".so") != std::string::npos) {
+            file.insert(0, "./lib");
+            ennemyLib.push_back(file);
+            std::cout << file.c_str() << std::endl;
+            std::shared_ptr<game_engine::Enemy> enemy = ennemyLoader.getInstance(file.c_str(), game_engine::Vector(0, 0));
+            enemy->pathEnemy();
+        }
+    }
+    closedir(pDIR);
+    if (ennemyLib.size() == 0)
+        throw (Exception("No library found in ennemy directory"));
+    // ennemySelected = rand() % ennemyLib.size();
+    // ennemyLoader.loadLibrary(ennemyLib[ennemySelected].c_str());
     return (0);
 }
