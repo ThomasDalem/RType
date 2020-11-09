@@ -5,25 +5,31 @@
 ** Client
 */
 
-#ifndef CLIENT_HPP_
-#define CLIENT_HPP_
+#ifndef __Client__
+#define __Client__
 
+#include <vector>
+#include <memory>
 #include <iostream>
+
+#include "Player.hpp"
+#include "NetUDPClient.hpp"
+#include "WindowHandler.hpp"
 
 using namespace std;
 class Client {
     public:
-        Client(string name);
+        Client();
         ~Client();
 
         void operator=(Client another);
         bool operator==(Client another);
 
-        void setName(string str);
-        string getName(void) const;
+        shared_ptr<Player> getPlayer(size_t) const;
+        void formatInput(size_t, shared_ptr<network::NetUDPClient>, shared_ptr<WindowHandler>);
 
     private:
-        string _name;
+        vector<shared_ptr<Player>> _players;
 
     protected:
 };
