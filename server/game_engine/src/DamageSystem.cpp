@@ -49,21 +49,21 @@ void game_engine::DamageSystem::applyDamage()
     std::vector<std::shared_ptr<IEntities>>::iterator objectIter;
     std::vector<std::shared_ptr<AComponents>> objectComponent;
 
-    for (playerIter = _player->begin(); playerIter != _player->end(); playerIter++)
-    {
-        playerComponent = playerIter->get()->getComponentList();
-        getDamageComponent(playerComponent, transfromComponent, collisionComponent, healthComponent);
-        for (objectIter = _object->begin(); objectIter != _object->end(); objectIter++) {
-            objectComponent = objectIter->get()->getComponentList();
-            if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
-                healthComponent->getDamage();
-        }
-        for (ennemyIter = _ennemy->begin(); ennemyIter != _ennemy->end(); ennemyIter++) {
-            ennemyComponent = ennemyIter->get()->getComponentList();
-            if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
-                healthComponent->getDamage();
-        }
-    }
+    // for (playerIter = _player->begin(); playerIter != _player->end(); playerIter++)
+    // {
+    //     playerComponent = playerIter->get()->getComponentList();
+    //     getDamageComponent(playerComponent, transfromComponent, collisionComponent, healthComponent);
+    //     for (objectIter = _object->begin(); objectIter != _object->end(); objectIter++) {
+    //         objectComponent = objectIter->get()->getComponentList();
+    //         if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
+    //             healthComponent->getDamage();
+    //     }
+    //     for (ennemyIter = _ennemy->begin(); ennemyIter != _ennemy->end(); ennemyIter++) {
+    //         ennemyComponent = ennemyIter->get()->getComponentList();
+    //         if (checkCollisionWithObject(*transfromComponent, *collisionComponent, objectComponent) == true)
+    //             healthComponent->getDamage();
+    //     }
+    // }
     ennemyDamageSystem();
     environnementDamageSystem();
 }
