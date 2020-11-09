@@ -37,33 +37,33 @@ void game_engine::SpawnSystem::spawnSystem()
 
 void game_engine::SpawnSystem::loadEnemyLibrary()
 {
+    DDloader<Enemy> ennemyLoader;
+    DIR *pDIR;
+    std::vector<std::string> ennemyLib;
+    std::string file;
+    struct dirent *entry;
+    //int ennemySelected;
 
-}
-
-void game_engine::SpawnSystem::spawnEnemy()
-{
-    // DDloader<Enemy> ennemyLoader;
-    // DIR *pDIR;
-    // std::vector<std::string> ennemyLib;
-    // std::string file;
-    // struct dirent *entry;
-    // int ennemySelected;
-
-    // pDIR = opendir("./ennemyLib");
-    // if (pDIR == nullptr)
-    //     throw (Exception("Can't find ennemy directory"));
-    // while (entry = readdir(pDIR)) {
-    //     file.assign(entry->d_name);
-    //     if (file.find(".so") != std::string::npos) {
-    //         file.insert(0, "./ennemyLib/");
-    //         ennemyLib.push_back(file);
-    //     }
-    // }
+    pDIR = opendir("../../../lib");
+    if (pDIR == nullptr)
+        throw (Exception("Can't find ennemy directory"));
+    while (entry = readdir(pDIR)) {
+        file.assign(entry->d_name);
+        std::cout << file.c_str() << std::endl;
+        /*if (file.find(".so") != std::string::npos) {
+            file.insert(0, "./ennemyLib/");
+            ennemyLib.push_back(file);
+        }*/
+    }
     // closedir(pDIR);
     // if (ennemyLib.size() == 0)
     //     throw (Exception("No library found in ennemy directory"));
     // ennemySelected = rand() % ennemyLib.size();
     // ennemyLoader.loadLibrary(ennemyLib[ennemySelected].c_str());
+}
+
+void game_engine::SpawnSystem::spawnEnemy()
+{
 }
 
 void game_engine::SpawnSystem::newPlayer(int clientID)
