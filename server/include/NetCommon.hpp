@@ -26,7 +26,7 @@ namespace network
     struct UDPMessage
     {
         int playerID;
-        int value;
+        int value[10];
         Event event;
     };
 }

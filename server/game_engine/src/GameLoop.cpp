@@ -29,12 +29,26 @@ game_engine::GameLoop::~GameLoop()
 
 bool game_engine::GameLoop::areTherePlayers()
 {
-    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList;
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
+    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
+    game_engine::Player *player;
+    std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message;
+    bool playerExisting = false;
 
+    while (server.hasMessages()) {
+        playerExisting = false;
+        message = server.getFirstMessage();
+        for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+            player = static_cast<Player *>(playerListIter->get());
+            player->addNewInput(message->first.event, message->first.value);
+            playerExisting = true;
+        }
+        if (playerExisting == false)
+            spawnSystem.newPlayer(message->first.playerID);
+    }
 
-    if (EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities)->empty())
+    if (playersList->empty())
         return (false);
-    //get message, parse
     //send message
     return (true);
 }

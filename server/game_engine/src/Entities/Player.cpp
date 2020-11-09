@@ -20,3 +20,24 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clien
     _timeInvincibility = 0;
     _speedMultiplicator = 1;
 }
+
+void game_engine::Player::addNewInput(network::Event event, int value[10])
+{
+    int moveX = 0;
+    int moveY = 0;
+
+    if (event == network::Event::MOVE) {
+        moveX = value[0];
+        moveY = value[1];
+        if (moveX > 0 && moveY == 0)
+            inputBuffer.push_back(InputEnum::MOVELEFT);
+        if (moveX < 0 && moveY == 0)
+            inputBuffer.push_back(InputEnum::MOVERIGHT);
+        if (moveX == 0 && moveY > 0)
+            inputBuffer.push_back(InputEnum::MOVEDOWN);
+        if (moveX == 0 && moveY < 0)
+            inputBuffer.push_back(InputEnum::MOVEUP);
+    }
+    if (event == network::Event::SHOOT)
+        inputBuffer.push_back(InputEnum::SHOOTINPUT);
+}
