@@ -34,7 +34,7 @@ CC			= 		g++
 
 CPPFLAGS	=		-I./game_engine/include -I./Class -I./game_engine/include/Entities
 
-WALL 		=		-Wall -Wextra -Werror
+WALL 		=		-Wall -Wextra -Werror -ldl
 
 all			:		$(NAME)
 
