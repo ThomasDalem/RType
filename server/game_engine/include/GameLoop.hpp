@@ -15,6 +15,7 @@
 #include "DeathSystem.hpp"
 #include "./DDLoader.hpp"
 #include "EntitiesParser.hpp"
+#include "../../include/NetUDPServer.hpp"
 
 namespace game_engine
 {
@@ -25,6 +26,8 @@ namespace game_engine
         ~GameLoop();
         void gameLoop();
         bool areTherePlayers();
+        void sendToClients();
+        void getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Collision *collisionComponent);
     protected:
     private:
         MoveSystem moveSystem;
@@ -33,6 +36,7 @@ namespace game_engine
         DamageSystem damageSystem;
         SpawnSystem spawnSystem;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
+        network::NetUDPServer server;
     };
 } // namespace game_engine
 

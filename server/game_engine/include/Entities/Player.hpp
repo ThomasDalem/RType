@@ -17,7 +17,7 @@
 #include "../Components/Collision.hpp"
 #include "../Components/Render.hpp"
 #include "../InputEnum.hpp"
-//#include "../../include/NetUDPServer.hpp"
+#include "../../include/NetUDPServer.hpp"
 
 
 namespace game_engine {
@@ -47,17 +47,20 @@ namespace game_engine {
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
 
-            //boost::asio::ip::udp::endpoint getClientEndpoint() const {return (endpoint);}
+            boost::asio::ip::udp::endpoint getClientEndpoint() const {return (endpoint);}
             float getTimeInvincibility() const {return (_timeInvincibility);};
             float getSpeedMultiplicator() const {return (_speedMultiplicator);};
+            int getScore() const {return(_score);}
             void setTimeInvincibility(size_t timeInvincibility) {_timeInvincibility = timeInvincibility;}
             void setSpeedMultiplicator(float speedMultiplicateur) {_speedMultiplicator = speedMultiplicateur;}
+            void addNewInput(network::Event event, int value[10]);
 
         protected:
         private:
             int _uniqueID;
             int _clientID;
-            //boost::asio::ip::udp::endpoint const endpoint;
+            int _score;
+            boost::asio::ip::udp::endpoint const endpoint;
             EntitiesType _entitesID;
             std::vector<InputEnum> inputBuffer;
 

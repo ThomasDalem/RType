@@ -10,7 +10,7 @@
 
 #include <cstdint>
 #include <boost/asio.hpp>
-
+#include "../../game_engine/include/EntitiesEnum.hpp"
 #define MAX_MESSAGE_LENGTH 1024
 
 namespace network
@@ -26,8 +26,17 @@ namespace network
     struct UDPMessage
     {
         int playerID;
-        int value;
+        int value[10];
         Event event;
+    };
+
+    struct UDPClientMessage
+    {
+        //game_engine::EntitiesType type;
+        int entitieType;
+        int pos[5];
+        float rotation;
+        int spriteRectangle[10];
     };
 }
 #endif /* !NETCOMMON_HPP_ */
