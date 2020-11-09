@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** R-Type
+** File description:
+** Room Menu
+*/
+
 #ifndef __RoomMenu__
 #define __RoomMenu__
 
@@ -14,7 +21,7 @@ enum ReturnRoom {Continue, Salle, Back};
 
 class RoomMenu {
     public:
-        RoomMenu(string = "");
+        RoomMenu(string = "", size_t = 0);
         ~RoomMenu();
 
         ReturnRoom loop(shared_ptr<sf::RenderWindow>, Player &);

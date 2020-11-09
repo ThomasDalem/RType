@@ -1,33 +1,32 @@
+/*
+** EPITECH PROJECT, 2020
+** R-Type
+** File description:
+** Room Menu
+*/
+
 #include "Room.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
-static int num = 0;
-
-void addItems(vector<shared_ptr<Button>> &roomlist, size_t &row) {
-    roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (num * 110)), sf::Vector2f(250, 100)));
-    roomlist[num]->setColor(sf::Color::Black, sf::Color::White, 5);
-    roomlist[num]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row), 75, sf::Color::White);
-    row += 1;
+void addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
+    roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (row * 110)), sf::Vector2f(250, 100)));
+    roomlist[row]->setColor(sf::Color::Black, sf::Color::White, 5);
+    roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
 }
 
-RoomMenu::RoomMenu(string name) {
+RoomMenu::RoomMenu(string name, size_t ndx) {
     _name = "";
     isMenu = true;
     size_t row = 0;
 
-    // A REMOVE -- POUR TEST
-    addItems(roomlist, row);
-    addItems(roomlist, row);
-    addItems(roomlist, row);
-    addItems(roomlist, row);
-    addItems(roomlist, row);
-    addItems(roomlist, row);
-    // FIN DU REMOVE -- POUR TEST
+    for (; row < ndx; row ++)
+        addItems(roomlist, row);
 }
 RoomMenu::~RoomMenu() {}
 
 ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
+    sf::Event event;
     ImageSFML back("./resources/sprites/mainbackground.png");
     TextSfml name_txt("Pseudo: " + player.getName(), "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
@@ -48,6 +47,9 @@ ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) 
 
         if (player.getRoom() != -1)
             break;
+        while(_window->pollEvent(event))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                return Back;
     }
     return player.getRoom() > 0 ? Salle : Back;
 }
@@ -73,6 +75,7 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
 }
 
 ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &player) {
+    sf::Event event;
     string roomname = "Partie de " + player.getName();
     ImageSFML back("./resources/sprites/mainbackground.png");
     ImageSFML P1("./resources/sprites/mainbackground.png");
@@ -94,6 +97,9 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &
 
         _window->display();
         _window->clear();
+        while(_window->pollEvent(event))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                return Back;
     }
     return player.getRoom() == 0 ? Continue : Back;
 }

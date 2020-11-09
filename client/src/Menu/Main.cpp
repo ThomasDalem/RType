@@ -2,6 +2,26 @@
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
+#include <stdio.h>
+#include <stdlib.h>
+
+string randomGen(void) {
+    switch(rand() % 10) {
+        case 0: return "Superman" + to_string(rand() % 100); break;
+        case 1: return "Batman" + to_string(rand() % 100); break;
+        case 2: return "Babar" + to_string(rand() % 100); break;
+        case 3: return "Jafare" + to_string(rand() % 100); break;
+        case 4: return "Franklin" + to_string(rand() % 100); break;
+        case 5: return "Oggy" + to_string(rand() % 100); break;
+        case 6: return "Rocket" + to_string(rand() % 100); break;
+        case 7: return "Didier" + to_string(rand() % 100); break;
+        case 8: return "Jacky" + to_string(rand() % 100); break;
+        case 9: return "XxDarkKikoudu91xx"; break;
+        default: return "KevinDu16"; break;
+    }
+    return "";
+}
+
 Mainmenu::Mainmenu() {
     _name = "";
     isHost = false;
@@ -34,6 +54,8 @@ ReturnMain Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) 
         _window->display();
         _window->clear();
     }
+    if (_name == "")
+        _name = randomGen();
     player.setName(_name);
     return isJoin ? Room : (isHost ? Creating : Quit);
 }
@@ -51,8 +73,6 @@ void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
                 _name = _name + (char)(event.key.code + 97);
             else if (event.key.code == 57)
                 _name = _name + " ";
-            // else if (event.key.code == 58 || event.key.code == 48)
-            //     isMenu = false;
         } if (_host->isClicked(event))
             isHost = true;
         else if (_join->isClicked(event))

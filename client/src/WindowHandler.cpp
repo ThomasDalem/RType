@@ -20,8 +20,8 @@ WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fp
 }
 
 WindowHandler::~WindowHandler() {
-    // _texts.clear();
-    // _images.clear();
+    _texts.clear();
+    _images.clear();
 }
 
 void WindowHandler::display(void) const {
@@ -51,23 +51,24 @@ void WindowHandler::rmImage(size_t row) {
     _images.erase(_images.begin() + i);
 }
 
-void WindowHandler::isEvent(Player &player) {
+Input WindowHandler::isEvent(Player &player) {
     sf::Event event;
 
     while (_window->pollEvent(event)) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
-            _window->close(); // [SEND] DISCONNECTED
+            _window->close();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y - 5)); // [SEND] HAUT
+            return Up;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y + 5)); // [SEND] BAS
+            return Down;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            player.setPosition(sf::Vector2f(player.getPosition().x + 5, player.getPosition().y)); // [SEND] DROITE
+            return Left;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            player.setPosition(sf::Vector2f(player.getPosition().x - 5, player.getPosition().y)); // [SEND] GAUCHE
+            return Right;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-            player.setPosition(sf::Vector2f(player.getPosition().x, player.getPosition().y)); // [SEND] FEU A VOLONTEE, PAS DE QUARTIER MOUSAILLON !
+            return Shoot;
     }
+    return Nothing;
 }
 
 size_t WindowHandler::getWidth(void) const {return _width;}
