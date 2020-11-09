@@ -48,9 +48,11 @@ namespace network
     {
         int entitieType;
         int uniqueID;
-        int pos[5];
-        float rotation;
-        int spriteRectangle[10];
+        int value[50];
+        //value[0] : 1 = message à afficher, 0 = le joueur est mort
+        //value[1] value[2] : position x y du sprite
+        //value[3] : rotation (jsp à quoi ça sert mais Thomas l'a mis donc ça doit servir)
+        //value[4] value[5] value[6] value[7] : les positions x y dans le sprite cheet et la Longueur et largeur à prendre
     };
 }
 #endif /* !NETCOMMON_HPP_ */

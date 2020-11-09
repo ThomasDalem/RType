@@ -62,21 +62,29 @@ void game_engine::GameLoop::sendToClients()
         getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieCollisionComponent);
         clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
         clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
-        clientMessage.pos[0] = entitieTransfromComponent->getPosition().x;
-        clientMessage.pos[1] = entitieTransfromComponent->getPosition().y;
-        clientMessage.rotation = entitieTransfromComponent->getRotation();
-        clientMessage.spriteRectangle[0] = entitieCollisionComponent->getRectSize().x;
-        clientMessage.spriteRectangle[1] = entitieCollisionComponent->getRectSize().y;
-        clientMessage.spriteRectangle[2] = entitieCollisionComponent->getRectSize().L;
-        clientMessage.spriteRectangle[3] = entitieCollisionComponent->getRectSize().l;
+        clientMessage.value[0] = 1;
+        clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
+        clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
+        clientMessage.value[3] = entitieTransfromComponent->getRotation();
+        clientMessage.value[4] = entitieCollisionComponent->getRectSize().x;
+        clientMessage.value[5] = entitieCollisionComponent->getRectSize().y;
+        clientMessage.value[6] = entitieCollisionComponent->getRectSize().L;
+        clientMessage.value[7] = entitieCollisionComponent->getRectSize().l;
         server.broadcastDispClassMessage(clientMessage);
     }
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
-        clientMessage.pos[0] = player->getHealth()->getHealthPoint();
-        clientMessage.pos[1] = player->getScore();
-        clientMessage.rotation = 0;
-        clientMessage.spriteRectangle[0];
+        if (player->getHealth()->getHealthPoint() > 0) {
+            clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
+            clientMessage.value[0] = 1;
+            clientMessage.value[1] = player->getHealth()->getHealthPoint();
+            clientMessage.value[2] = player->getScore();
+            clientMessage.value[3] = 0;
+        }
+        else {
+            clientMessage.value[0] = 0;
+        }
+        server.sendDispClassMessage(clientMessage, player->getClientEndpoint()); 
     }
 }
 
