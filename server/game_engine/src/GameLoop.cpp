@@ -49,8 +49,53 @@ bool game_engine::GameLoop::areTherePlayers()
 
     if (playersList->empty())
         return (false);
-    //send message
     return (true);
+}
+
+void game_engine::GameLoop::sendToClients()
+{
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
+    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
+    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator entitiesListIter;
+    std::vector<std::shared_ptr<AComponents>> entitiesComponents;
+    game_engine::Player *player;
+    Transform *entitieTransfromComponent;
+    Collision *entitieCollisionComponent;
+    Health *entitieHealthComponent;
+
+    network::UDPClientMessage clientMessage;
+
+    for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
+        entitiesComponents = entitiesListIter->get()->getComponentList();
+        getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieCollisionComponent);
+        clientMessage.entitieType = entitiesListIter->get()->getUniqueID();
+        clientMessage.pos[0] = entitieTransfromComponent->getPosition().x;
+        clientMessage.pos[1] = entitieTransfromComponent->getPosition().y;
+        clientMessage.rotation = entitieTransfromComponent->getRotation();
+        clientMessage.spriteRectangle[0] = entitieCollisionComponent->getRectSize().x;
+        clientMessage.spriteRectangle[1] = entitieCollisionComponent->getRectSize().y;
+        clientMessage.spriteRectangle[2] = entitieCollisionComponent->getRectSize().L;
+        clientMessage.spriteRectangle[3] = entitieCollisionComponent->getRectSize().l;
+        server.broadcastDispClassMessage(clientMessage);
+    }
+    for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+        player = static_cast<Player *>(playerListIter->get());
+        clientMessage.pos[0] = player->getHealth()->getHealthPoint();
+        clientMessage.pos[1] = player->getScore();
+        clientMessage.rotation = 0;
+        clientMessage.spriteRectangle[0]
+    }
+}
+
+void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Collision *collisionComponent)
+{
+    std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
+    for (componentListIter = componentList.begin(); componentListIter != componentList.end(); ++componentListIter) {
+        if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
+            transfromComponent = static_cast<Transform *>(componentListIter->get());
+        if (componentListIter->get()->getType() == ComponentType::COLLISION)
+            collisionComponent = static_cast<Collision *>(componentListIter->get());
+    }
 }
 
 void game_engine::GameLoop::gameLoop()

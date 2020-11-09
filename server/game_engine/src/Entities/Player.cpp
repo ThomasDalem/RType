@@ -10,6 +10,7 @@
 game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID)
 {
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
+    _uniqueID = clientID;
     _clientID = clientID;
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
     _health = std::make_shared<Health>(1, true);
@@ -19,6 +20,7 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clien
     _entitesID = EntitiesType::PLAYER;
     _timeInvincibility = 0;
     _speedMultiplicator = 1;
+    _score = 0;
 }
 
 void game_engine::Player::addNewInput(network::Event event, int value[10])
