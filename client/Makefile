@@ -8,26 +8,28 @@
 
 NAME = r-type_client
 
-SRC = 	main.cpp				\
+SRC = 	main.cpp						\
 		\
-		src/SFML/Button.cpp			\
-		src/SFML/ImageSFML.cpp		\
-		src/SFML/TextSFML.cpp		\
-		src/SFML/BackgroundSFML.cpp	\
+		src/SFML/Button.cpp				\
+		src/SFML/ImageSFML.cpp			\
+		src/SFML/TextSFML.cpp			\
+		src/SFML/BackgroundSFML.cpp		\
 		\
-		src/Menu/Main.cpp			\
-		src/Menu/Room.cpp			\
+		src/Menu/Main.cpp				\
+		src/Menu/Room.cpp				\
 		\
-		src/Entities/Player.cpp		\
-		src/Entities/Monster.cpp	\
-		src/Entities/SMonster.cpp	\
+		src/Entities/Player.cpp			\
+		src/Entities/Monster.cpp		\
+		src/Entities/SMonster.cpp		\
 		\
-		src/Virtual/VMonster.cpp	\
-		src/Virtual/VEntitie.cpp	\
+		src/Virtual/VMonster.cpp		\
+		src/Virtual/VEntitie.cpp		\
 		\
-		src/Client.cpp			\
-		src/ErrorHandler.cpp	\
-		src/WindowHandler.cpp	\
+		src/Network/NetUDPClient.cpp	\
+		\
+		src/Client.cpp					\
+		src/ErrorHandler.cpp			\
+		src/WindowHandler.cpp			\
 
 
 OBJSHARED =		Client.o	\
@@ -43,7 +45,7 @@ CPPFLAGS =	-I./include			\
 			-I./Class/Virtual	\
 			-I./Class/Menu		\
 
-EXT = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system
+EXT = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -pthread
 
 WALL = -Wall -Wextra -Werror
 

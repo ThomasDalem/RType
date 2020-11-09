@@ -13,7 +13,9 @@
 #include "Room.hpp"
 #include "Main.hpp"
 #include "Player.hpp"
+#include "NetCommon.hpp"
 #include "ErrorHandler.hpp"
+#include "NetUDPClient.hpp"
 #include "WindowHandler.hpp"
 
 using namespace std;
@@ -28,7 +30,11 @@ vector<string> getArgs(char **av) {
 void core(vector<string> av) {
     Player player;
     WindowHandler windowhdl(1910, 1070, "R-Type");
+    network::NetUDPClient net("127.0.0.1", "200");
+    network::UDPMessage msg = {13, 84, network::Event::ADD};
     shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
+
+    net.sendMessage(msg);
 
     windowhdl.setFramerate(50);
     windowhdl.addText(Score);
@@ -40,6 +46,11 @@ void core(vector<string> av) {
     windowhdl.addImage(player.getImage());
     windowhdl.addText(player.getNameText());
     while (windowhdl.isOpen()) {
+        while (net.hasMessages()) {
+            unique_ptr<network::UDPMessage> message = net.getFirstMessage();
+
+            cout << "MESSAGES: " <<  int(message->event) << ", " << message->playerID << ", " << message->value << endl;
+        }
         windowhdl.isEvent(player);
         windowhdl.display();
     }

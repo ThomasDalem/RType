@@ -4,24 +4,25 @@
 
 static int num = 0;
 
-void addItems(vector<shared_ptr<Button>> &roomlist) {
+void addItems(vector<shared_ptr<Button>> &roomlist, size_t &row) {
     roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (num * 110)), sf::Vector2f(250, 100)));
     roomlist[num]->setColor(sf::Color::Black, sf::Color::White, 5);
-    roomlist[num]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(num + 1), 75, sf::Color::White);
-    num += 1;
+    roomlist[num]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row), 75, sf::Color::White);
+    row += 1;
 }
 
 RoomMenu::RoomMenu(string name) {
     _name = "";
     isMenu = true;
+    size_t row = 0;
 
     // A REMOVE -- POUR TEST
-    addItems(roomlist);
-    addItems(roomlist);
-    addItems(roomlist);
-    addItems(roomlist);
-    addItems(roomlist);
-    addItems(roomlist);
+    addItems(roomlist, row);
+    addItems(roomlist, row);
+    addItems(roomlist, row);
+    addItems(roomlist, row);
+    addItems(roomlist, row);
+    addItems(roomlist, row);
     // FIN DU REMOVE -- POUR TEST
 }
 RoomMenu::~RoomMenu() {}
