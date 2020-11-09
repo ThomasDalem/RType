@@ -22,9 +22,6 @@ SRC = 	main.cpp						\
 		src/Entities/Monster.cpp		\
 		src/Entities/SMonster.cpp		\
 		\
-		src/Virtual/VMonster.cpp		\
-		src/Virtual/VEntitie.cpp		\
-		\
 		src/Network/NetUDPClient.cpp	\
 		\
 		src/Client.cpp					\
@@ -42,7 +39,6 @@ CPPFLAGS =	-I./include			\
 			-I./Class			\
 			-I./Class/Entities	\
 			-I./Class/SFML		\
-			-I./Class/Virtual	\
 			-I./Class/Menu		\
 
 EXT = -lsfml-window -lsfml-graphics -lsfml-audio -lsfml-system -pthread

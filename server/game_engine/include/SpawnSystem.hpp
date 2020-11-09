@@ -47,6 +47,9 @@ namespace game_engine
 
         void spawnObstacle();
         void addObstacle();
+        int getAndIncID();
+        int getID() const;
+        void incID();
 
     protected:
     private:
@@ -56,6 +59,7 @@ namespace game_engine
         double enemySpawnTime;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
         std::vector<DDloader<game_engine::Enemy>> _enemyLoader;
+        int id;
     };
 } // namespace game_engine
 

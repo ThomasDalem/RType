@@ -18,26 +18,25 @@
 using namespace std;
 class Player {
     public:
-        Player();
+        Player(size_t id);
         ~Player();
 
-        void setName(string str);
+        void setId(size_t id);
         void setRoom(int room);
         int getRoom(void) const;
+        size_t getId(void) const;
+        void setName(string str);
         string getName(void) const;
-        void setHealth(size_t hlth);
-        size_t getHealth(void) const;
         void setImage(ImageSFML news);
-        sf::Vector2f getPosition(void) const;
         void setPosition(sf::Vector2f newpos);
         shared_ptr<ImageSFML> getImage(void) const;
         shared_ptr<TextSfml> getNameText(void) const;
 
     private:
         int _room;
+        size_t _id;
         string _name;
-        size_t _health;
-        sf::Vector2f _pos;
+
         shared_ptr<ImageSFML> _image;
         shared_ptr<TextSfml> _textname;
 

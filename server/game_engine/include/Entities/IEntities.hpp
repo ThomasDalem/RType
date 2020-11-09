@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <vector>
+#include <uuid/uuid.h>
 #include "../Exception.hpp"
 #include "../Components/AComponents.hpp"
 #include "../EntitiesEnum.hpp"

@@ -7,8 +7,9 @@
 
 #include "DestroyableTile.hpp"
 
-game_engine::DestroyableTile::DestroyableTile(Vector _position)
+game_engine::DestroyableTile::DestroyableTile(Vector _position, int id)
 {
+    _uniqueID = id;
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
     _health = std::make_shared<Health>(1, true);
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 100, 50), true);

@@ -7,7 +7,7 @@
 
 #include "Alien.hpp"
 
-enemies::Alien::Alien(game_engine::Vector position) : game_engine::Enemy(position)
+enemies::Alien::Alien(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
 }
 
@@ -29,7 +29,7 @@ void enemies::Alien::pathEnemy()
     }
 }
 
-extern "C" enemies::Alien *entryPoint(game_engine::Vector position)
+extern "C" enemies::Alien *entryPoint(game_engine::Vector position, int id)
 {
-    return (new enemies::Alien(position));
+    return (new enemies::Alien(position, id));
 }

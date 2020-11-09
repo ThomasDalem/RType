@@ -7,7 +7,7 @@
 
 #include "BattleShip.hpp"
 
-enemies::BattleShip::BattleShip(game_engine::Vector position) : game_engine::Enemy(position)
+enemies::BattleShip::BattleShip(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
 }
 
@@ -29,7 +29,7 @@ void enemies::BattleShip::pathEnemy()
     }
 }
 
-extern "C" enemies::BattleShip *entryPoint(game_engine::Vector position)
+extern "C" enemies::BattleShip *entryPoint(game_engine::Vector position, int id)
 {
-    return (new enemies::BattleShip(position));
+    return (new enemies::BattleShip(position, id));
 }

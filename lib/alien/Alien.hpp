@@ -16,7 +16,7 @@
 namespace enemies {
     class Alien : public game_engine::Enemy {
         public:
-            Alien(game_engine::Vector position);
+            Alien(game_engine::Vector position, int id);
             ~Alien();
             void pathEnemy();
 

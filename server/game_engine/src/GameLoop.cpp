@@ -7,20 +7,10 @@
 
 #include "GameLoop.hpp"
 
-game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities): server(8081)
+game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities):
+    server(8081), _entities(entities), moveSystem(entities), deathSystem(entities),
+    spawnSystem(entities), collisionSystem(entities), damageSystem(entities)
 {
-    _entities = entities;
-    moveSystem = MoveSystem(entities);
-    deathSystem = DeathSystem(entities);
-    spawnSystem = SpawnSystem(entities);
-    collisionSystem = CollisionSystem(
-        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, entities),
-        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::POWERUP}, entities),
-        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, entities));
-    damageSystem = DamageSystem(
-        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, entities),
-        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY}, entities),
-        EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, entities));
 }
 
 game_engine::GameLoop::~GameLoop()
@@ -39,9 +29,11 @@ bool game_engine::GameLoop::areTherePlayers()
         playerExisting = false;
         message = server.getFirstMessage();
         for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
-            player = static_cast<Player *>(playerListIter->get());
-            player->addNewInput(message->first.event, message->first.value);
-            playerExisting = true;
+            if (message->second == player->getClientEndpoint()) {
+                player = static_cast<Player *>(playerListIter->get());
+                player->addNewInput(message->first.event, message->first.value);
+                playerExisting = true;
+            }
         }
         if (playerExisting == false)
             spawnSystem.newPlayer(message->first.playerID);
@@ -68,7 +60,8 @@ void game_engine::GameLoop::sendToClients()
     for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
         entitiesComponents = entitiesListIter->get()->getComponentList();
         getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieCollisionComponent);
-        clientMessage.entitieType = entitiesListIter->get()->getUniqueID();
+        clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
+        clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
         clientMessage.pos[0] = entitieTransfromComponent->getPosition().x;
         clientMessage.pos[1] = entitieTransfromComponent->getPosition().y;
         clientMessage.rotation = entitieTransfromComponent->getRotation();
