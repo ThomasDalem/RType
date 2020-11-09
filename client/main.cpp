@@ -24,7 +24,6 @@ void core(vector<string> av) {
     Client client;
 
     network::UDPMessage msg = {1, {84}, network::Event::ADD};
-    shared_ptr<network::NetUDPClient> net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     client.getWindowHandler()->addText(Score);
@@ -36,17 +35,16 @@ void core(vector<string> av) {
     client.getWindowHandler()->addImage(client.getPlayer(0)->getImage());
     client.getWindowHandler()->addText(client.getPlayer(0)->getNameText());
 
-    net->sendMessage(msg);
+    client.getNetwork()->sendMessage(msg);
     while (client.getWindowHandler()->isOpen()) {
-        while (net->hasMessages()) {
-            unique_ptr<network::UDPMessage> message = net->getFirstMessage();
+        while (client.getNetwork()->hasMessages()) {
+            unique_ptr<network::UDPMessage> message = client.getNetwork()->getFirstMessage();
 
             cout << "MESSAGES: " << int(message->event) << ", " << message->playerID << ", " << message->value << endl;
         }
-        client.formatInput(0, net);
+        client.formatInput(0);
         client.getWindowHandler()->display();
     }
-    client.getWindowHandler()->~WindowHandler();
 }
 
 int main(int ac, char **argv, char **env) {

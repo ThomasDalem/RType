@@ -22,16 +22,16 @@ class Client {
         Client();
         ~Client();
 
-        void operator=(Client another);
-        bool operator==(Client another);
-
+        void game(void);
+        void formatInput(size_t);
         shared_ptr<Player> getPlayer(size_t) const;
         shared_ptr<WindowHandler> getWindowHandler(void) const;
-        void formatInput(size_t, shared_ptr<network::NetUDPClient>);
+        shared_ptr<network::NetUDPClient> getNetwork(void) const;
 
     private:
         vector<shared_ptr<Player>> _players;
         shared_ptr<WindowHandler> _windowhdl;
+        shared_ptr<network::NetUDPClient> _net;
 
     protected:
 };
