@@ -22,6 +22,8 @@ WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fp
 WindowHandler::~WindowHandler() {
     _texts.clear();
     _images.clear();
+    if (_window->isOpen())
+        _window->close();
 }
 
 void WindowHandler::display(void) const {
@@ -67,6 +69,8 @@ Input WindowHandler::isEvent(Player &player) {
             return Right;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             return Shoot;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            return Escape;
     }
     return Nothing;
 }

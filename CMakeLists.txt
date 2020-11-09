@@ -10,6 +10,7 @@ conan_basic_setup(TARGETS)
 set(SERVER_SRCS
     ./server/main.cpp
     ./server/game_engine/src/System.cpp
+    ./server/game_engine/src/Exception.cpp
     ./server/game_engine/src/MoveSystem.cpp
     ./server/game_engine/src/DamageSystem.cpp
     ./server/game_engine/src/CollisionSystem.cpp

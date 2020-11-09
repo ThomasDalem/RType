@@ -27,19 +27,22 @@ RoomMenu::~RoomMenu() {}
 
 ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
-    ImageSFML back("./resources/sprites/mainbackground.png");
-    TextSfml name_txt("Pseudo: " + player.getName(), "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
+    shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
+    shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
+    shared_ptr<TextSfml> name_txt = make_shared<TextSfml>("Pseudo: " + player.getName(), "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
+    arrow->setScale(sf::Vector2f(0.25, 0.25));
     _name = player.getName();
     _window->setFramerateLimit(60);
     while(_window->isOpen() && isMenu) {
         EventHandler(_window, player);
 
-        name_txt.setString("Pseudo: " + _name);
-        name_txt.setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
+        name_txt->setString("Pseudo: " + _name);
+        name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
-        _window->draw(*back.getSprite());
-        _window->draw(*name_txt.getData());
+        _window->draw(*back->getSprite());
+        _window->draw(*arrow->getSprite());
+        _window->draw(*name_txt->getData());
         for (size_t i = 0; i < roomlist.size(); i ++)
             roomlist[i]->drawButton(_window);
         _window->display();
@@ -77,23 +80,23 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
 ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
     string roomname = "Partie de " + player.getName();
-    ImageSFML back("./resources/sprites/mainbackground.png");
-    ImageSFML P1("./resources/sprites/mainbackground.png");
-    ImageSFML P2("./resources/sprites/mainbackground.png");
-    ImageSFML P3("./resources/sprites/mainbackground.png");
-    ImageSFML P4("./resources/sprites/mainbackground.png");
-    TextSfml name_txt(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
+    shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
+    shared_ptr<ImageSFML> P1 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
+    shared_ptr<ImageSFML> P2 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
+    shared_ptr<ImageSFML> P3 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
+    shared_ptr<ImageSFML> P4 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
+    shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     _name = roomname;
     _window->setFramerateLimit(60);
     while(_window->isOpen()) {
         EventHandler(_window, player);
 
-        name_txt.setString("Nom de la Partie: " + _name);
-        name_txt.setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
+        name_txt->setString("Nom de la Partie: " + _name);
+        name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
-        _window->draw(*back.getSprite());
-        _window->draw(*name_txt.getData());
+        _window->draw(*back->getSprite());
+        _window->draw(*name_txt->getData());
 
         _window->display();
         _window->clear();
