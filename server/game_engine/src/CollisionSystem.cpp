@@ -11,9 +11,8 @@ game_engine::CollisionSystem::CollisionSystem()
 {
 }
 
-game_engine::CollisionSystem::CollisionSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> player, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> powerUp,
-    std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> objectAndEnemy)
-    : _player(player), _powerUp(powerUp), _objectAndEnemy(objectAndEnemy)
+game_engine::CollisionSystem::CollisionSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> list)
+    : _entities(list)
 {
 }
 
@@ -30,6 +29,14 @@ game_engine::CollisionSystem &game_engine::CollisionSystem::operator=(const game
 }
 
 void game_engine::CollisionSystem::collisionSystem()
+{
+    _player = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
+    _powerUp = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::POWERUP}, _entities);
+    _objectAndEnemy = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, _entities);
+    collideAll();
+}
+
+void game_engine::CollisionSystem::collideAll()
 {
     std::vector<std::shared_ptr<IEntities>>::iterator playerIter;
     std::vector<std::shared_ptr<AComponents>> playerComponent;

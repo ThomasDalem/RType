@@ -39,7 +39,6 @@ namespace game_engine
         ~SpawnSystem();
         SpawnSystem &operator=(const SpawnSystem &deathSystem);
         void spawnSystem();
-        void loadEnemyLibrary();
         void spawnEnemy();
         void newPlayer(int clientID);
         void checkEntitieShoot();
@@ -54,6 +53,7 @@ namespace game_engine
         std::clock_t blockSpawnClock;
         double blockSpawnTime;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
+        std::vector<DDloader<game_engine::Enemy>> _enemyLoader;
     };
 } // namespace game_engine
 

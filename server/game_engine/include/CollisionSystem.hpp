@@ -16,15 +16,17 @@
 #include "Entities/PowerUp.hpp"
 #include "EntitiesEnum.hpp"
 #include "Entities/IEntities.hpp"
+#include "EntitiesParser.hpp"
 
 namespace game_engine
 {
     class CollisionSystem {
         public:
             CollisionSystem();
-            CollisionSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> player, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> powerUp, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> objectAndEnemy);
+            CollisionSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> list);
             ~CollisionSystem();
             CollisionSystem &operator=(const CollisionSystem &moveSystem);
+            void collideAll();
             void collisionSystem();
             void ennemyCollisionSystem();
             bool ennemyCollisionWithObject(Transform &playerTransfromComponent, Collision &playerCollisionComponent, std::vector<std::shared_ptr<AComponents>> powerUpComponent);
@@ -35,6 +37,7 @@ namespace game_engine
 
         protected:
         private:
+            std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
             std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _player;
             std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _powerUp;
             std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _objectAndEnemy;

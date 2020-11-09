@@ -26,9 +26,10 @@ namespace game_engine
     {
     public:
         DamageSystem();
-        DamageSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> player, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> ennemy, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> object);
+        DamageSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> list);
         ~DamageSystem();
         DamageSystem &operator=(const DamageSystem &moveSystem);
+        void applyDamage();
         void damageSystem();
         void ennemyDamageSystem();
         void environnementDamageSystem();
@@ -40,6 +41,7 @@ namespace game_engine
 
     protected:
     private:
+        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _player;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _ennemy;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _object;
