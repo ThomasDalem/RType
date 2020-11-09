@@ -22,6 +22,7 @@ class Mainmenu {
     private:
         bool isHost;
         bool isJoin;
+        bool isQuit;
         string _name;
         shared_ptr<Button> _host;
         shared_ptr<Button> _join;

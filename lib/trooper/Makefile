@@ -5,7 +5,7 @@
 ## Makefile
 ##
 
-NAME			=		trooper.so
+NAME			=		lib_trooper.so
 
 SRC				=		Trooper.cpp										\
 						../../server/game_engine/src/Entities/Enemy.cpp	\

@@ -14,7 +14,7 @@ using namespace std;
 ErrorHandler::ErrorHandler() {}
 ErrorHandler::~ErrorHandler() {}
 
-static vector<string> getArgs(char **av) {
+vector<string> ErrorHandler::getArgs(char **av) {
     vector<string> args;
 
     for (size_t i = 0; av && av[i]; i ++)

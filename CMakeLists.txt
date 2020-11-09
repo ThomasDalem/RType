@@ -12,6 +12,7 @@ set(SERVER_SRCS
     ./server/game_engine/src/GameLoop.cpp
     ./server/game_engine/src/Exception.cpp
     ./server/game_engine/src/System.cpp
+    ./server/game_engine/src/Exception.cpp
     ./server/game_engine/src/MoveSystem.cpp
     ./server/game_engine/src/DeathSystem.cpp
     ./server/game_engine/src/SpawnSystem.cpp
