@@ -37,18 +37,18 @@ class DDloader
             return (0);
         }
 
-        std::shared_ptr<T> getInstance(const char *name, game_engine::Vector position)
+        std::shared_ptr<T> getInstance(const char *name, game_engine::Vector position, int id)
         {
             *(void **)(&this->entryPoint) = dlsym(this->handle, name);
             if (entryPoint == nullptr)
                 return (nullptr);
-            return (static_cast<std::shared_ptr<T>>((T *)(*entryPoint)(position)));
+            return (static_cast<std::shared_ptr<T>>((T *)(*entryPoint)(position, id)));
         }
 
     protected:
     private:
         void *handle;
-        void *(*entryPoint)(game_engine::Vector position);
+        void *(*entryPoint)(game_engine::Vector position, int id);
 };
 
 #endif /* !DDLOADER_HPP_ */

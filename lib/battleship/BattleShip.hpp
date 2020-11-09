@@ -16,7 +16,7 @@
 namespace enemies {
     class BattleShip : public game_engine::Enemy {
         public:
-            BattleShip(game_engine::Vector position);
+            BattleShip(game_engine::Vector position, int id);
             ~BattleShip();
             void pathEnemy();
 

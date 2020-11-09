@@ -32,8 +32,8 @@ namespace network
 
     struct UDPClientMessage
     {
-        //game_engine::EntitiesType type;
         int entitieType;
+        int uniqueID;
         int pos[5];
         float rotation;
         int spriteRectangle[10];

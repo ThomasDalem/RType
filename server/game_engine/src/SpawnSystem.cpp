@@ -38,8 +38,34 @@ game_engine::SpawnSystem::SpawnSystem()
 
 game_engine::SpawnSystem::SpawnSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities): _entities(entities)
 {
+    DIR *pDIR;
+    std::string file;
+    struct dirent *entry;
+    DDloader<game_engine::Enemy> libLoader;
+    std::vector<std::string> enemyLib;
+
+    pDIR = opendir("./lib");
+    if (pDIR == nullptr)
+        throw (Exception("Can't find ennemy directory"));
+    while (entry = readdir(pDIR)) {
+        file.assign(entry->d_name);
+        if (file.find(".so") != std::string::npos) {
+            file.insert(0, "./lib/");
+            enemyLib.push_back(file);
+        }
+    }
+    closedir(pDIR);
+
+    if (enemyLib.size() == 0)
+        throw (Exception("No library found in ennemy directory"));
+    for (int i = 0; i < 3; i++) {
+        if (libLoader.loadLibrary(enemyLib[i].c_str()) == 84)
+            throw (Exception("can't load"));
+        _enemyLoader.push_back(libLoader);
+    }
     blockSpawnClock = std::clock();
     blockSpawnClock = 0.5;
+    id = 1;
 }
 
 game_engine::SpawnSystem::~SpawnSystem()
@@ -99,8 +125,8 @@ void game_engine::SpawnSystem::spawnObstacle()
 
     if (timePassed > blockSpawnTime) {
         blockSpawnClock = clock();
-        _entities->push_back(std::make_shared<StageObstacle>(Vector(0, 1920)));
-        _entities->push_back(std::make_shared<StageObstacle>(Vector(1030, 1920)));
+        _entities->push_back(std::make_shared<StageObstacle>(Vector(0, 1920), getAndIncID()));
+        _entities->push_back(std::make_shared<StageObstacle>(Vector(1030, 1920), getAndIncID()));
         addObstacle();
     }
 }
@@ -122,18 +148,18 @@ void game_engine::SpawnSystem::addObstacle()
             for (upStart = 50; upStart <= nbObstacletoSpawn * 50; upStart+=50) {
                 stageObstacleOrNot = rand() % 2;
                 if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(upStart, 1920)));
+                    _entities->push_back(std::make_shared<StageObstacle>(Vector(upStart, 1920), getAndIncID()));
                 else
-                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(upStart, 1920)));
+                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(upStart, 1920), getAndIncID()));
             }
         }
         else {
             for (downStart = 1040; downStart <= 1040 - 50 * nbObstacletoSpawn; downStart-=50) {
                 stageObstacleOrNot = rand() % 2;
                 if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(downStart, 1920)));
+                    _entities->push_back(std::make_shared<StageObstacle>(Vector(downStart, 1920), getAndIncID()));
                 else
-                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(downStart, 1920)));
+                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(downStart, 1920), getAndIncID()));
             }
         }
     }
@@ -160,7 +186,7 @@ void game_engine::SpawnSystem::checkPlayerShoot(std::shared_ptr<std::vector<std:
         if (player->getFirstEnum() == InputEnum::SHOOTINPUT) {
             bulletPosX = player->getTransform()->getPosition().x + player->getCollision()->getRectSize().L;
             bulletPosY = player->getTransform()->getPosition().y + (player->getCollision()->getRectSize().l / 2);
-            _entities->push_back(std::make_shared<Bullet>(false, Vector(10, 0), Vector(bulletPosX, bulletPosY)));
+            _entities->push_back(std::make_shared<Bullet>(false, Vector(10, 0), Vector(bulletPosX, bulletPosY), getAndIncID()));
             player->popFirstInput();
         }
     }
@@ -191,8 +217,25 @@ void game_engine::SpawnSystem::checkEnnemyShoot(std::shared_ptr<std::vector<std:
             player = static_cast<Player *>(listPlayerIter->get());
             vecBulletX = player->getTransform()->getPosition().x - bulletPosX;
             vecBulletY = player->getTransform()->getPosition().y - bulletPosY;
-            _entities->push_back(std::make_shared<Bullet>(false, Vector(vecBulletX, vecBulletY), Vector(bulletPosX, bulletPosY)));
+            _entities->push_back(std::make_shared<Bullet>(false, Vector(vecBulletX, vecBulletY), Vector(bulletPosX, bulletPosY), getAndIncID()));
             ennemy->popFirstInput();
         }
     }
+}
+
+int game_engine::SpawnSystem::getAndIncID()
+{
+    int temp = id;
+
+    id++;
+    return (temp);
+}
+
+int game_engine::SpawnSystem::getID() const
+{
+    return (id);
+}
+void game_engine::SpawnSystem::incID()
+{
+    id++;
 }

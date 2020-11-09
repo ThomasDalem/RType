@@ -17,7 +17,7 @@
 namespace game_engine {
     class StageObstacle : public IEntities {
         public:
-            StageObstacle(Vector _position);
+            StageObstacle(Vector _position, int id);
             ~StageObstacle() {};
 
             int getUniqueID() const {return (_uniqueID);};

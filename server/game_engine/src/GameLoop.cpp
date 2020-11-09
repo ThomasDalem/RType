@@ -29,9 +29,11 @@ bool game_engine::GameLoop::areTherePlayers()
         playerExisting = false;
         message = server.getFirstMessage();
         for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
-            player = static_cast<Player *>(playerListIter->get());
-            player->addNewInput(message->first.event, message->first.value);
-            playerExisting = true;
+            if (message->second == player->getClientEndpoint()) {
+                player = static_cast<Player *>(playerListIter->get());
+                player->addNewInput(message->first.event, message->first.value);
+                playerExisting = true;
+            }
         }
         if (playerExisting == false)
             spawnSystem.newPlayer(message->first.playerID);
@@ -58,7 +60,8 @@ void game_engine::GameLoop::sendToClients()
     for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
         entitiesComponents = entitiesListIter->get()->getComponentList();
         getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieCollisionComponent);
-        clientMessage.entitieType = entitiesListIter->get()->getUniqueID();
+        clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
+        clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
         clientMessage.pos[0] = entitieTransfromComponent->getPosition().x;
         clientMessage.pos[1] = entitieTransfromComponent->getPosition().y;
         clientMessage.rotation = entitieTransfromComponent->getRotation();

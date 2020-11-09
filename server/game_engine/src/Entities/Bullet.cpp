@@ -10,8 +10,9 @@
 #include "./Components/Transform.hpp"
 #include "./Components/Sound.hpp"
 
-game_engine::Bullet::Bullet(bool _damagePlayer, Vector _direction, Vector _position)
+game_engine::Bullet::Bullet(bool _damagePlayer, Vector _direction, Vector _position, int id)
 {
+    _uniqueID = id;
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, _direction);
     _health = std::make_shared<Health>(1, true);

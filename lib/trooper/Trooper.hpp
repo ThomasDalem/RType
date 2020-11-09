@@ -16,7 +16,7 @@
 namespace enemies {
     class Trooper : public game_engine::Enemy {
         public:
-            Trooper(game_engine::Vector position);
+            Trooper(game_engine::Vector position, int id);
             ~Trooper();
             void pathEnemy();
 
