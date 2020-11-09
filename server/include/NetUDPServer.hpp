@@ -19,7 +19,6 @@ namespace network
     public:
         NetUDPServer(short port);
         ~NetUDPServer();
-
         void sendMessage(UDPMessage const& message, boost::asio::ip::udp::endpoint const& endpoint);
         void broadcastMessage(UDPMessage &message);
         bool hasMessages() const;
@@ -27,7 +26,7 @@ namespace network
 
     private:
         void receiveMessage();
-        void handleMessage(boost::system::error_code const &ec, std::size_t receivedBytes);    
+        void handleMessage(boost::system::error_code const &ec, std::size_t receivedBytes);
         bool newClientExist() const;
 
     private:

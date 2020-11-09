@@ -15,6 +15,7 @@
 #include "DeathSystem.hpp"
 #include "./DDLoader.hpp"
 #include "EntitiesParser.hpp"
+#include "../../include/NetUDPServer.hpp"
 
 namespace game_engine
 {
@@ -33,6 +34,7 @@ namespace game_engine
         DamageSystem damageSystem;
         SpawnSystem spawnSystem;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
+        network::NetUDPServer server;
     };
 } // namespace game_engine
 

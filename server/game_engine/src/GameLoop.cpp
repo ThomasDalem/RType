@@ -7,7 +7,7 @@
 
 #include "GameLoop.hpp"
 
-game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities)
+game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities): server(8081)
 {
     _entities = entities;
     moveSystem = MoveSystem(entities);
@@ -30,6 +30,7 @@ game_engine::GameLoop::~GameLoop()
 bool game_engine::GameLoop::areTherePlayers()
 {
     std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList;
+
 
     if (EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities)->empty())
         return (false);
