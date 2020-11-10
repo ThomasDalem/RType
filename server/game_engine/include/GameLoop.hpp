@@ -27,7 +27,7 @@ namespace game_engine
         void gameLoop();
         bool areTherePlayers();
         void sendToClients();
-        void getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Collision *collisionComponent);
+        void getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *collisionComponent);
     protected:
     private:
         MoveSystem moveSystem;

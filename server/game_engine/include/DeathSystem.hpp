@@ -23,6 +23,7 @@
 #include "Entities/Enemy.hpp"
 #include "Entities/Player.hpp"
 #include "Entities/Bullet.hpp"
+#include "Entities/PowerUp.hpp"
 #include "Entities/StageObstacle.hpp"
 #include "Entities/DestroyableTile.hpp"
 #include "./DDLoader.hpp"
@@ -39,6 +40,7 @@ namespace game_engine
         DeathSystem &operator=(const DeathSystem &deathSystem);
         void deathSystem();
         bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
+        void spawnPowerUp(game_engine::IEntities *entitie);
 
     protected:
     private:

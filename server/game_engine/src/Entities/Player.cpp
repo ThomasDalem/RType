@@ -15,7 +15,15 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clien
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
     _health = std::make_shared<Health>(1, true);
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 4, 4), false);
-    _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 0, 75, 45));
+    if (playerColor == PlayerColor::Blue)
+        _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(2, 2, 32, 16));
+    if (playerColor == PlayerColor::Yellow)
+        _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(2, 20, 32, 16));
+    if (playerColor == PlayerColor::Red)
+        _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(2, 36, 32, 16));
+    if (playerColor == PlayerColor::Green)
+        _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(2, 53, 32, 16));
+
     _deathSound = std::make_shared<Sound>("./path_to_death_sound");
     _entitesID = EntitiesType::PLAYER;
     _timeInvincibility = 0;
