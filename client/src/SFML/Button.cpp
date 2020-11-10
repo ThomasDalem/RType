@@ -17,7 +17,6 @@ void Button::setText(string fontPath, string _text, int _size, const sf::Color t
     sf::Vector2f textPos;
 
     if (font.loadFromFile(fontPath) == false)
-        // throw Exception("can't load button text font \n");
         cout << "can't load button text font \n" << endl;
     text.setFont(font);
     text.setString(_text);
@@ -36,8 +35,9 @@ void Button::setColor(sf::Color buttonColor, sf::Color boundColor, float boundSi
 
 void Button::drawButton(shared_ptr<sf::RenderWindow> window) {
     sf::Vector2i cursorPos = sf::Mouse::getPosition();
+    sf::Vector2i windowPos = window->getPosition();
 
-    if (button.getGlobalBounds().contains(sf::Vector2f(cursorPos))) {
+    if (button.getGlobalBounds().contains(sf::Vector2f(cursorPos.x - windowPos.x, cursorPos.y - windowPos.y))) {
         button.setOutlineColor(sf::Color::White);
         button.setFillColor(sf::Color::Black);
         text.setFillColor(sf::Color::White);
@@ -50,12 +50,13 @@ void Button::drawButton(shared_ptr<sf::RenderWindow> window) {
     window->draw(text);
 }
 
-int Button::isClicked(sf::Event event) {
+int Button::isClicked(sf::Event event, shared_ptr<sf::RenderWindow> window) {
     sf::Vector2i cursorPos;
+    sf::Vector2i windowPos = window->getPosition();
 
     if (event.type == sf::Event::MouseButtonPressed) {
         cursorPos = sf::Mouse::getPosition();
-        if (button.getGlobalBounds().contains(sf::Vector2f(cursorPos)))
+        if (button.getGlobalBounds().contains(sf::Vector2f(cursorPos.x - windowPos.x, cursorPos.y - windowPos.y)))
             return true;
     }
     return false;

@@ -27,7 +27,7 @@ void core(vector<string> av) {
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
     client->getPlayer(0)->setId(1);
-    //client->MenusLoop();
+    client->MenusLoop();
     client->game();
 }
 
@@ -35,8 +35,6 @@ int main(int ac, char **argv, char **env) {
     vector<string> av = ErrorHandler().getArgs(argv);
 
     if (!ErrorHandler().isDisplayEnv(env))
-        return 84;
-    cout << "start" << endl;
-    core(av);
+        return 84;    core(av);
     return 0;
 }

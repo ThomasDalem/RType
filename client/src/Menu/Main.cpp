@@ -75,9 +75,9 @@ void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
                 _name = _name + (char)(event.key.code + 97);
             else if (event.key.code == 57)
                 _name = _name + " ";
-        } if (_host->isClicked(event))
+        } if (_host->isClicked(event, _window))
             isHost = true;
-        else if (_join->isClicked(event))
+        else if (_join->isClicked(event, _window))
             isJoin = true;
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             isQuit = true;

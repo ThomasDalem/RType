@@ -75,9 +75,9 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
             else if (event.key.code == 57)
                 _name = _name + " ";
         } for (size_t i = 0; i < roomlist.size(); i ++) {
-            if (roomlist[i]->isClicked(event))
+            if (roomlist[i]->isClicked(event, _window))
                 player.setRoom(i + 1);
-        } if (_play->isClicked(event)) {
+        } if (_play->isClicked(event, _window)) {
             isPlay = true;
         }
     }
