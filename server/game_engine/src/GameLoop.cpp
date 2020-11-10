@@ -24,19 +24,23 @@ bool game_engine::GameLoop::areTherePlayers()
     game_engine::Player *player;
     std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message;
     bool playerExisting = false;
+    int newPlayerID = 0;
 
     while (server.hasMessages()) {
         playerExisting = false;
         message = server.getFirstMessage();
-        for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
-            if (message->second == player->getClientEndpoint()) {
-                player = static_cast<Player *>(playerListIter->get());
-                player->addNewInput(message->first.event, message->first.value);
-                playerExisting = true;
+        if (message->first.playerID == -1) {
+            for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+                if (message->second == player->getClientEndpoint()) {
+                    player = static_cast<Player *>(playerListIter->get());
+                    player->addNewInput(message->first.event, message->first.value);
+                    playerExisting = true;
+                }
             }
         }
-        if (playerExisting == false)
-            spawnSystem.newPlayer(message->first.playerID);
+        else {
+            newPlayerID = spawnSystem.newPlayer();
+        }
     }
 
     if (playersList->empty())
