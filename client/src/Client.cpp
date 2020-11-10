@@ -44,7 +44,12 @@ void Client::game(void) {
             while (_net->hasMessages()) {
                 bool find = false;
                 unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
-
+                if (message->event == network::SendEvent::REMOVE) {
+                    for (size_t i = 0; i < _entities.size(); i ++) {
+                        if (message->uniqueID == _entities[i]->getId())
+                            _entities.erase(_entities.begin() + i);
+                    }
+                }
                 if (message->value[0] != 0) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
                         if (message->uniqueID == _entities[i]->getId()) {
@@ -54,7 +59,8 @@ void Client::game(void) {
                                 _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
                             find = true;
                         }
-                    } if (!find) {
+                    }
+                    if (!find) {
                         std::cout << "Create new entitie = " << message->entitieType << std::endl;
                         std::cout << "pos x = " << message->value[4] <<  std::endl;
                         std::cout << "pos y = " << message->value[5] <<  std::endl;

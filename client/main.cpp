@@ -24,9 +24,11 @@ void core(vector<string> av) {
     shared_ptr<Client> client = make_shared<Client>();
 
     client->waitConnection();
-    network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
-    client->getPlayer(0)->setId(1);
+    while(!client->getNetwork()->hasMessages());
+    network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
+    client->getPlayer(0)->setId(message.uniqueID);
+    // Menus
     //client->MenusLoop();
     client->game();
 }

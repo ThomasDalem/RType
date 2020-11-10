@@ -23,7 +23,7 @@ namespace network
         void broadcastMessage(UDPClientMessage &message);
         bool hasMessages() const;
         std::unique_ptr<std::pair<UDPMessage, boost::asio::ip::udp::endpoint>> getFirstMessage();
-
+        std::vector<boost::asio::ip::udp::endpoint> getAllClient();
     private:
         void receiveMessage();
         void handleMessage(boost::system::error_code const &ec, std::size_t receivedBytes);

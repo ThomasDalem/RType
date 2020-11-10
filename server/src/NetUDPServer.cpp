@@ -78,4 +78,8 @@ namespace network
         }
         return (false);
     }
+    std::vector<boost::asio::ip::udp::endpoint> NetUDPServer::getAllClient()
+    {
+        return (_clients);
+    }
 }

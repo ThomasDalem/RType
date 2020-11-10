@@ -69,7 +69,7 @@ Input WindowHandler::isEvent(Player &player) {
             return Left;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
             return Right;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
             return Shoot;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             return Escape;
