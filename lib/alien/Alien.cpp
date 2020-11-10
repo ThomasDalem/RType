@@ -11,6 +11,7 @@
 enemies::Alien::Alien(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
     this->getRender()->setRect(game_engine::Rectangle(0, 67, 33, 36)); //r-typesheet18.gif
+    _entitesID = game_engine::EntitiesType::ENEMYALIEN;
 }
 
 enemies::Alien::~Alien()

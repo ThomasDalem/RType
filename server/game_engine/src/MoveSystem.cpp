@@ -56,7 +56,8 @@ void game_engine::MoveSystem::moveEntitie()
 void game_engine::MoveSystem::applyMovement()
 {
     changePlayerDirection(EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _list));
-    changeEnnemyDirection(EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY}, _list));
+    changeEnnemyDirection(EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMYALIEN,
+        game_engine::EntitiesType::ENEMYBATTLESHIP, game_engine::EntitiesType::ENEMYTROOPER}, _list));
 }
 
 void game_engine::MoveSystem::changePlayerDirection(std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer)
@@ -68,13 +69,13 @@ void game_engine::MoveSystem::changePlayerDirection(std::shared_ptr<std::vector<
         player = static_cast<Player *>(listPlayerIter->get());
         if (player->getFirstEnum() != InputEnum::NOTHING && player->getFirstEnum() != InputEnum::SHOOTINPUT) {
             if (player->getFirstEnum() == InputEnum::MOVEDOWN)
-                player->getTransform()->changeDirection(Vector(0, -5));
+                player->getTransform()->changeDirection(Vector(0, -5 * player->getSpeedMultiplicator()));
             if (player->getFirstEnum() == InputEnum::MOVEUP)
-                player->getTransform()->changeDirection(Vector(0, 5));
+                player->getTransform()->changeDirection(Vector(0, 5 * player->getSpeedMultiplicator()));
             if (player->getFirstEnum() == InputEnum::MOVELEFT)
-                player->getTransform()->changeDirection(Vector(-5, 0));
+                player->getTransform()->changeDirection(Vector(-5 * player->getSpeedMultiplicator(), 0));
             if (player->getFirstEnum() == InputEnum::MOVERIGHT)
-                player->getTransform()->changeDirection(Vector(5, 0));
+                player->getTransform()->changeDirection(Vector(5 * player->getSpeedMultiplicator(), 0));
             player->popFirstInput();
         }
         else

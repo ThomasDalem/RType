@@ -10,6 +10,7 @@
 
 #include "../../server/game_engine/include/Entities/Enemy.hpp"
 #include "../../server/game_engine/include/Vector.hpp"
+#include "../../server/game_engine/include/EntitiesEnum.hpp"
 #include <vector>
 #include <memory>
 
