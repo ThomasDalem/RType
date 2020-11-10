@@ -85,7 +85,7 @@ game_engine::SpawnSystem &game_engine::SpawnSystem::operator=(const game_engine:
 
 void game_engine::SpawnSystem::spawnSystem()
 {
-    spawnEnemy();
+    //spawnEnemy();
     spawnObstacle();
     checkEntitieShoot();
 }
@@ -129,12 +129,12 @@ void game_engine::SpawnSystem::spawnObstacle()
 
     double timePassed = difftime(time(0), blockSpawnTimer) * 1000.0;
 
-    if (timePassed >= 2000) {
+    if (timePassed >= 1000) {
         //std::cout << "spawn block" << std::endl;
         blockSpawnTimer = time(0);
 
         _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 0), getAndIncID()));
-        _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 830), getAndIncID()));
+        _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 960), getAndIncID()));
         addObstacle();
     }
 }
@@ -144,25 +144,25 @@ void game_engine::SpawnSystem::addObstacle()
     int obstacleChancetoSpawn;
     int nbObstacletoSpawn;
     int upOrDownSpawn;
-    int upStart = 50;
-    int downStart = 830;
+    int upStart = 60;
+    int downStart = 960;
     int stageObstacleOrNot;
 
-    obstacleChancetoSpawn = rand() % 10;
+    obstacleChancetoSpawn = rand() % 2;
     if (obstacleChancetoSpawn == 1) {
-        nbObstacletoSpawn = rand() % 4;
+        nbObstacletoSpawn = rand() % 4 + 1;
         upOrDownSpawn = rand() % 2;
         if (upOrDownSpawn == 0) {
-            for (upStart = 50; upStart <= nbObstacletoSpawn * 50; upStart+=50) {
+            for (upStart = 60; upStart <= nbObstacletoSpawn * 60; upStart += 60) {
                 stageObstacleOrNot = rand() % 2;
                 if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart), getAndIncID()));
+                    _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart + rand() % 700), getAndIncID()));
                 else
                     _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart), getAndIncID()));
             }
         }
         else {
-            for (downStart = 1040; downStart <= 1040 - 50 * nbObstacletoSpawn; downStart-=50) {
+            for (downStart = 960; downStart <= 1040 - 60 * nbObstacletoSpawn; downStart -= 60) {
                 stageObstacleOrNot = rand() % 2;
                 if (stageObstacleOrNot == 0)
                     _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, downStart), getAndIncID()));
@@ -198,7 +198,6 @@ void game_engine::SpawnSystem::checkPlayerShoot(std::shared_ptr<std::vector<std:
         }
     }
 }
-
 
 void game_engine::SpawnSystem::checkEnnemyShoot(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListEnnemy,
     std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListPlayer)
@@ -242,6 +241,7 @@ int game_engine::SpawnSystem::getID() const
 {
     return (id);
 }
+
 void game_engine::SpawnSystem::incID()
 {
     id++;

@@ -55,8 +55,7 @@ void Client::game(void) {
                         if (message->uniqueID == _entities[i]->getId()) {
                             _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                             _entities[i]->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
-                            if (_entities[i]->getEntityType() != 6)
-                                _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
+                            _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
                             find = true;
                         }
                     }
