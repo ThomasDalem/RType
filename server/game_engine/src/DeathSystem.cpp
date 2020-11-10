@@ -33,13 +33,13 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
     std::vector<std::shared_ptr<AComponents>>::iterator entitieComponentIter;
 
     for (listEntitieIter = _entities->begin(); listEntitieIter != _entities->end(); listEntitieIter++) {
-        if (listEntitieIter->get()->getEntitiesID() != EntitiesType::STAGEOBSTACLE && listEntitieIter->get()->getEntitiesID() != EntitiesType::MUSIC
+        if (listEntitieIter->get()->getEntitiesID() != EntitiesType::MUSIC
             && listEntitieIter->get()->getEntitiesID() != EntitiesType::ENVIRONNEMENT) {
             entitieComponent = listEntitieIter->get()->getComponentList();
             if (isDead(entitieComponent)) {
+                std::cout << "suppres entitie :" << listEntitieIter->get()->getEntitiesID() << std::endl;
                 if (EntitiesParser::isAnEnemy(listEntitieIter->get()->getEntitiesID()))
                     spawnPowerUp(listEntitieIter->get());
-                std::cout << listEntitieIter->get()->getEntitiesID() << std::endl;
                 network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),
                     listEntitieIter->get()->getUniqueID()};
                 server.broadcastMessage(suppressMessage);
@@ -54,6 +54,7 @@ bool game_engine::DeathSystem::isDead(std::vector<std::shared_ptr<AComponents>> 
 {
     Health *entitieHealthComponent;
     Transform *entitieTransformComponent;
+    Collision *entitieCollisionComponent;
     std::vector<std::shared_ptr<AComponents>>::iterator entitieComponentIter;
 
     for (entitieComponentIter = entitieComponent.begin(); entitieComponentIter != entitieComponent.end(); ++entitieComponentIter) {
@@ -61,9 +62,11 @@ bool game_engine::DeathSystem::isDead(std::vector<std::shared_ptr<AComponents>> 
             entitieHealthComponent = static_cast<Health *>(entitieComponentIter->get());
         if (entitieComponentIter->get()->getType() == ComponentType::TRANSFORM)
             entitieTransformComponent = static_cast<Transform *>(entitieComponentIter->get());
+        if (entitieComponentIter->get()->getType() == ComponentType::COLLISION)
+            entitieCollisionComponent = static_cast<Collision *>(entitieComponentIter->get());
     }
     if (entitieHealthComponent->getDamabeable() == true && entitieHealthComponent->getHealthPoint() == 0 ||
-        checkGameBorder(*entitieTransformComponent) == true)
+        checkGameBorder(*entitieTransformComponent, *entitieCollisionComponent) == true)
         return (true);
     return (false);
 }
@@ -78,12 +81,12 @@ void game_engine::DeathSystem::spawnPowerUp(game_engine::IEntities *entitie)
     _entities->push_back(std::make_shared<PowerUp>(ennemy->getTransform()->getPosition()));
 }
 
-bool game_engine::DeathSystem::checkGameBorder(Transform &transform)
+bool game_engine::DeathSystem::checkGameBorder(Transform &transform, Collision &collision)
 {
     if (transform.getPosition().y + transform.getDirection().y < 0 ||
         transform.getPosition().y + transform.getDirection().y > 1080 ||
         transform.getPosition().x + transform.getDirection().x > 1920 ||
-        transform.getPosition().x + transform.getDirection().x < 0)
+        (transform.getPosition().x + transform.getDirection().x + collision.getRectSize().L) <= 0)
         return (true);
     return (false);
 }

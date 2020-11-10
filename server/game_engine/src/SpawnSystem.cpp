@@ -99,7 +99,7 @@ void game_engine::SpawnSystem::spawnEnemy()
         std::cout << "spawn enemy" << std::endl;
         enemySpawnTimer = time(0);
         //int x = rand() % _enemyLoader.size();
-        _entities->push_back(_enemyLoader[0].getInstance("entryPoint", Vector(700, 200/*(rand() % 780) + 50*/), getAndIncID()));
+        _entities->push_back(_enemyLoader[0].getInstance("entryPoint", Vector(500, 500/*(rand() % 780) + 50*/), getAndIncID()));
     }
 }
 
@@ -130,7 +130,7 @@ void game_engine::SpawnSystem::spawnObstacle()
     double timePassed = difftime(time(0), blockSpawnTimer) * 1000.0;
 
     if (timePassed >= 2000) {
-        std::cout << "spawn block" << std::endl;
+        //std::cout << "spawn block" << std::endl;
         blockSpawnTimer = time(0);
 
         _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 0), getAndIncID()));

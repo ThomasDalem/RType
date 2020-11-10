@@ -41,7 +41,7 @@ namespace game_engine
         void deathSystem(network::NetUDPServer &server);
         bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
         void spawnPowerUp(game_engine::IEntities *entitie);
-        bool checkGameBorder(Transform &transform);
+        bool checkGameBorder(Transform &transform, Collision &collision);
 
     protected:
     private:
