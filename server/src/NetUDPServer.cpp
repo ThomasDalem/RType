@@ -23,27 +23,15 @@ namespace network
     {
     }
 
-    void NetUDPServer::sendMessage(UDPMessage const& message, asio::ip::udp::endpoint const& endpoint)
+    void NetUDPServer::sendMessage(UDPClientMessage const& message, asio::ip::udp::endpoint const& endpoint)
     {
         _socket.send_to(asio::buffer(&message, sizeof(UDPMessage)), endpoint);
     }
 
-    void NetUDPServer::sendDispClassMessage(UDPClientMessage const& message, asio::ip::udp::endpoint const& endpoint)
-    {
-        _socket.send_to(asio::buffer(&message, sizeof(UDPMessage)), endpoint);
-    }
-
-    void NetUDPServer::broadcastMessage(UDPMessage &message)
+    void NetUDPServer::broadcastMessage(UDPClientMessage &message)
     {
         for (auto it = _clients.begin(); it != _clients.end(); it++) {
             sendMessage(message, *it);
-        }
-    }
-
-    void NetUDPServer::broadcastDispClassMessage(UDPClientMessage &message)
-    {
-        for (auto it = _clients.begin(); it != _clients.end(); it++) {
-            sendDispClassMessage(message, *it);
         }
     }
 

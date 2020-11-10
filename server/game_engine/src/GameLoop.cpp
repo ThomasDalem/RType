@@ -35,8 +35,11 @@ bool game_engine::GameLoop::areTherePlayers()
                 playerExisting = true;
             }
         }
-        if (playerExisting == false)
+        if (playerExisting == false) {
+            network::UDPClientMessage responseMessage = {0, -1};
             spawnSystem.newPlayer(message->first.playerID);
+            server.sendMessage(responseMessage, message->second);
+        }
     }
 
     if (playersList->empty())
@@ -70,7 +73,7 @@ void game_engine::GameLoop::sendToClients()
         clientMessage.value[5] = entitieCollisionComponent->getRectSize().y;
         clientMessage.value[6] = entitieCollisionComponent->getRectSize().L;
         clientMessage.value[7] = entitieCollisionComponent->getRectSize().l;
-        server.broadcastDispClassMessage(clientMessage);
+        server.broadcastMessage(clientMessage);
     }
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
@@ -84,7 +87,7 @@ void game_engine::GameLoop::sendToClients()
         else {
             clientMessage.value[0] = 0;
         }
-        server.sendDispClassMessage(clientMessage, player->getClientEndpoint()); 
+        server.sendMessage(clientMessage, player->getClientEndpoint()); 
     }
 }
 

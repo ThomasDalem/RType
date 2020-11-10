@@ -47,7 +47,7 @@ Request for Comments: 4242                                                  Alex
 
             - ERROR         -- Inform the receiver that an error occured
 
-            - OK            -- Informs the receiver that his command is successful
+            - OK            -- Inform the receiver that his command is successful
 
             - CONNECT       -- Server->Clients = Someone connected
 
@@ -64,10 +64,51 @@ Request for Comments: 4242                                                  Alex
         The client MUST also respond with an TCPEvent OK or ERROR after receiving data
         from the server.
 
+        /--------\                     /--------\
+        | Client |-------Connect------>| Server |
+        \--------/                     \--------/
+        /--------\                     /--------\
+        | Client |<---------OK---------| Server |
+        \--------/                     \--------/
+        /--------\                     /--------\
+        | Client |--------Start------->| Server |
+        \--------/                     \--------/
+        /--------\                     /--------\
+        | Client |<---------OK---------| Server |
+        \--------/                     \--------/
+
     3.2   UDP PROTOCOL
 
         The UDP protocol MUST be used to send ingame data.
-        It MUST send the following structure to communicate:
+        It MUST send the following structures to communicate:
+
+        The server MUST send the following structure to the client:
+
+            struct UDPClientMessage
+            {
+                int entityType;
+                int uniqueID;
+                int value[50];
+            }
+
+        The entityType is the ID linked to a type of entity (monster, wall) it's used to reference a sprite
+        in the client.
+
+        The uniqueID is the ID linked to a displayed sprite.
+
+        Value is containing the data used to properly display the sprite. It's containing the following
+        informations:
+
+            0: Is player dead ?
+            1: X position of the sprite
+            2: Y position of the sprite
+            3: Rotation of the sprite
+            4: X position of the spritesheet
+            5: Y position of the spritesheet
+            4: Width in the spritesheet
+            5: Height in the spritesheet
+
+        The client MUST send the following structure when communicating with the server:
 
             struct UDPMessage
             {
@@ -76,10 +117,10 @@ Request for Comments: 4242                                                  Alex
                 Event event;
             }
 
-        The playerID is the unique ID linked to each player. It is used to differenciate
-        players when sending information to other clients.
+        The playerID is the unique ID linked to each player. It is used by the server to differenciate
+        players when receiving infomation from the clients.
 
-        The value data is information needed by the server or the client and is linked to the
+        The value data is the information needed by the server and is linked to the
         event, see next description for more information.
 
         Event is an enum and MUST contain the following options:

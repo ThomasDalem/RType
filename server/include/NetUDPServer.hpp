@@ -19,10 +19,8 @@ namespace network
     public:
         NetUDPServer(short port);
         ~NetUDPServer();
-        void sendMessage(UDPMessage const& message, boost::asio::ip::udp::endpoint const& endpoint);
-        void sendDispClassMessage(UDPClientMessage const& message, boost::asio::ip::udp::endpoint const& endpoint);
-        void broadcastMessage(UDPMessage &message);
-        void broadcastDispClassMessage(UDPClientMessage &message);
+        void sendMessage(UDPClientMessage const& message, boost::asio::ip::udp::endpoint const& endpoint);
+        void broadcastMessage(UDPClientMessage &message);
         bool hasMessages() const;
         std::unique_ptr<std::pair<UDPMessage, boost::asio::ip::udp::endpoint>> getFirstMessage();
 
