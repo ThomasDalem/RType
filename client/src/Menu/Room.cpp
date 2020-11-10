@@ -112,7 +112,6 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &
                 return Back;
             EventHandler(_window, player);
         }
-        cout << (isPlay ? "GO PLAY" : "") << endl;
     }
     return Continue;
 }

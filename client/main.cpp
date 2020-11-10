@@ -22,8 +22,12 @@
 using namespace std;
 void core(vector<string> av) {
     Client client;
-    network::UDPMessage msg = {1, {84}, network::Event::ADD};
+    network::UDPMessage msg = {-1, {84}, network::Event::ADD};
 
+    while(client.getNetwork()->hasMessages()) {
+        network::UDPClientMessage message = *client.getNetwork()->getFirstMessage();
+        client.getPlayer(0)->setId(message.uniqueID);
+    }
     client.MenusLoop();
     client.getNetwork()->sendMessage(msg);
     client.game();
