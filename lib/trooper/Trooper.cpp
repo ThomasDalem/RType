@@ -10,7 +10,7 @@
 
 enemies::Trooper::Trooper(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
-    this->getRender()->setRect(game_engine::Rectangle(18, 68, 33, 30)); //r-typesheet20.gif
+    //this->getRender()->setRect(game_engine::Rectangle(18, 68, 33, 30)); //r-typesheet20.gif
     _entitesID = game_engine::EntitiesType::ENEMYTROOPER;
 }
 

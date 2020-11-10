@@ -62,6 +62,7 @@ void game_engine::GameLoop::sendToClients()
     std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
     game_engine::Player *player;
     Transform *entitieTransfromComponent;
+    Collision *entitieCollisionComponent;
     Render *entitieRenderComponent;
     Health *entitieHealthComponent;
 
@@ -73,18 +74,11 @@ void game_engine::GameLoop::sendToClients()
                 entitieTransfromComponent = static_cast<Transform *>(componentListIter->get());
             if (componentListIter->get()->getType() == ComponentType::RENDER)
                 entitieRenderComponent = static_cast<Render *>(componentListIter->get());
+            if (componentListIter->get()->getType() == ComponentType::COLLISION)
+                entitieCollisionComponent = static_cast<Collision *>(componentListIter->get());
         }
         if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x ||
             entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
-            if (entitiesListIter->get()->getEntitiesID() == EntitiesType::ENEMYALIEN) {
-                std::cout << "x = " << entitieRenderComponent->getRect().x << std::endl;
-                std::cout << "y = " << entitieRenderComponent->getRect().y << std::endl;
-                std::cout << "L = " << entitieRenderComponent->getRect().L << std::endl;
-                std::cout << "l = " << entitieRenderComponent->getRect().l << std::endl;
-                std::cout << "transform  x= " << entitieTransfromComponent->getPosition().x << std::endl;
-                std::cout << "transform y= " << entitieTransfromComponent->getPosition().y << std::endl;
-                std::cout << "transform rotation= " << entitieTransfromComponent->getRotation() << std::endl;
-            }
             clientMessage.event = network::SendEvent::UPDATE;
             clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
             clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();

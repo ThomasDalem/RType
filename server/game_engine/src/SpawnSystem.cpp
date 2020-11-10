@@ -98,9 +98,29 @@ void game_engine::SpawnSystem::spawnEnemy()
     if (timePassed >= 4000) {
         std::cout << "spawn enemy" << std::endl;
         enemySpawnTimer = time(0);
-        //int x = rand() % _enemyLoader.size();
-        _entities->push_back(_enemyLoader[0].getInstance("entryPoint", Vector(500, 500/*(rand() % 780) + 50*/), getAndIncID()));
+        int x = rand() % _enemyLoader.size();
+        _entities->push_back(_enemyLoader[x].getInstance("entryPoint", Vector(1000, (rand() % 780) + 50), getAndIncID()));
+        setEnnemyRender();
     }
+}
+
+void game_engine::SpawnSystem::setEnnemyRender()
+{
+    std::vector<std::shared_ptr<AComponents>> entitiesComponents;
+    std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
+    Render *entitieRenderComponent;
+
+    entitiesComponents = (*_entities)[_entities->size() - 1].get()->getComponentList();
+    for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
+        if (componentListIter->get()->getType() == ComponentType::RENDER)
+            entitieRenderComponent = static_cast<Render *>(componentListIter->get());
+    }
+    if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYALIEN)
+        entitieRenderComponent->setRect(game_engine::Rectangle(0, 67, 33, 36));
+    if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYBATTLESHIP)
+        entitieRenderComponent->setRect(game_engine::Rectangle(0, 0, 65, 50));
+    if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYTROOPER)
+        entitieRenderComponent->setRect(game_engine::Rectangle(18, 68, 33, 30));
 }
 
 int game_engine::SpawnSystem::newPlayer(boost::asio::ip::udp::endpoint &endpoint)

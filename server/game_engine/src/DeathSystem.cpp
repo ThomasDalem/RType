@@ -37,7 +37,6 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
             && listEntitieIter->get()->getEntitiesID() != EntitiesType::ENVIRONNEMENT) {
             entitieComponent = listEntitieIter->get()->getComponentList();
             if (isDead(entitieComponent)) {
-                std::cout << "suppres entitie :" << listEntitieIter->get()->getEntitiesID() << std::endl;
                 if (EntitiesParser::isAnEnemy(listEntitieIter->get()->getEntitiesID()))
                     spawnPowerUp(listEntitieIter->get());
                 network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),

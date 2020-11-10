@@ -62,6 +62,8 @@ void Client::game(void) {
                     }
                     if (!find) {
                         std::cout << "Create new entitie = " << message->entitieType << std::endl;
+                        std::cout << "coord x = " << message->value[1] <<  std::endl;
+                        std::cout << "coord y = " << message->value[2] <<  std::endl;
                         std::cout << "pos x = " << message->value[4] <<  std::endl;
                         std::cout << "pos y = " << message->value[5] <<  std::endl;
                         std::cout << "L = " << message->value[6] <<  std::endl;
