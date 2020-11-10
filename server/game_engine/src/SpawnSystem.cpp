@@ -87,8 +87,8 @@ game_engine::SpawnSystem &game_engine::SpawnSystem::operator=(const game_engine:
 
 void game_engine::SpawnSystem::spawnSystem()
 {
-    spawnEnemy();
-    spawnObstacle();
+    //spawnEnemy();
+    //spawnObstacle();
     checkEntitieShoot();
 }
 
@@ -105,30 +105,32 @@ void game_engine::SpawnSystem::spawnEnemy()
     }
 }
 
-int game_engine::SpawnSystem::newPlayer()
+int game_engine::SpawnSystem::newPlayer(boost::asio::ip::udp::endpoint &endpoint)
 {
     std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer = std::make_shared<std::vector<std::shared_ptr<IEntities>>>();
     std::shared_ptr<Player> newPlayer;
 
     newListPlayer = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
     if (newListPlayer->size() == 0)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, getAndIncID());
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, getAndIncID(), endpoint);
     if (newListPlayer->size() == 1)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Blue, getAndIncID());
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Blue, getAndIncID(), endpoint);
     if (newListPlayer->size() == 2)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Red, getAndIncID());
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Red, getAndIncID(), endpoint);
     if (newListPlayer->size() == 3)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, getAndIncID());
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, getAndIncID(), endpoint);
     _entities->push_back(newPlayer);
     return (getID());
 }
 
 void game_engine::SpawnSystem::spawnObstacle()
 {
+    std::cout << "la" << std::endl;
     double timePassed = std::clock() - blockSpawnClock;
     int obstacleChancetoSpawn;
     int nbObstacletoSpawn;
     int upOrDownSpawn;
+    std::cout << "pui la " << std::endl;
 
     if (timePassed > blockSpawnTime) {
         blockSpawnClock = std::clock();

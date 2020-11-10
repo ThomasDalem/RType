@@ -24,13 +24,13 @@ void core(vector<string> av) {
     std::shared_ptr<Client> client = std::make_shared<Client>();
     network::UDPMessage msg = {-1, {84}, network::Event::ADD};
 
-    std::cout << "la" << std::endl;
     // Wait ID from Server
     client->getNetwork()->sendMessage(msg);
-    while(client->getNetwork()->hasMessages()) {
-        network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
-        client->getPlayer(0)->setId(message.uniqueID);
-    }
+    while(!client->getNetwork()->hasMessages());
+    std::cout << "la" << std::endl;
+    network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
+    client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
+    client->getPlayer(0)->setId(1);
     // Menus
     //client->MenusLoop();
     // Game

@@ -30,7 +30,15 @@ bool game_engine::GameLoop::areTherePlayers()
         std::cout << "receive message" << std::endl;
         playerExisting = false;
         message = server.getFirstMessage();
-        if (message->first.playerID == -1) {
+        if (message->first.playerID == -1){
+            std::cout << "create new player" << std::endl;
+            newPlayerID = spawnSystem.newPlayer(message->second);
+            network::UDPClientMessage responseMessage = {0, newPlayerID};
+            responseMessage.value[0] = -1;
+            while (!server.hasMessages())
+                server.sendMessage(responseMessage, message->second);
+        }
+        else if (message->first.event != network::Event::CONFIRMCONNECTION) {
             for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
                 if (message->second == player->getClientEndpoint()) {
                     player = static_cast<Player *>(playerListIter->get());
@@ -38,11 +46,7 @@ bool game_engine::GameLoop::areTherePlayers()
                     playerExisting = true;
                 }
             }
-        } else {
-            newPlayerID = spawnSystem.newPlayer();
-            network::UDPClientMessage responseMessage = {0, newPlayerID};
-            server.sendMessage(responseMessage, message->second);
-        }
+        } 
     }
 
     if (playersList->empty())
@@ -56,16 +60,22 @@ void game_engine::GameLoop::sendToClients()
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator entitiesListIter;
     std::vector<std::shared_ptr<AComponents>> entitiesComponents;
+    std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
     game_engine::Player *player;
     Transform *entitieTransfromComponent;
     Render *entitieRenderComponent;
     Health *entitieHealthComponent;
 
-    network::UDPClientMessage clientMessage;
-
     for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
+        network::UDPClientMessage clientMessage;
         entitiesComponents = entitiesListIter->get()->getComponentList();
-        getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieRenderComponent);
+        //getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieRenderComponent);
+        for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
+            if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
+                entitieTransfromComponent = static_cast<Transform *>(componentListIter->get());
+            if (componentListIter->get()->getType() == ComponentType::RENDER)
+                entitieRenderComponent = static_cast<Render *>(componentListIter->get());
+        }
         clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
         clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
         clientMessage.value[0] = 1;
@@ -76,10 +86,13 @@ void game_engine::GameLoop::sendToClients()
         clientMessage.value[5] = entitieRenderComponent->getRect().y;
         clientMessage.value[6] = entitieRenderComponent->getRect().L;
         clientMessage.value[7] = entitieRenderComponent->getRect().l;
+        clientMessage.value[8] = 0;
+        clientMessage.value[9] = 0;
         server.broadcastMessage(clientMessage);
     }
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
+        network::UDPClientMessage clientMessage;
         if (player->getHealth()->getHealthPoint() > 0) {
             clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
             clientMessage.value[0] = 1;
@@ -99,8 +112,10 @@ void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComp
     std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
 
     for (componentListIter = componentList.begin(); componentListIter != componentList.end(); ++componentListIter) {
-        if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
+        if (componentListIter->get()->getType() == ComponentType::TRANSFORM) {
+            std::cout << "get transform" << std::endl;
             transfromComponent = static_cast<Transform *>(componentListIter->get());
+        }
         if (componentListIter->get()->getType() == ComponentType::RENDER)
             renderComponent = static_cast<Render *>(componentListIter->get());
     }

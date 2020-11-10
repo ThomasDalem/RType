@@ -17,9 +17,6 @@ Client::Client() {
 
     // Player in a game
     _players.push_back(make_shared<Player>(0));
-    // _players.push_back(make_shared<Player>(2));
-    // _players.push_back(make_shared<Player>(3));
-    // _players.push_back(make_shared<Player>(4));
 
     // Window class stats
     _windowhdl->setFramerate(50);
@@ -44,34 +41,36 @@ Client::~Client() {
 // value[7] : largeur dans le sprite sheet
 
 void Client::game(void) {
-    _net->sendMessage({13, {-1, 0}, network::Event::MOVE});
     while (_windowhdl->isOpen()) {
         while (_net->hasMessages()) {
+            std::cout << "received a message" << std::endl;
             bool find = false;
             unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
 
             // Check if i know this entity
-            for (size_t i = 0; i < _entities.size(); i ++) {
-                if (message->uniqueID == _entities[i]->getId()) {
-                    cout << "Find one: " + to_string(i) << endl;
-                    _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
-                    find = true;
+            if (message->value[0] != 0) {
+                for (size_t i = 0; i < _entities.size(); i ++) {
+                    if (message->uniqueID == _entities[i]->getId()) {
+                        cout << "Find one: " + to_string(i) << endl;
+                        _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
+                        find = true;
+                    }
                 }
-            }
-            // If i don't know, i create it
-            if (!find) {
-                shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
-
-                newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
-                newone->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
-                _entities.push_back(newone);
+                if (!find) {
+                    shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
+                    newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
+                    newone->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
+                    _entities.push_back(newone);
+                }
             }
             formatInput(1);
             // Draw des entities
-            for (size_t i = 0; i < _entities.size(); i ++)
-                _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-            _windowhdl->display();
         }
+        formatInput(1);
+        _windowhdl->getWindow()->clear();
+        for (size_t i = 0; i < _entities.size(); i ++)
+            _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
+        _windowhdl->display();
     }
 }
 

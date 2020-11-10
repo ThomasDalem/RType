@@ -40,7 +40,7 @@ namespace game_engine
         SpawnSystem &operator=(const SpawnSystem &deathSystem);
         void spawnSystem();
         void spawnEnemy();
-        int newPlayer();
+        int newPlayer(boost::asio::ip::udp::endpoint &endpoint);
         void checkEntitieShoot();
         void checkPlayerShoot(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListPlayer);
         void checkEnnemyShoot(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListEnnemy, std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListPlayer);

@@ -21,7 +21,8 @@ namespace network
         MOVE,
         SHOOT,
         ADD,
-        REMOVE
+        REMOVE,
+        CONFIRMCONNECTION,
     };
 
     enum class TCPEvent : std::uint8_t

@@ -31,7 +31,7 @@ namespace network
 
     void NetUDPClient::receiveMessage()
     {
-        _socket.async_receive_from(asio::buffer(_data, MAX_MESSAGE_LENGTH), _endpoint,
+        _socket.async_receive_from(asio::buffer(_data, sizeof(UDPClientMessage)), _endpoint,
             std::bind(&NetUDPClient::handleMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
 

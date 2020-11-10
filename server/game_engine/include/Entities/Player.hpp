@@ -23,7 +23,7 @@
 namespace game_engine {
     class Player : public IEntities {
         public:
-            Player(Vector _position, PlayerColor playerColor, int clientID);
+            Player(Vector _position, PlayerColor playerColor, int clientID, boost::asio::ip::udp::endpoint &endpoint);
             ~Player() {};
 
             int getUniqueID() const {return (_uniqueID);};
@@ -47,7 +47,7 @@ namespace game_engine {
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
 
-            boost::asio::ip::udp::endpoint getClientEndpoint() const {return (endpoint);}
+            boost::asio::ip::udp::endpoint getClientEndpoint() const {return (_endpoint);}
             float getTimeInvincibility() const {return (_timeInvincibility);};
             float getSpeedMultiplicator() const {return (_speedMultiplicator);};
             int getScore() const {return(_score);}
@@ -60,7 +60,7 @@ namespace game_engine {
             int _uniqueID;
             int _clientID;
             int _score;
-            boost::asio::ip::udp::endpoint const endpoint;
+            boost::asio::ip::udp::endpoint _endpoint;
             EntitiesType _entitesID;
             std::vector<InputEnum> inputBuffer;
 

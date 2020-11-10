@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID)
+game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID, boost::asio::ip::udp::endpoint &endpoint)
 {
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _uniqueID = clientID;
@@ -29,6 +29,12 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clien
     _timeInvincibility = 0;
     _speedMultiplicator = 1;
     _score = 0;
+    _endpoint = endpoint;
+    _componentList.push_back(_transform);
+    _componentList.push_back(_deathSound);
+    _componentList.push_back(_health);
+    _componentList.push_back(_collision);
+    _componentList.push_back(_render);
 }
 
 void game_engine::Player::addNewInput(network::Event event, int value[10])

@@ -25,7 +25,7 @@ namespace network
 
     void NetUDPServer::sendMessage(UDPClientMessage const& message, asio::ip::udp::endpoint const& endpoint)
     {
-        _socket.send_to(asio::buffer(&message, sizeof(UDPMessage)), endpoint);
+        _socket.send_to(asio::buffer(&message, sizeof(UDPClientMessage)), endpoint);
     }
 
     void NetUDPServer::broadcastMessage(UDPClientMessage &message)
@@ -37,7 +37,7 @@ namespace network
 
     void NetUDPServer::receiveMessage()
     {
-        _socket.async_receive_from(asio::buffer(_data, MAX_MESSAGE_LENGTH), _senderEndpoint,
+        _socket.async_receive_from(asio::buffer(_data, sizeof(UDPMessage)), _senderEndpoint,
             std::bind(&NetUDPServer::handleMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
 
