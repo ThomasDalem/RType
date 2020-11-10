@@ -42,6 +42,7 @@ Client::~Client() {
 
 void Client::game(void) {
     while (_windowhdl->isOpen()) {
+        if (_net->hasMessages()) {
         while (_net->hasMessages()) {
             //std::cout << "received a message" << std::endl;
             bool find = false;
@@ -68,19 +69,21 @@ void Client::game(void) {
             formatInput(0);
             _windowhdl->getWindow()->clear();
             _windowhdl->dispBackground();
+            for (size_t i = 0; i < _entities.size(); i ++) 
+                _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
+            _windowhdl->display();
+                // Draw des entities
+            }
+        }
+        else {
+            formatInput(0);
+            _windowhdl->getWindow()->clear();
+            _windowhdl->dispBackground();
             for (size_t i = 0; i < _entities.size(); i ++) {
                 _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
             }
             _windowhdl->display();
-            // Draw des entities
         }
-        formatInput(0);
-        _windowhdl->getWindow()->clear();
-        _windowhdl->dispBackground();
-        for (size_t i = 0; i < _entities.size(); i ++) {
-            _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-        }
-        _windowhdl->display();
     }
 }
 

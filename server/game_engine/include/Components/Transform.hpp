@@ -17,7 +17,7 @@ namespace game_engine
     {
     public:
         Transform(Vector position, float rotation, Vector direction)
-            : AComponents(ComponentType::TRANSFORM), _position(position), _rotation(rotation), _direction(direction), _oldPosition(position)
+            : AComponents(ComponentType::TRANSFORM), _position(position), _rotation(rotation), _direction(direction), _oldPosition(Vector(0, 0))
         {
             _type = ComponentType::TRANSFORM;
         }

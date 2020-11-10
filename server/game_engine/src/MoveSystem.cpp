@@ -69,13 +69,14 @@ void game_engine::MoveSystem::changePlayerDirection(std::shared_ptr<std::vector<
         player = static_cast<Player *>(listPlayerIter->get());
         if (player->getFirstEnum() != InputEnum::NOTHING && player->getFirstEnum() != InputEnum::SHOOTINPUT) {
             if (player->getFirstEnum() == InputEnum::MOVEDOWN)
-                player->getTransform()->changeDirection(Vector(0, -5 * player->getSpeedMultiplicator()));
+                player->getTransform()->changeDirection(Vector(0, 10 * player->getSpeedMultiplicator()));
             if (player->getFirstEnum() == InputEnum::MOVEUP)
-                player->getTransform()->changeDirection(Vector(0, 5 * player->getSpeedMultiplicator()));
+                player->getTransform()->changeDirection(Vector(0, -10 * player->getSpeedMultiplicator()));
             if (player->getFirstEnum() == InputEnum::MOVELEFT)
-                player->getTransform()->changeDirection(Vector(-5 * player->getSpeedMultiplicator(), 0));
-            if (player->getFirstEnum() == InputEnum::MOVERIGHT)
-                player->getTransform()->changeDirection(Vector(5 * player->getSpeedMultiplicator(), 0));
+                player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), 0));
+            if (player->getFirstEnum() == InputEnum::MOVERIGHT) {
+                player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), 0));
+            }
             player->popFirstInput();
         }
         else

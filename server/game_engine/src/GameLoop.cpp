@@ -75,7 +75,7 @@ void game_engine::GameLoop::sendToClients()
             if (componentListIter->get()->getType() == ComponentType::RENDER)
                 entitieRenderComponent = static_cast<Render *>(componentListIter->get());
         }
-        if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x &&
+        if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x ||
             entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
             clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
             clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
@@ -89,7 +89,6 @@ void game_engine::GameLoop::sendToClients()
             clientMessage.value[7] = entitieRenderComponent->getRect().l;
             clientMessage.value[8] = 0;
             clientMessage.value[9] = 0;
-            std::cout << clientMessage.value[1] << " " << clientMessage.value[2] << std::endl;
             server.broadcastMessage(clientMessage);
         }
     }
