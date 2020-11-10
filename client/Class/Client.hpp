@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Player.hpp"
+#include "Entities.hpp"
 #include "NetUDPClient.hpp"
 #include "WindowHandler.hpp"
 
@@ -33,6 +34,7 @@ class Client {
         shared_ptr<TextSfml> _score;
         vector<shared_ptr<Player>> _players;
         shared_ptr<WindowHandler> _windowhdl;
+        vector<shared_ptr<Entities>> _entities;
         shared_ptr<network::NetUDPClient> _net;
 
     protected:

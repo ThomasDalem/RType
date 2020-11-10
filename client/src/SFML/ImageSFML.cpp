@@ -28,6 +28,10 @@ void ImageSFML::setTexture(string path) {
     _sprite->setTexture(*_texture);
 }
 
+void ImageSFML::setRectangleSheep(sf::Vector2f pos, sf::Vector2f size) {
+    _sprite->setTextureRect(sf::IntRect(pos.x, pos.y, size.x, size.y));
+}
+
 string ImageSFML::getPath() const {return _path;}
 shared_ptr<sf::Sprite> ImageSFML::getSprite() const {return(_sprite);}
 void ImageSFML::setPosition(sf::Vector2f pos) {_sprite->setPosition(pos);}

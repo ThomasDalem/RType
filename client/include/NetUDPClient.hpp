@@ -20,9 +20,9 @@ namespace network
             NetUDPClient(std::string const &ip, std::string const &port);
             ~NetUDPClient();
 
-            void sendMessage(UDPMessage const &message);
             bool hasMessages() const;
-            std::unique_ptr<UDPMessage> getFirstMessage();
+            void sendMessage(UDPMessage const &message);
+            std::unique_ptr<UDPClientMessage> getFirstMessage();
 
         private:
             void receiveMessage();
@@ -36,7 +36,7 @@ namespace network
             boost::asio::ip::udp::resolver::results_type _endpoints;
             boost::asio::ip::udp::endpoint _endpoint;
             char _data[MAX_MESSAGE_LENGTH];
-            std::queue<std::unique_ptr<UDPMessage>> _messages;
+            std::queue<std::unique_ptr<UDPClientMessage>> _messages;
     };
 }
 
