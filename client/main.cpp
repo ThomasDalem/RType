@@ -24,12 +24,16 @@ void core(vector<string> av) {
     Client client;
     network::UDPMessage msg = {-1, {84}, network::Event::ADD};
 
+    // Wait ID from Server
+    client.getNetwork()->sendMessage(msg);
     while(client.getNetwork()->hasMessages()) {
         network::UDPClientMessage message = *client.getNetwork()->getFirstMessage();
         client.getPlayer(0)->setId(message.uniqueID);
     }
+    // Menus
     client.MenusLoop();
-    client.getNetwork()->sendMessage(msg);
+
+    // Game
     client.game();
 }
 

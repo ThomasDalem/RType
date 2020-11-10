@@ -15,11 +15,13 @@ Client::Client() {
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
+    // Player in a game
     _players.push_back(make_shared<Player>(1));
     _players.push_back(make_shared<Player>(2));
     _players.push_back(make_shared<Player>(3));
     _players.push_back(make_shared<Player>(4));
 
+    // Window class stats
     _windowhdl->setFramerate(50);
     _windowhdl->addText(_score);
     _windowhdl->addImage(_players[0]->getImage());
@@ -47,19 +49,23 @@ void Client::game(void) {
             bool find = false;
             unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
 
+            // Check if i know this entity
             for (size_t i = 0; i < _entities.size(); i ++) {
                 if (message->uniqueID == _entities[i]->getId()) {
                     cout << "Find one: " + to_string(i) << endl;
                     _entities[i]->getImage()->setRectangleSheep(sf::Vector2f(message->value[4], message->value[5]), sf::Vector2f(message->value[6], message->value[7]));
                     find = true;
                 }
-            } if (!find) {
+            }
+            // If i don't know, i create it
+            if (!find) {
                 shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
 
                 newone->getImage()->setRectangleSheep(sf::Vector2f(message->value[4], message->value[5]), sf::Vector2f(message->value[6], message->value[7]));
                 _entities.push_back(newone);
             }
             formatInput(0);
+            // Draw des entities
             for (size_t i = 0; i < _entities.size(); i ++)
                 _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
             _windowhdl->display();
