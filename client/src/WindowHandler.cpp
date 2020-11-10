@@ -26,15 +26,17 @@ WindowHandler::~WindowHandler() {
         _window->close();
 }
 
-void WindowHandler::display(void) const {
+void WindowHandler::dispBackground()
+{
     _background->move();
 
     _window->draw(*_background->getImage()->getSprite());
-    for (size_t i = 0; i < _images.size() && i < _images.size(); i ++)
-        _window->draw(*_images[i]->getSprite());
     for (size_t i = 0; i < _texts.size() && i < _texts.size(); i ++)
         _window->draw(*_texts[i]->getData());
+}
 
+void WindowHandler::display(void) const 
+{
     _window->display();
     _window->clear();
 }

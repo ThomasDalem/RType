@@ -49,7 +49,7 @@ namespace network
     {
         int entitieType;
         int uniqueID;
-        int value[50];
+        int value[10];
         //value[0] : 1 = message à afficher, 0 = le joueur est mort
         //value[1] value[2] : position x y du sprite
         //value[3] : rotation (jsp à quoi ça sert mais Thomas l'a mis donc ça doit servir)

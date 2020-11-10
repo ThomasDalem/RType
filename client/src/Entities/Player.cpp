@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-Player::Player(size_t id) {
+Player::Player(int id) {
     _id = id;
     _room = -1;
     _name = "";
@@ -34,8 +34,8 @@ void Player::setName(string str) {
 
 void Player::setRoom(int room) {_room = room;}
 int Player::getRoom(void) const {return _room;}
-void Player::setId(size_t id) {_id = id;}
-size_t Player::getId(void) const {return _id;}
+void Player::setId(int id) {_id = id;}
+int Player::getId(void) const {return _id;}
 string Player::getName(void) const {return _name;}
 shared_ptr<ImageSFML> Player::getImage(void) const {return _image;}
 shared_ptr<TextSfml> Player::getNameText(void) const {return _textname;}

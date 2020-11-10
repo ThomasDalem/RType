@@ -37,6 +37,7 @@ class WindowHandler {
         size_t getHeight(void) const;
         shared_ptr<Background> getBackground(void) const;
         shared_ptr<sf::RenderWindow> getWindow(void) const;
+        void dispBackground();
 
         //Graphics Data
         void rmText(size_t);

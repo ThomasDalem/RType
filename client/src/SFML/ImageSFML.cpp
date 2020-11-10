@@ -19,7 +19,6 @@ ImageSFML::ImageSFML(string path) {
     _sprite->setTexture(*_texture);
 }
 ImageSFML::~ImageSFML() {
-    _texture->~Texture();
 }
 
 void ImageSFML::setTexture(string path) {

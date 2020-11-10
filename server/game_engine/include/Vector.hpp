@@ -15,6 +15,11 @@ namespace game_engine {
         Vector(int _x, int _y)
         : x(_x),y(_y)
         {}
+        bool operator!=(Vector b) {
+            if (x != b.x && y != b.y)
+                return true;
+            return (false);
+        }
         int x;
         int y;
     };

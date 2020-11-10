@@ -27,10 +27,10 @@ bool game_engine::GameLoop::areTherePlayers()
     int newPlayerID = 0;
 
     while (server.hasMessages()) {
-        std::cout << "receive message" << std::endl;
+        //std::cout << "receive message" << std::endl;
         playerExisting = false;
         message = server.getFirstMessage();
-        if (message->first.playerID == -1){
+        if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION){
             std::cout << "create new player" << std::endl;
             newPlayerID = spawnSystem.newPlayer(message->second);
             network::UDPClientMessage responseMessage = {0, newPlayerID};
@@ -40,13 +40,13 @@ bool game_engine::GameLoop::areTherePlayers()
         }
         else if (message->first.event != network::Event::CONFIRMCONNECTION) {
             for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+                player = static_cast<Player *>(playerListIter->get());
                 if (message->second == player->getClientEndpoint()) {
-                    player = static_cast<Player *>(playerListIter->get());
                     player->addNewInput(message->first.event, message->first.value);
                     playerExisting = true;
                 }
             }
-        } 
+        }
     }
 
     if (playersList->empty())
@@ -69,42 +69,45 @@ void game_engine::GameLoop::sendToClients()
     for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
         network::UDPClientMessage clientMessage;
         entitiesComponents = entitiesListIter->get()->getComponentList();
-        //getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieRenderComponent);
         for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
             if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
                 entitieTransfromComponent = static_cast<Transform *>(componentListIter->get());
             if (componentListIter->get()->getType() == ComponentType::RENDER)
                 entitieRenderComponent = static_cast<Render *>(componentListIter->get());
         }
-        clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
-        clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
-        clientMessage.value[0] = 1;
-        clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
-        clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
-        clientMessage.value[3] = entitieTransfromComponent->getRotation();
-        clientMessage.value[4] = entitieRenderComponent->getRect().x;
-        clientMessage.value[5] = entitieRenderComponent->getRect().y;
-        clientMessage.value[6] = entitieRenderComponent->getRect().L;
-        clientMessage.value[7] = entitieRenderComponent->getRect().l;
-        clientMessage.value[8] = 0;
-        clientMessage.value[9] = 0;
-        server.broadcastMessage(clientMessage);
-    }
-    for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
-        player = static_cast<Player *>(playerListIter->get());
-        network::UDPClientMessage clientMessage;
-        if (player->getHealth()->getHealthPoint() > 0) {
-            clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
+        if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x &&
+            entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
+            clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
+            clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
             clientMessage.value[0] = 1;
-            clientMessage.value[1] = player->getHealth()->getHealthPoint();
-            clientMessage.value[2] = player->getScore();
-            clientMessage.value[3] = 0;
+            clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
+            clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
+            clientMessage.value[3] = entitieTransfromComponent->getRotation();
+            clientMessage.value[4] = entitieRenderComponent->getRect().x;
+            clientMessage.value[5] = entitieRenderComponent->getRect().y;
+            clientMessage.value[6] = entitieRenderComponent->getRect().L;
+            clientMessage.value[7] = entitieRenderComponent->getRect().l;
+            clientMessage.value[8] = 0;
+            clientMessage.value[9] = 0;
+            std::cout << clientMessage.value[1] << " " << clientMessage.value[2] << std::endl;
+            server.broadcastMessage(clientMessage);
         }
-        else {
-            clientMessage.value[0] = 0;
-        }
-        server.sendMessage(clientMessage, player->getClientEndpoint()); 
     }
+    // for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+    //     player = static_cast<Player *>(playerListIter->get());
+    //     network::UDPClientMessage clientMessage;
+    //     if (player->getHealth()->getHealthPoint() > 0) {
+    //         clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
+    //         clientMessage.value[0] = 1;
+    //         clientMessage.value[1] = player->getHealth()->getHealthPoint();
+    //         clientMessage.value[2] = player->getScore();
+    //         clientMessage.value[3] = 0;
+    //     }
+    //     else {
+    //         clientMessage.value[0] = 0;
+    //     }
+    //     server.sendMessage(clientMessage, player->getClientEndpoint()); 
+    // }
 }
 
 void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *renderComponent)
@@ -123,14 +126,21 @@ void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComp
 
 void game_engine::GameLoop::gameLoop()
 {
+    auto start = std::chrono::steady_clock::now();
     while (areTherePlayers() == false);
     //un joueur c'est connecté
     while (areTherePlayers()) {
-        moveSystem.moveSystem();
-        collisionSystem.collisionSystem();
-        damageSystem.damageSystem();
-        deathSystem.deathSystem();
-        spawnSystem.spawnSystem();
-        sendToClients();
+        auto now = std::chrono::steady_clock::now();
+        auto diff = now - start;
+        auto end = now + std::chrono::milliseconds(16);
+        if(diff >= std::chrono::milliseconds(10)) {
+            moveSystem.moveSystem();
+            collisionSystem.collisionSystem();
+            damageSystem.damageSystem();
+            deathSystem.deathSystem();
+            spawnSystem.spawnSystem();
+            sendToClients();
+        }
+        std::this_thread::sleep_until(end);
     }
 }

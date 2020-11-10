@@ -18,13 +18,13 @@
 using namespace std;
 class Player {
     public:
-        Player(size_t id);
+        Player(int32_t id);
         ~Player();
 
-        void setId(size_t id);
+        void setId(int id);
         void setRoom(int room);
         int getRoom(void) const;
-        size_t getId(void) const;
+        int getId(void) const;
         void setName(string str);
         string getName(void) const;
         void setImage(ImageSFML news);
@@ -34,7 +34,7 @@ class Player {
 
     private:
         int _room;
-        size_t _id;
+        int _id;
         string _name;
 
         shared_ptr<ImageSFML> _image;
