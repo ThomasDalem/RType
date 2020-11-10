@@ -39,9 +39,7 @@ namespace network
     {
         std::unique_ptr<UDPClientMessage> message = std::make_unique<UDPClientMessage>();
 
-        // if (receivedBytes == sizeof(UDPClientMessage))
-        //     std::cout << "message received" << std::endl;
-        if (!ec) {
+        if (!ec && receivedBytes == sizeof(UDPClientMessage)) {
             std::memcpy(message.get(), _data, sizeof(UDPClientMessage));
             _messages.push(std::move(message));
             receiveMessage();
