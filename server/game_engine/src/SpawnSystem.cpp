@@ -105,21 +105,22 @@ void game_engine::SpawnSystem::spawnEnemy()
     }
 }
 
-void game_engine::SpawnSystem::newPlayer(int clientID)
+int game_engine::SpawnSystem::newPlayer()
 {
     std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> newListPlayer = std::make_shared<std::vector<std::shared_ptr<IEntities>>>();
     std::shared_ptr<Player> newPlayer;
 
     newListPlayer = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
     if (newListPlayer->size() == 0)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, clientID);
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, getAndIncID());
     if (newListPlayer->size() == 1)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Blue, clientID);
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Blue, getAndIncID());
     if (newListPlayer->size() == 2)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Red, clientID);
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Red, getAndIncID());
     if (newListPlayer->size() == 3)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, clientID);
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, getAndIncID());
     _entities->push_back(newPlayer);
+    return (getID());
 }
 
 void game_engine::SpawnSystem::spawnObstacle()
