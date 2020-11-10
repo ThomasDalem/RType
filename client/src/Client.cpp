@@ -16,10 +16,10 @@ Client::Client() {
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     // Player in a game
-    _players.push_back(make_shared<Player>(1));
-    _players.push_back(make_shared<Player>(2));
-    _players.push_back(make_shared<Player>(3));
-    _players.push_back(make_shared<Player>(4));
+    _players.push_back(make_shared<Player>(0));
+    // _players.push_back(make_shared<Player>(2));
+    // _players.push_back(make_shared<Player>(3));
+    // _players.push_back(make_shared<Player>(4));
 
     // Window class stats
     _windowhdl->setFramerate(50);
@@ -28,10 +28,10 @@ Client::Client() {
     _windowhdl->addText(_players[0]->getNameText());
 }
 Client::~Client() {
-    for(size_t i = 0; i < _players.size(); i ++)
-        _players[i]->~Player();
-    _players.~vector();
-    _windowhdl->~WindowHandler();
+    // for(size_t i = 0; i < _players.size(); i ++)
+    //     _players[i]->~Player();
+    // _players.~vector();
+    // _windowhdl->~WindowHandler();
 }
 
 // value[0] : 1 = message à afficher, 0 = le joueur est mort
@@ -44,6 +44,7 @@ Client::~Client() {
 // value[7] : largeur dans le sprite sheet
 
 void Client::game(void) {
+    _net->sendMessage({13, {-1, 0}, network::Event::MOVE});
     while (_windowhdl->isOpen()) {
         while (_net->hasMessages()) {
             bool find = false;
@@ -53,7 +54,7 @@ void Client::game(void) {
             for (size_t i = 0; i < _entities.size(); i ++) {
                 if (message->uniqueID == _entities[i]->getId()) {
                     cout << "Find one: " + to_string(i) << endl;
-                    _entities[i]->getImage()->setRectangleSheep(sf::Vector2f(message->value[4], message->value[5]), sf::Vector2f(message->value[6], message->value[7]));
+                    _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                     find = true;
                 }
             }
@@ -61,10 +62,11 @@ void Client::game(void) {
             if (!find) {
                 shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
 
-                newone->getImage()->setRectangleSheep(sf::Vector2f(message->value[4], message->value[5]), sf::Vector2f(message->value[6], message->value[7]));
+                newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
+                newone->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
                 _entities.push_back(newone);
             }
-            formatInput(0);
+            formatInput(1);
             // Draw des entities
             for (size_t i = 0; i < _entities.size(); i ++)
                 _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());

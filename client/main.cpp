@@ -21,20 +21,20 @@
 
 using namespace std;
 void core(vector<string> av) {
-    Client client;
+    std::shared_ptr<Client> client = std::make_shared<Client>();
     network::UDPMessage msg = {-1, {84}, network::Event::ADD};
 
+    std::cout << "la" << std::endl;
     // Wait ID from Server
-    client.getNetwork()->sendMessage(msg);
-    while(client.getNetwork()->hasMessages()) {
-        network::UDPClientMessage message = *client.getNetwork()->getFirstMessage();
-        client.getPlayer(0)->setId(message.uniqueID);
+    client->getNetwork()->sendMessage(msg);
+    while(client->getNetwork()->hasMessages()) {
+        network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
+        client->getPlayer(0)->setId(message.uniqueID);
     }
     // Menus
-    client.MenusLoop();
-
+    //client->MenusLoop();
     // Game
-    client.game();
+    client->game();
 }
 
 int main(int ac, char **argv, char **env) {
@@ -42,6 +42,7 @@ int main(int ac, char **argv, char **env) {
 
     if (!ErrorHandler().isDisplayEnv(env))
         return 84;
+    std::cout << "start" << std::endl;
     core(av);
     return 0;
 }

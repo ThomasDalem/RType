@@ -29,7 +29,7 @@ class ImageSFML {
         void setSprite(sf::Sprite newone);
         void setPosition(sf::Vector2f pos);
         shared_ptr<sf::Sprite> getSprite(void) const;
-        void setRectangleSheep(sf::Vector2f pos, sf::Vector2f size);
+        void setRectangleSheep(sf::IntRect rect);
 
     private:
         string _path;

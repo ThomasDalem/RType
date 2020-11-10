@@ -27,6 +27,7 @@ bool game_engine::GameLoop::areTherePlayers()
     int newPlayerID = 0;
 
     while (server.hasMessages()) {
+        std::cout << "receive message" << std::endl;
         playerExisting = false;
         message = server.getFirstMessage();
         if (message->first.playerID == -1) {
@@ -115,5 +116,6 @@ void game_engine::GameLoop::gameLoop()
         damageSystem.damageSystem();
         deathSystem.deathSystem();
         spawnSystem.spawnSystem();
+        sendToClients();
     }
 }
