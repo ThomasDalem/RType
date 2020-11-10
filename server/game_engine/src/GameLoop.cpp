@@ -33,7 +33,7 @@ bool game_engine::GameLoop::areTherePlayers()
         if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION){
             std::cout << "create new player" << std::endl;
             newPlayerID = spawnSystem.newPlayer(message->second);
-            network::UDPClientMessage responseMessage = {0, newPlayerID};
+            network::UDPClientMessage responseMessage = {network::SendEvent::UPDATE , 0, newPlayerID};
             responseMessage.value[0] = -1;
             while (!server.hasMessages())
                 server.sendMessage(responseMessage, message->second);
@@ -77,6 +77,7 @@ void game_engine::GameLoop::sendToClients()
         }
         if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x ||
             entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
+            clientMessage.event = network::SendEvent::UPDATE;
             clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
             clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
             clientMessage.value[0] = 1;
@@ -105,7 +106,7 @@ void game_engine::GameLoop::sendToClients()
     //     else {
     //         clientMessage.value[0] = 0;
     //     }
-    //     server.sendMessage(clientMessage, player->getClientEndpoint()); 
+    //     server.sendMessage(clientMessage, player->getClientEndpoint());
     // }
 }
 
@@ -136,7 +137,7 @@ void game_engine::GameLoop::gameLoop()
             moveSystem.moveSystem();
             collisionSystem.collisionSystem();
             damageSystem.damageSystem();
-            deathSystem.deathSystem();
+            deathSystem.deathSystem(server);
             spawnSystem.spawnSystem();
             sendToClients();
         }

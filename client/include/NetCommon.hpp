@@ -24,6 +24,12 @@ namespace network
         REMOVE,
         CONFIRMCONNECTION,
     };
+    enum class SendEvent : std::uint8_t
+    {
+        UPDATE,
+        ADD,
+        REMOVE,
+    };
 
     enum class TCPEvent : std::uint8_t
     {
@@ -47,6 +53,7 @@ namespace network
 
     struct UDPClientMessage
     {
+        SendEvent event;
         int entitieType;
         int uniqueID;
         int value[10];

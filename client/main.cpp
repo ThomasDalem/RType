@@ -30,7 +30,7 @@ void core(vector<string> av) {
     std::cout << "la" << std::endl;
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
-    client->getPlayer(0)->setId(1);
+    client->getPlayer(0)->setId(message.uniqueID);
     // Menus
     //client->MenusLoop();
     // Game

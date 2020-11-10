@@ -197,7 +197,7 @@ void game_engine::SpawnSystem::checkPlayerShoot(std::shared_ptr<std::vector<std:
         if (player->getFirstEnum() == InputEnum::SHOOTINPUT) {
             bulletPosX = player->getTransform()->getPosition().x + player->getCollision()->getRectSize().L;
             bulletPosY = player->getTransform()->getPosition().y + (player->getCollision()->getRectSize().l / 2);
-            _entities->push_back(std::make_shared<Bullet>(false, Vector(10, 0), Vector(bulletPosX, bulletPosY), getAndIncID()));
+            _entities->push_back(std::make_shared<Bullet>(false, Vector(50, 0), Vector(bulletPosX, bulletPosY), getAndIncID()));
             player->popFirstInput();
         }
     }
