@@ -102,6 +102,21 @@ void Client::MenusLoop(void) {
     return;
 }
 
+void Client::waitConnection(void) {
+    network::UDPMessage msg = {-1, {84}, network::Event::ADD};
+    shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
+    shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
+
+    for (int attempt = -3; !_net->hasMessages(); attempt ++) {
+        _net->sendMessage(msg);
+        textw->setString("Wait for Server..." + (attempt > 0 ? "(attempt " + to_string(attempt) + ")" : ""));
+        _windowhdl->getWindow()->draw(*waiter->getSprite());
+        _windowhdl->getWindow()->draw(*textw->getData());
+        _windowhdl->display();
+        sleep(attempt > 0 ? 5 : 1);
+    }
+}
+
 shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
 shared_ptr<WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}

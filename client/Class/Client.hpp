@@ -26,6 +26,7 @@ class Client {
         void game(void);
         void MenusLoop(void);
         void formatInput(size_t);
+        void waitConnection(void);
         shared_ptr<Player> getPlayer(size_t) const;
         shared_ptr<WindowHandler> getWindowHandler(void) const;
         shared_ptr<network::NetUDPClient> getNetwork(void) const;
