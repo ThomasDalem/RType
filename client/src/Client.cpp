@@ -44,16 +44,12 @@ void Client::game(void) {
     while (_windowhdl->isOpen()) {
         if (_net->hasMessages()) {
             while (_net->hasMessages()) {
-                //std::cout << "received a message" << std::endl;
                 bool find = false;
                 unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
-                // Check if i know this entity
                 if (message->event == network::SendEvent::REMOVE) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
-                        if (message->uniqueID == _entities[i]->getId()) {
-                            std::cout << message->entitieType << std::endl;
+                        if (message->uniqueID == _entities[i]->getId())
                             _entities.erase(_entities.begin() + i);
-                        }
                     }
                 }
                 if (message->value[0] != 0) {
@@ -66,7 +62,6 @@ void Client::game(void) {
                         }
                     }
                     if (!find) {
-                        std::cout << "create new entitie" << std::endl;
                         shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
                         newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                         newone->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
@@ -79,7 +74,6 @@ void Client::game(void) {
                 for (size_t i = 0; i < _entities.size(); i ++)
                     _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
                 _windowhdl->display();
-                    // Draw des entities
             }
         }
         else {

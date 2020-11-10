@@ -35,8 +35,7 @@ bool game_engine::GameLoop::areTherePlayers()
             newPlayerID = spawnSystem.newPlayer(message->second);
             network::UDPClientMessage responseMessage = {network::SendEvent::UPDATE , 0, newPlayerID};
             responseMessage.value[0] = -1;
-            while (!server.hasMessages())
-                server.sendMessage(responseMessage, message->second);
+            server.sendMessage(responseMessage, message->second);
         }
         else if (message->first.event != network::Event::CONFIRMCONNECTION) {
             for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {

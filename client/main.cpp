@@ -27,7 +27,6 @@ void core(vector<string> av) {
     // Wait ID from Server
     client->getNetwork()->sendMessage(msg);
     while(!client->getNetwork()->hasMessages());
-    std::cout << "la" << std::endl;
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
     client->getPlayer(0)->setId(message.uniqueID);
