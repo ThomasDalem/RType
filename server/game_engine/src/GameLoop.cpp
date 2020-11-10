@@ -71,19 +71,11 @@ void game_engine::GameLoop::sendToClients()
         clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
         clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
         clientMessage.value[3] = entitieTransfromComponent->getRotation();
-<<<<<<< HEAD
-        clientMessage.value[4] = entitieCollisionComponent->getRectSize().x;
-        clientMessage.value[5] = entitieCollisionComponent->getRectSize().y;
-        clientMessage.value[6] = entitieCollisionComponent->getRectSize().L;
-        clientMessage.value[7] = entitieCollisionComponent->getRectSize().l;
-        server.broadcastMessage(clientMessage);
-=======
         clientMessage.value[4] = entitieRenderComponent->getRect().x;
         clientMessage.value[5] = entitieRenderComponent->getRect().y;
         clientMessage.value[6] = entitieRenderComponent->getRect().L;
         clientMessage.value[7] = entitieRenderComponent->getRect().l;
-        server.broadcastDispClassMessage(clientMessage);
->>>>>>> c9cae0e0b57801a6e7d7641a0317e1362cb4328b
+        server.broadcastMessage(clientMessage);
     }
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
