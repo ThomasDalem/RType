@@ -32,7 +32,9 @@ void game_engine::CollisionSystem::collisionSystem()
 {
     _player = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
     _powerUp = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::POWERUP}, _entities);
-    _objectAndEnemy = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMY, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, _entities);
+    _objectAndEnemy = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMYALIEN,
+        game_engine::EntitiesType::ENEMYBATTLESHIP, game_engine::EntitiesType::ENEMYTROOPER,
+        game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, _entities);
     collideAll();
 }
 
@@ -47,8 +49,7 @@ void game_engine::CollisionSystem::collideAll()
 
     std::vector<std::shared_ptr<IEntities>>::iterator powerUpIter;
     std::vector<std::shared_ptr<AComponents>> powerUpComponent;
-    for (playerIter = _player->begin(); playerIter != _player->end(); playerIter++)
-    {
+    for (playerIter = _player->begin(); playerIter != _player->end(); playerIter++) {
         playerComponent = playerIter->get()->getComponentList();
         for (playerComponentIter = playerComponent.begin(); playerComponentIter != playerComponent.end(); playerComponentIter++) {
             if (playerComponentIter->get()->getType() == ComponentType::TRANSFORM)
@@ -63,7 +64,6 @@ void game_engine::CollisionSystem::collideAll()
                 Player *playerEntitie = static_cast<Player *>(playerIter->get());
                 powerUpEntitie->activePowerUp(*playerEntitie);
                 _powerUp->erase(powerUpIter);
-                printf("Power up touché");// Je sais pas;
             }
         }
     }
@@ -84,7 +84,7 @@ void game_engine::CollisionSystem::ennemyCollisionSystem()
     std::vector<std::shared_ptr<AComponents>>::iterator objectComponentIter;
 
     for (ennemyIter = _objectAndEnemy->begin(); ennemyIter != _objectAndEnemy->end(); ennemyIter++) {
-       if (ennemyIter->get()->getEntitiesID() == EntitiesType::ENEMY) {
+       if (EntitiesParser::isAnEnemy(ennemyIter->get()->getEntitiesID())) {
            ennemyComponent = ennemyIter->get()->getComponentList();
             for (ennemyComponentIter = ennemyComponent.begin(); ennemyComponentIter != ennemyComponent.end(); ennemyComponentIter++) {
                 if (ennemyComponentIter->get()->getType() == ComponentType::TRANSFORM)

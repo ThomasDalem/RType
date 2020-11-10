@@ -47,7 +47,6 @@ namespace game_engine {
             virtual void pathEnemy() {};
 
         protected:
-        private:
             int _uniqueID;
             EntitiesType _entitesID;
             std::vector<InputEnum> inputBuffer;

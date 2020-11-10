@@ -38,6 +38,14 @@ namespace game_engine {
                 }
                 return (false);
             }
+
+            static bool isAnEnemy(game_engine::EntitiesType entitieID) {
+                if (entitieID == game_engine::EntitiesType::ENEMYALIEN ||
+                    entitieID == game_engine::EntitiesType::ENEMYBATTLESHIP ||
+                    entitieID == game_engine::EntitiesType::ENEMYTROOPER)
+                    return (true);
+                return (false);
+            }
     };
 }
 
