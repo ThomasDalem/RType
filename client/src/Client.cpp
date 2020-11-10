@@ -68,23 +68,14 @@ void Client::game(void) {
                         _entities.push_back(newone);
                     }
                 }
-                formatInput(0);
-                _windowhdl->getWindow()->clear();
-                _windowhdl->dispBackground();
-                for (size_t i = 0; i < _entities.size(); i ++)
-                    _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-                _windowhdl->display();
             }
         }
-        else {
-            formatInput(0);
-            _windowhdl->getWindow()->clear();
-            _windowhdl->dispBackground();
-            for (size_t i = 0; i < _entities.size(); i ++) {
-                _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-            }
-            _windowhdl->display();
-        }
+        formatInput(0);
+        _windowhdl->getWindow()->clear();
+        _windowhdl->dispBackground();
+        for (size_t i = 0; i < _entities.size(); i ++)
+            _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
+        _windowhdl->display();
     }
 }
 
