@@ -48,9 +48,8 @@ set(CLIENT_SRCS
     ./client/src/Client.cpp
     ./client/src/ErrorHandler.cpp
     ./client/src/WindowHandler.cpp
-    ./client/src/Entities/Monster.cpp
     ./client/src/Entities/Player.cpp
-    ./client/src/Entities/SMonster.cpp
+    ./client/src/Entities/Entities.cpp
     ./client/src/SFML/BackgroundSFML.cpp
     ./client/src/SFML/ImageSFML.cpp
     ./client/src/SFML/TextSFML.cpp

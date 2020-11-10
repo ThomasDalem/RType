@@ -37,10 +37,10 @@ namespace network
 
     void NetUDPClient::handleMessage(boost::system::error_code const& ec, std::size_t receivedBytes)
     {
-        std::unique_ptr<UDPMessage> message = std::make_unique<UDPMessage>();
+        std::unique_ptr<UDPClientMessage> message = std::make_unique<UDPClientMessage>();
 
-        if (!ec && receivedBytes == sizeof(UDPMessage)) {
-            std::memcpy(message.get(), _data, sizeof(UDPMessage));
+        if (!ec && receivedBytes == sizeof(UDPClientMessage)) {
+            std::memcpy(message.get(), _data, sizeof(UDPClientMessage));
             _messages.push(std::move(message));
             receiveMessage();
         } else {
@@ -53,9 +53,9 @@ namespace network
         return !_messages.empty();
     }
 
-    std::unique_ptr<UDPMessage> NetUDPClient::getFirstMessage()
+    std::unique_ptr<UDPClientMessage> NetUDPClient::getFirstMessage()
     {
-        std::unique_ptr<UDPMessage> messageSave = std::move(_messages.front());
+        std::unique_ptr<UDPClientMessage> messageSave = std::move(_messages.front());
         _messages.pop();
         return std::move(messageSave);
     }
