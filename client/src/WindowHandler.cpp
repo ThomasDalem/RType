@@ -35,7 +35,7 @@ void WindowHandler::dispBackground()
         _window->draw(*_texts[i]->getData());
 }
 
-void WindowHandler::display(void) const 
+void WindowHandler::display(void) const
 {
     _window->display();
     _window->clear();

@@ -21,19 +21,25 @@
 
 using namespace std;
 void core(vector<string> av) {
-    std::shared_ptr<Client> client = std::make_shared<Client>();
+    shared_ptr<Client> client = make_shared<Client>();
     network::UDPMessage msg = {-1, {84}, network::Event::ADD};
+    shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
+    shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
 
-    // Wait ID from Server
     client->getNetwork()->sendMessage(msg);
-    while(!client->getNetwork()->hasMessages());
-    std::cout << "la" << std::endl;
+    for (int attempt = -3; !client->getNetwork()->hasMessages(); attempt ++) {
+        textw->setString("Wait for Server..." + (attempt > 0 ? "(attempt " + to_string(attempt) + ")" : ""));
+        client->getWindowHandler()->getWindow()->draw(*waiter->getSprite());
+        client->getWindowHandler()->getWindow()->draw(*textw->getData());
+        client->getWindowHandler()->display();
+        sleep(attempt > 0 ? 5 : 1);
+        client->getNetwork()->sendMessage(msg);
+    }
+
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
     client->getPlayer(0)->setId(1);
-    // Menus
     //client->MenusLoop();
-    // Game
     client->game();
 }
 
@@ -42,7 +48,7 @@ int main(int ac, char **argv, char **env) {
 
     if (!ErrorHandler().isDisplayEnv(env))
         return 84;
-    std::cout << "start" << std::endl;
+    cout << "start" << endl;
     core(av);
     return 0;
 }
