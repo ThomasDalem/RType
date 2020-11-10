@@ -50,10 +50,16 @@ void Client::game(void) {
                         if (message->uniqueID == _entities[i]->getId()) {
                             _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                             _entities[i]->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
-                            _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
+                            if (_entities[i]->getEntityType() != 6)
+                                _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
                             find = true;
                         }
                     } if (!find) {
+                        std::cout << "Create new entitie = " << message->entitieType << std::endl;
+                        std::cout << "pos x = " << message->value[4] <<  std::endl;
+                        std::cout << "pos y = " << message->value[5] <<  std::endl;
+                        std::cout << "L = " << message->value[6] <<  std::endl;
+                        std::cout << "l = " << message->value[7] <<  std::endl;
                         shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
 
                         newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
@@ -61,21 +67,14 @@ void Client::game(void) {
                         _entities.push_back(newone);
                     }
                 }
-                formatInput(0);
-                _windowhdl->getWindow()->clear();
-                _windowhdl->dispBackground();
-                for (size_t i = 0; i < _entities.size(); i ++)
-                    _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-                _windowhdl->display();
             }
-        } else {
-            formatInput(0);
-            _windowhdl->getWindow()->clear();
-            _windowhdl->dispBackground();
-            for (size_t i = 0; i < _entities.size(); i ++)
-                _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-            _windowhdl->display();
         }
+        formatInput(0);
+        _windowhdl->getWindow()->clear();
+        _windowhdl->dispBackground();
+        for (size_t i = 0; i < _entities.size(); i ++)
+            _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
+        _windowhdl->display();
     }
 }
 

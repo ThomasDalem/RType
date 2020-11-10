@@ -13,8 +13,8 @@ game_engine::Enemy::Enemy(Vector _position, int id)
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, Vector(0, 0));
     _health = std::make_shared<Health>(1, true);
-    _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 4, 4), false);
-    _render = std::make_shared<Render>("./path_to_ennemy sprite", Rectangle(0, 0, 75, 45));
+    _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 40, 40), false);
+    _render = std::make_shared<game_engine::Render>("./path_to_ennemy sprite", game_engine::Rectangle(0, 67, 33, 36));
     _deathSound = std::make_shared<Sound>("./path_to_ennemy_death_sound");
     //_entitesID = EntitiesType::ENEMY;
     _componentList.push_back(_transform);

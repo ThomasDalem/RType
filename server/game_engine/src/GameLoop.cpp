@@ -77,6 +77,15 @@ void game_engine::GameLoop::sendToClients()
         }
         if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x ||
             entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
+            if (entitiesListIter->get()->getEntitiesID() == EntitiesType::ENEMYALIEN) {
+                std::cout << "x = " << entitieRenderComponent->getRect().x << std::endl;
+                std::cout << "y = " << entitieRenderComponent->getRect().y << std::endl;
+                std::cout << "L = " << entitieRenderComponent->getRect().L << std::endl;
+                std::cout << "l = " << entitieRenderComponent->getRect().l << std::endl;
+                std::cout << "transform  x= " << entitieTransfromComponent->getPosition().x << std::endl;
+                std::cout << "transform y= " << entitieTransfromComponent->getPosition().y << std::endl;
+                std::cout << "transform rotation= " << entitieTransfromComponent->getRotation() << std::endl;
+            }
             clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
             clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
             clientMessage.value[0] = 1;
@@ -135,7 +144,7 @@ void game_engine::GameLoop::gameLoop()
         if(diff >= std::chrono::milliseconds(10)) {
             moveSystem.moveSystem();
             collisionSystem.collisionSystem();
-            damageSystem.damageSystem();
+            //damageSystem.damageSystem();
             deathSystem.deathSystem();
             spawnSystem.spawnSystem();
             sendToClients();

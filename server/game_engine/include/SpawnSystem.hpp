@@ -53,10 +53,8 @@ namespace game_engine
 
     protected:
     private:
-        std::clock_t blockSpawnClock;
-        std::clock_t enemySpawnClock;
-        double blockSpawnTime;
-        double enemySpawnTime;
+        std::time_t blockSpawnTimer;
+        std::time_t enemySpawnTimer;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
         std::vector<DDloader<game_engine::Enemy>> _enemyLoader;
         int id;

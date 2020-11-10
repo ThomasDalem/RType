@@ -63,10 +63,8 @@ game_engine::SpawnSystem::SpawnSystem(std::shared_ptr<std::vector<std::shared_pt
             throw (Exception("can't load"));
         _enemyLoader.push_back(libLoader);
     }
-    blockSpawnClock = std::clock();
-    blockSpawnClock = 0.5;
-    enemySpawnClock = std::clock();
-    enemySpawnClock = 2;
+    blockSpawnTimer = time(0);
+    enemySpawnTimer = time(0);
     id = 1;
 }
 
@@ -87,21 +85,21 @@ game_engine::SpawnSystem &game_engine::SpawnSystem::operator=(const game_engine:
 
 void game_engine::SpawnSystem::spawnSystem()
 {
-    //spawnEnemy();
-    //spawnObstacle();
+    spawnEnemy();
+    spawnObstacle();
     checkEntitieShoot();
 }
 
 void game_engine::SpawnSystem::spawnEnemy()
 {
-    double timePassed = std::clock() - enemySpawnClock;
+    double timePassed = difftime(time(0), enemySpawnTimer) * 1000.0;
     int enemyChancetoSpawn;
 
-    if (timePassed > enemySpawnTime) {
-        enemySpawnClock = std::clock();
-        enemySpawnClock = 2;
-        int x = rand() % _enemyLoader.size();
-        _entities->push_back(_enemyLoader[x].getInstance("entryPoint", Vector(1920, (rand() % 990) + 50), getAndIncID()));
+    if (timePassed >= 4000) {
+        std::cout << "spawn enemy" << std::endl;
+        enemySpawnTimer = time(0);
+        //int x = rand() % _enemyLoader.size();
+        _entities->push_back(_enemyLoader[0].getInstance("entryPoint", Vector(700, 200/*(rand() % 780) + 50*/), getAndIncID()));
     }
 }
 
@@ -125,18 +123,18 @@ int game_engine::SpawnSystem::newPlayer(boost::asio::ip::udp::endpoint &endpoint
 
 void game_engine::SpawnSystem::spawnObstacle()
 {
-    std::cout << "la" << std::endl;
-    double timePassed = std::clock() - blockSpawnClock;
     int obstacleChancetoSpawn;
     int nbObstacletoSpawn;
     int upOrDownSpawn;
-    std::cout << "pui la " << std::endl;
 
-    if (timePassed > blockSpawnTime) {
-        blockSpawnClock = std::clock();
-        blockSpawnClock = 0.5;
-        _entities->push_back(std::make_shared<StageObstacle>(Vector(0, 1920), getAndIncID()));
-        _entities->push_back(std::make_shared<StageObstacle>(Vector(1030, 1920), getAndIncID()));
+    double timePassed = difftime(time(0), blockSpawnTimer) * 1000.0;
+
+    if (timePassed >= 2000) {
+        std::cout << "spawn block" << std::endl;
+        blockSpawnTimer = time(0);
+
+        _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 0), getAndIncID()));
+        _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 830), getAndIncID()));
         addObstacle();
     }
 }
@@ -147,7 +145,7 @@ void game_engine::SpawnSystem::addObstacle()
     int nbObstacletoSpawn;
     int upOrDownSpawn;
     int upStart = 50;
-    int downStart = 1040;
+    int downStart = 830;
     int stageObstacleOrNot;
 
     obstacleChancetoSpawn = rand() % 10;
@@ -158,18 +156,18 @@ void game_engine::SpawnSystem::addObstacle()
             for (upStart = 50; upStart <= nbObstacletoSpawn * 50; upStart+=50) {
                 stageObstacleOrNot = rand() % 2;
                 if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(upStart, 1920), getAndIncID()));
+                    _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart), getAndIncID()));
                 else
-                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(upStart, 1920), getAndIncID()));
+                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart), getAndIncID()));
             }
         }
         else {
             for (downStart = 1040; downStart <= 1040 - 50 * nbObstacletoSpawn; downStart-=50) {
                 stageObstacleOrNot = rand() % 2;
                 if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(downStart, 1920), getAndIncID()));
+                    _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, downStart), getAndIncID()));
                 else
-                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(downStart, 1920), getAndIncID()));
+                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, downStart), getAndIncID()));
             }
         }
     }
@@ -197,7 +195,7 @@ void game_engine::SpawnSystem::checkPlayerShoot(std::shared_ptr<std::vector<std:
         if (player->getFirstEnum() == InputEnum::SHOOTINPUT) {
             bulletPosX = player->getTransform()->getPosition().x + player->getCollision()->getRectSize().L;
             bulletPosY = player->getTransform()->getPosition().y + (player->getCollision()->getRectSize().l / 2);
-            _entities->push_back(std::make_shared<Bullet>(false, Vector(10, 0), Vector(bulletPosX, bulletPosY), getAndIncID()));
+            _entities->push_back(std::make_shared<Bullet>(false, Vector(30, 0), Vector(bulletPosX, bulletPosY), getAndIncID()));
             player->popFirstInput();
         }
     }

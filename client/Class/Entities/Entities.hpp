@@ -23,9 +23,11 @@ class Entities {
         int getId(void) const;
         shared_ptr<ImageSFML> getImage(void) const;
 
+        size_t getEntityType() {return (_type);};
+
     private:
         int _id;
-        size_t type;
+        size_t _type;
         string _path;
         shared_ptr<ImageSFML> _image;
 

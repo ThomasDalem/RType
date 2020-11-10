@@ -19,9 +19,10 @@ Entities::Entities(int id, size_t type) {
         case 5: _path = "./resources/sprites/block.png"; break; // Destroyable
         case 6: _path = "./resources/sprites/block.png"; break; // StageObstacle
         case 7: _path = "./resources/sprites/r-typesheet18.gif"; break; // Alien
-        case 8: _path = "./resources/sprites/r-typesheet26gif"; break; // Battleshibre
+        case 8: _path = "./resources/sprites/r-typesheet26.gif"; break; // Battleshibre
         case 9: _path = "./resources/sprites/r-typesheet20.gif"; break; // Trooper
     }
+    _type = type;
     _image = make_shared<ImageSFML>(_path);
 }
 Entities::~Entities() {}
