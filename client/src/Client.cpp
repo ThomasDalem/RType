@@ -73,9 +73,8 @@ void Client::game(void) {
         formatInput(0);
         _windowhdl->getWindow()->clear();
         _windowhdl->dispBackground();
-        for (size_t i = 0; i < _entities.size(); i ++) {
+        for (size_t i = 0; i < _entities.size(); i ++)
             _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-        }
         _windowhdl->display();
     }
 }
