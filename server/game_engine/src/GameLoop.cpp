@@ -24,20 +24,22 @@ bool game_engine::GameLoop::areTherePlayers()
     game_engine::Player *player;
     std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message;
     bool playerExisting = false;
+    int newPlayerID = 0;
 
     while (server.hasMessages()) {
         playerExisting = false;
         message = server.getFirstMessage();
-        for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
-            if (message->second == player->getClientEndpoint()) {
-                player = static_cast<Player *>(playerListIter->get());
-                player->addNewInput(message->first.event, message->first.value);
-                playerExisting = true;
+        if (message->first.playerID == -1) {
+            for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+                if (message->second == player->getClientEndpoint()) {
+                    player = static_cast<Player *>(playerListIter->get());
+                    player->addNewInput(message->first.event, message->first.value);
+                    playerExisting = true;
+                }
             }
-        }
-        if (playerExisting == false) {
-            network::UDPClientMessage responseMessage = {0, -1};
-            spawnSystem.newPlayer(message->first.playerID);
+        } else {
+            newPlayerID = spawnSystem.newPlayer();
+            network::UDPClientMessage responseMessage = {0, newPlayerID};
             server.sendMessage(responseMessage, message->second);
         }
     }
@@ -55,25 +57,33 @@ void game_engine::GameLoop::sendToClients()
     std::vector<std::shared_ptr<AComponents>> entitiesComponents;
     game_engine::Player *player;
     Transform *entitieTransfromComponent;
-    Collision *entitieCollisionComponent;
+    Render *entitieRenderComponent;
     Health *entitieHealthComponent;
 
     network::UDPClientMessage clientMessage;
 
     for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
         entitiesComponents = entitiesListIter->get()->getComponentList();
-        getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieCollisionComponent);
+        getComponentToDisp(entitiesComponents, entitieTransfromComponent, entitieRenderComponent);
         clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
         clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
         clientMessage.value[0] = 1;
         clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
         clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
         clientMessage.value[3] = entitieTransfromComponent->getRotation();
+<<<<<<< HEAD
         clientMessage.value[4] = entitieCollisionComponent->getRectSize().x;
         clientMessage.value[5] = entitieCollisionComponent->getRectSize().y;
         clientMessage.value[6] = entitieCollisionComponent->getRectSize().L;
         clientMessage.value[7] = entitieCollisionComponent->getRectSize().l;
         server.broadcastMessage(clientMessage);
+=======
+        clientMessage.value[4] = entitieRenderComponent->getRect().x;
+        clientMessage.value[5] = entitieRenderComponent->getRect().y;
+        clientMessage.value[6] = entitieRenderComponent->getRect().L;
+        clientMessage.value[7] = entitieRenderComponent->getRect().l;
+        server.broadcastDispClassMessage(clientMessage);
+>>>>>>> c9cae0e0b57801a6e7d7641a0317e1362cb4328b
     }
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
@@ -91,14 +101,15 @@ void game_engine::GameLoop::sendToClients()
     }
 }
 
-void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Collision *collisionComponent)
+void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *renderComponent)
 {
     std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
+
     for (componentListIter = componentList.begin(); componentListIter != componentList.end(); ++componentListIter) {
         if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
             transfromComponent = static_cast<Transform *>(componentListIter->get());
-        if (componentListIter->get()->getType() == ComponentType::COLLISION)
-            collisionComponent = static_cast<Collision *>(componentListIter->get());
+        if (componentListIter->get()->getType() == ComponentType::RENDER)
+            renderComponent = static_cast<Render *>(componentListIter->get());
     }
 }
 

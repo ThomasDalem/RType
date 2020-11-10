@@ -36,8 +36,11 @@ void game_engine::DeathSystem::deathSystem()
         if (listEntitieIter->get()->getEntitiesID() != EntitiesType::STAGEOBSTACLE && listEntitieIter->get()->getEntitiesID() != EntitiesType::MUSIC
             && listEntitieIter->get()->getEntitiesID() != EntitiesType::ENVIRONNEMENT) {
             entitieComponent = listEntitieIter->get()->getComponentList();
-            if (isDead(entitieComponent))
+            if (isDead(entitieComponent)) {
+                if (EntitiesParser::isAnEnemy(listEntitieIter->get()->getEntitiesID()))
+                    spawnPowerUp(listEntitieIter->get());
                 listEntitieIter = _entities->erase(listEntitieIter);
+            }
         }
     }
 }
@@ -54,4 +57,14 @@ bool game_engine::DeathSystem::isDead(std::vector<std::shared_ptr<AComponents>> 
     if (entitieHealthComponent->getDamabeable() == true && entitieHealthComponent->getHealthPoint() == 0)
         return (true);
     return (false);
+}
+
+void game_engine::DeathSystem::spawnPowerUp(game_engine::IEntities *entitie)
+{
+    int powerUpSpawn = rand() % 2;
+    game_engine::Enemy * ennemy = static_cast<Enemy *>(entitie);
+
+    if (powerUpSpawn == 1)
+        return;
+    _entities->push_back(std::make_shared<PowerUp>(ennemy->getTransform()->getPosition()));
 }

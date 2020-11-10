@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "Player.hpp"
+#include "Entities.hpp"
 #include "NetUDPClient.hpp"
 #include "WindowHandler.hpp"
 
@@ -23,14 +24,17 @@ class Client {
         ~Client();
 
         void game(void);
+        void MenusLoop(void);
         void formatInput(size_t);
         shared_ptr<Player> getPlayer(size_t) const;
         shared_ptr<WindowHandler> getWindowHandler(void) const;
         shared_ptr<network::NetUDPClient> getNetwork(void) const;
 
     private:
+        shared_ptr<TextSfml> _score;
         vector<shared_ptr<Player>> _players;
         shared_ptr<WindowHandler> _windowhdl;
+        vector<shared_ptr<Entities>> _entities;
         shared_ptr<network::NetUDPClient> _net;
 
     protected:

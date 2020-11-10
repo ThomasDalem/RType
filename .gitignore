@@ -19,6 +19,8 @@ r-type_client
 vgcore.*
 
 # Build
+CMakeFiles
+CMakeCache.txt
 conan.lock
 conanbuildinfo.cmake
 conanbuildinfo.txt
