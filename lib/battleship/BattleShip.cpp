@@ -6,9 +6,11 @@
 */
 
 #include "BattleShip.hpp"
+#include "Rectangle.hpp"
 
 enemies::BattleShip::BattleShip(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
+    this->getRender()->setRect(game_engine::Rectangle(0, 0, 65, 50)); //r-typesheet26.gif
 }
 
 enemies::BattleShip::~BattleShip()
