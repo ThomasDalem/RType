@@ -9,21 +9,25 @@
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
-void addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
-    roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (row * 110)), sf::Vector2f(250, 100)));
-    roomlist[row]->setColor(sf::Color::Black, sf::Color::White, 5);
-    roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
-}
-
 RoomMenu::RoomMenu(string name, size_t ndx) {
     _name = "";
     isMenu = true;
+    isPlay = false;
     size_t row = 0;
+    _play = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 700), sf::Vector2f(250, 100));
 
+    _play->setColor(sf::Color::Black, sf::Color::White, 5);
+    _play->setText("./resources/fonts/2MASS.otf", "Play", 75, sf::Color::White);
     for (; row < ndx; row ++)
         addItems(roomlist, row);
 }
 RoomMenu::~RoomMenu() {}
+
+void RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
+    roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (row * 110)), sf::Vector2f(250, 100)));
+    roomlist[row]->setColor(sf::Color::Black, sf::Color::White, 5);
+    roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
+}
 
 ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
@@ -73,6 +77,8 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
         } for (size_t i = 0; i < roomlist.size(); i ++) {
             if (roomlist[i]->isClicked(event))
                 player.setRoom(i + 1);
+        } if (_play->isClicked(event)) {
+            isPlay = true;
         }
     }
 }
@@ -88,8 +94,8 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     _name = roomname;
-    _window->setFramerateLimit(60);
-    while(_window->isOpen()) {
+    _window->setFramerateLimit(120);
+    while(_window->isOpen() && !isPlay) {
         EventHandler(_window, player);
 
         name_txt->setString("Nom de la Partie: " + _name);
@@ -98,11 +104,15 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &
         _window->draw(*back->getSprite());
         _window->draw(*name_txt->getData());
 
+        _play->drawButton(_window);
         _window->display();
         _window->clear();
-        while(_window->pollEvent(event))
+        while(_window->pollEvent(event)) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
                 return Back;
+            EventHandler(_window, player);
+        }
+        cout << (isPlay ? "GO PLAY" : "") << endl;
     }
-    return player.getRoom() == 0 ? Continue : Back;
+    return Continue;
 }

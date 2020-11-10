@@ -5,11 +5,14 @@
 ** Client
 */
 
+#include "Room.hpp"
+#include "Main.hpp"
 #include "Client.hpp"
 
 Client::Client() {
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
+    _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     _players.push_back(make_shared<Player>(1));
     _players.push_back(make_shared<Player>(2));
@@ -17,6 +20,9 @@ Client::Client() {
     _players.push_back(make_shared<Player>(4));
 
     _windowhdl->setFramerate(50);
+    _windowhdl->addText(_score);
+    _windowhdl->addImage(_players[0]->getImage());
+    _windowhdl->addText(_players[0]->getNameText());
 }
 Client::~Client() {
     for(size_t i = 0; i < _players.size(); i ++)
@@ -25,7 +31,17 @@ Client::~Client() {
     _windowhdl->~WindowHandler();
 }
 
-void Client::game(void) {}
+void Client::game(void) {
+    while (_windowhdl->isOpen()) {
+        while (_net->hasMessages()) {
+            unique_ptr<network::UDPMessage> message = _net->getFirstMessage();
+
+            cout << "MESSAGES: " << int(message->event) << ", " << message->playerID << ", " << message->value << endl;
+        }
+        formatInput(0);
+        _windowhdl->display();
+    }
+}
 
 void Client::formatInput(size_t row) {
     network::UDPMessage lastinput;
@@ -41,6 +57,14 @@ void Client::formatInput(size_t row) {
     }
 }
 
+void Client::MenusLoop(void) {
+    switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
+        case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), *_players[0]); break;
+        case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
+        default: break;
+    }
+    return;
+}
 shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
 shared_ptr<WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}

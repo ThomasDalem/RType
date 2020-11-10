@@ -22,29 +22,11 @@
 using namespace std;
 void core(vector<string> av) {
     Client client;
-
     network::UDPMessage msg = {1, {84}, network::Event::ADD};
-    shared_ptr<TextSfml> Score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
-    client.getWindowHandler()->addText(Score);
-    switch (Mainmenu().loop(client.getWindowHandler()->getWindow(), *client.getPlayer(0))) {
-        case Creating: RoomMenu().creatingGame(client.getWindowHandler()->getWindow(), *client.getPlayer(0)); break;
-        case Room: RoomMenu().loop(client.getWindowHandler()->getWindow(), *client.getPlayer(0)); break;
-        default: break;
-    }
-    client.getWindowHandler()->addImage(client.getPlayer(0)->getImage());
-    client.getWindowHandler()->addText(client.getPlayer(0)->getNameText());
-
+    client.MenusLoop();
     client.getNetwork()->sendMessage(msg);
-    while (client.getWindowHandler()->isOpen()) {
-        while (client.getNetwork()->hasMessages()) {
-            unique_ptr<network::UDPMessage> message = client.getNetwork()->getFirstMessage();
-
-            cout << "MESSAGES: " << int(message->event) << ", " << message->playerID << ", " << message->value << endl;
-        }
-        client.formatInput(0);
-        client.getWindowHandler()->display();
-    }
+    client.game();
 }
 
 int main(int ac, char **argv, char **env) {
