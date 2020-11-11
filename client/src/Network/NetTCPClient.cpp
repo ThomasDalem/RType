@@ -7,75 +7,63 @@
 
 #include <thread>
 #include <iostream>
+
+// #include "Exception.hpp"
 #include "NetTCPClient.hpp"
 
 namespace network
 {
     NetTCPClient::NetTCPClient(std::string const& ip, std::string const& port) :
-        _resolver(_context), _endpoints(_resolver.resolve(ip, port)), _socket(_context)
-    {
+        _resolver(_context), _endpoints(_resolver.resolve(ip, port)), _socket(_context) {
         connect();
-        _thread = std::thread([this]{ _context.run(); });
+        try {
+            _thread = std::thread([this]{ _context.run(); });
+        } catch (std::bad_alloc e) {
+            _thread.detach();
+        }
+    }
+    NetTCPClient::~NetTCPClient() {
+        // _thread.detach();
     }
 
-    NetTCPClient::~NetTCPClient()
-    {
-    }
+    bool NetTCPClient::isConnected() const {return _isConnected;}
+    bool NetTCPClient::hasMessages() const {return !_messages.empty();}
 
-    bool NetTCPClient::isConnected() const
-    {
-        return _isConnected;
-    }
-
-    bool NetTCPClient::hasMessages() const
-    {
-        return !_messages.empty();
-    }
-
-    std::unique_ptr<TCPMessage> NetTCPClient::getFirstMessage()
-    {
+    std::unique_ptr<TCPMessage> NetTCPClient::getFirstMessage() {
         std::unique_ptr<TCPMessage> messageSave = std::move(_messages.front());
         _messages.pop();
         return std::move(messageSave);
     }
 
-    void NetTCPClient::sendMessage(TCPMessage const& message)
-    {
+    void NetTCPClient::sendMessage(TCPMessage const &message) {
         boost::asio::async_write(_socket, boost::asio::buffer(&message, sizeof(TCPMessage)),
-            [this](boost::system::error_code ec, std::size_t size)
-            {
-                if (ec) {
+            [this](boost::system::error_code ec, std::size_t size) {
+                if (ec)
                     _isConnected = false;
-                }
             }
         );
     }
 
-    void NetTCPClient::connect()
-    {
+    void NetTCPClient::connect() {
         boost::asio::async_connect(_socket, _endpoints,
-            [this](boost::system::error_code ec, boost::asio::ip::tcp::endpoint ep)
-            {
+            [this](boost::system::error_code ec, boost::asio::ip::tcp::endpoint ep) {
                 if (!ec) {
                     _isConnected = true;
                     receiveMessage();
-                } else {
+                } else
                     std::cerr << "Could not connect to server" << std::endl;
-                }
             }
         );
     }
 
-    void NetTCPClient::receiveMessage()
-    {
+    void NetTCPClient::receiveMessage() {
         TCPMessage message;
 
         boost::asio::async_read(_socket, boost::asio::buffer(&_data, sizeof(TCPMessage)),
             std::bind(&NetTCPClient::handleMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    void NetTCPClient::handleMessage(boost::system::error_code ec, std::size_t receivedBytes)
-    {
+    void NetTCPClient::handleMessage(boost::system::error_code ec, std::size_t receivedBytes) {
         if (!ec && receivedBytes == sizeof(TCPMessage)) {
             std::unique_ptr<TCPMessage> message = std::make_unique<TCPMessage>();
 

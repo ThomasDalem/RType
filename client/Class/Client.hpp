@@ -24,7 +24,7 @@ class Client {
         ~Client();
 
         void game(void);
-        void MenusLoop(void);
+        bool MenusLoop(void);
         void formatInput(size_t);
         void waitConnection(void);
         shared_ptr<Player> getPlayer(size_t) const;

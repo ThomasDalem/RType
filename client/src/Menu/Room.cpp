@@ -77,9 +77,8 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
         } for (size_t i = 0; i < roomlist.size(); i ++) {
             if (roomlist[i]->isClicked(event, _window))
                 player.setRoom(i + 1);
-        } if (_play->isClicked(event, _window)) {
+        } if (_play->isClicked(event, _window))
             isPlay = true;
-        }
     }
 }
 
@@ -108,9 +107,9 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &
         _window->display();
         _window->clear();
         while(_window->pollEvent(event)) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                return Back;
             EventHandler(_window, player);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
+                return Back;
         }
     }
     return Continue;

@@ -20,10 +20,10 @@ WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fp
 }
 
 WindowHandler::~WindowHandler() {
-    _texts.clear();
-    _images.clear();
-    if (_window->isOpen())
-        _window->close();
+    // _texts.clear();
+    // _images.clear();
+    // if (_window->isOpen())
+    //     _window->close();
 }
 
 void WindowHandler::dispBackground()
@@ -61,6 +61,14 @@ Input WindowHandler::isEvent(Player &player) {
     while (_window->pollEvent(event)) {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
             _window->close();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            return RightUp;
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            return LeftUp;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            return RightDown;
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            return LeftDown;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
             return Up;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))

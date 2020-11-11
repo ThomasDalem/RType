@@ -19,7 +19,22 @@
 #include "BackgroundSFML.hpp"
 
 using namespace std;
-enum Input {Left, Right, Up, Down, Shoot, Nothing, Escape};
+enum Input {
+    Left,
+    Right,
+    Up,
+    Down,
+
+    LeftUp,
+    RightUp,
+    LeftDown,
+    RightDown,
+
+    Shoot,
+
+    Nothing,
+    Escape
+};
 
 class WindowHandler {
     public:

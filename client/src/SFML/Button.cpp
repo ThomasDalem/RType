@@ -16,7 +16,7 @@ Button::~Button() {}
 void Button::setText(string fontPath, string _text, int _size, const sf::Color textColor) {
     sf::Vector2f textPos;
 
-    if (font.loadFromFile(fontPath) == false)
+    if (!font.loadFromFile(fontPath))
         cout << "can't load button text font \n" << endl;
     text.setFont(font);
     text.setString(_text);

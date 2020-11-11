@@ -28,15 +28,18 @@ void core(vector<string> av) {
     while(!client->getNetwork()->hasMessages());
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getPlayer(0)->setId(message.uniqueID);
-    // Menus
-    //client->MenusLoop();
-    client->game();
+    if (client->MenusLoop())
+        client->game();
 }
 
 int main(int ac, char **argv, char **env) {
     vector<string> av = ErrorHandler().getArgs(argv);
 
     if (!ErrorHandler().isDisplayEnv(env))
-        return 84;    core(av);
+        return 84;
+    try {
+        core(av);
+    } catch (std::bad_alloc) {
+    }
     return 0;
 }
