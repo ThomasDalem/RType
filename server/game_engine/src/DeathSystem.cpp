@@ -40,7 +40,8 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
                 if (EntitiesParser::isAnEnemy(listEntitieIter->get()->getEntitiesID()))
                     spawnPowerUp(listEntitieIter->get());
                 if (listEntitieIter->get()->getEntitiesID() == EntitiesType::PLAYER) {
-                    disconnectClient(listEntitieIter, server);
+                    // disconnectClient(listEntitieIter, server);
+                    deadClient(listEntitieIter, server);
                     listEntitieIter = _entities->begin();
                 }
                 else {
@@ -53,6 +54,14 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
             }
         }
     }
+}
+
+void game_engine::DeathSystem::deadClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server) {
+    Player *player = static_cast<Player *>(listEntitieIter->get());
+    network::UDPClientMessage suppressMessage = {network::SendEvent::DEAD, listEntitieIter->get()->getEntitiesID(),
+        listEntitieIter->get()->getUniqueID()};
+
+    server.sendMessage(suppressMessage, player->getClientEndpoint());
 }
 
 void game_engine::DeathSystem::disconnectClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server)

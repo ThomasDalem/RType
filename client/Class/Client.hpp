@@ -36,6 +36,7 @@ namespace client {
             shared_ptr<network::NetUDPClient> getNetwork(void) const;
 
         private:
+            bool isDead;
             shared_ptr<TextSfml> _score;
             vector<shared_ptr<Player>> _players;
             shared_ptr<WindowHandler> _windowhdl;

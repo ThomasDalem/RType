@@ -12,6 +12,7 @@
 #include "MusicSFML.hpp"
 
 client::Client::Client() {
+    isDead = false;
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
@@ -48,6 +49,8 @@ void client::Client::game(void) {
                 unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
                 if (message->event == network::SendEvent::DESCONNECTCLIENT)
                     return;
+                if (message->event == network::SendEvent::DEAD)
+                    isDead = true;
                 if (message->event == network::SendEvent::REMOVE) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
                         if (message->uniqueID == _entities[i]->getId())
@@ -82,7 +85,6 @@ void client::Client::game(void) {
         _windowhdl->dispBackground();
         for (size_t i = 0; i < _entities.size(); i ++)
             _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-        cout << endl << endl;
         _windowhdl->display();
     }
 }
@@ -90,6 +92,8 @@ void client::Client::game(void) {
 void client::Client::formatInput(size_t row) {
     network::UDPMessage lastinput;
 
+    if (isDead)
+        return;
     switch(_windowhdl->isEvent(*_players[row])) {
         case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
         case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
