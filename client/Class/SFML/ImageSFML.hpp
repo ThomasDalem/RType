@@ -31,6 +31,7 @@ namespace client {
             void setSprite(sf::Sprite newone);
             void setPosition(sf::Vector2f pos);
             shared_ptr<sf::Sprite> getSprite(void) const;
+            sf::IntRect getRectangleSheep() const;
             void setRectangleSheep(sf::IntRect rect);
 
         private:

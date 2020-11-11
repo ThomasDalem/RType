@@ -26,8 +26,7 @@ namespace client {
             int getId(void) const;
             string getName(void) const;
             shared_ptr<ImageSFML> getImage(void) const;
-
-            size_t getEntityType() {return (_type);};
+            size_t getEntityType() const;
 
         private:
             int _id;

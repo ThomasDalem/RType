@@ -14,6 +14,7 @@ client::Client::Client() {
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
+    _animation = Animation();
 
     _players.push_back(make_shared<Player>(0));
 
@@ -55,7 +56,6 @@ void client::Client::game(void) {
                 } if (message->value[0] != 0) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
                         if (message->uniqueID == _entities[i]->getId()) {
-                            _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                             _entities[i]->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
                             _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
                             find = true;
@@ -73,8 +73,10 @@ void client::Client::game(void) {
         formatInput(0);
         _windowhdl->getWindow()->clear();
         _windowhdl->dispBackground();
+        if (_animation.checkTimerAnimation() == true)
+            _animation.updateAnimation(_entities);
         for (size_t i = 0; i < _entities.size(); i ++) {
-            cout << i << ": Entities Id: " << to_string(_entities[i]->getId()) << endl;
+            //cout << i << ": Entities Id: " << to_string(_entities[i]->getId()) << endl;
             _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
             // for (size_t j = 0; j < _players.size(); j ++)
             //     if (_entities[i]->getId() == _players[j]->getId()) {
@@ -130,18 +132,6 @@ void client::Client::waitConnection(void) {
         sleep(attempt > 0 ? 5 : 1);
     }
 }
-
-/*void client::Client::setAnimation() {
-    sf::Time time;
-    float seconds = 0;
-
-    time = _clock.getElapsedTime();
-    seconds = time.asMicroseconds() / 300000.0;
-    if (seconds > 0.3) {
-        _clock.restart();
-        _animation;
-    }
-}*/
 
 size_t client::Client::getNumbersPlayer(void) const {return _players.size();}
 shared_ptr<network::NetUDPClient> client::Client::getNetwork(void) const {return _net;}
