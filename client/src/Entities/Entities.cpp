@@ -7,7 +7,7 @@
 
 #include "Entities.hpp"
 
-Entities::Entities(int id, size_t type, string name) {
+client::Entities::Entities(int id, size_t type, string name) {
     _id = id;
     _name = name;
 
@@ -26,11 +26,19 @@ Entities::Entities(int id, size_t type, string name) {
     _type = type;
     _image = make_shared<ImageSFML>(_path);
 }
-Entities::~Entities() {}
+client::Entities::~Entities() {}
 
+<<<<<<< HEAD
 void Entities::setId(int id) {_id = id;}
 int Entities::getId(void) const {return _id;}
 void Entities::setName(string name) {_name = name;}
 string Entities::getName(void) const {return _name;}
 size_t Entities::getEntityType(void) const {return (_type);};
 shared_ptr<ImageSFML> Entities::getImage(void) const {return _image;}
+=======
+void client::Entities::setId(int id) {_id = id;}
+int client::Entities::getId(void) const {return _id;}
+void client::Entities::setName(string name) {_name = name;}
+string client::Entities::getName(void) const {return _name;}
+shared_ptr<client::ImageSFML> client::Entities::getImage(void) const {return _image;}
+>>>>>>> 37db647d159404fdcecca9a2c2c5827e660b1c67

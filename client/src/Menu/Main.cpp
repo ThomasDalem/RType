@@ -24,7 +24,7 @@ string randomGen(void) {
     return "Faker";
 }
 
-Mainmenu::Mainmenu() {
+client::Mainmenu::Mainmenu() {
     _name = "";
     isHost = false;
     isJoin = false;
@@ -37,9 +37,10 @@ Mainmenu::Mainmenu() {
     _host->setText("./resources/fonts/2MASS.otf", "Host", 75, sf::Color::White);
     _join->setText("./resources/fonts/2MASS.otf", "Join", 75, sf::Color::White);
 }
-Mainmenu::~Mainmenu() {}
 
-ReturnMain Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
+client::Mainmenu::~Mainmenu() {}
+
+client::ReturnMain client::Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>("Pseudo: " + _name, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
@@ -64,7 +65,7 @@ ReturnMain Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) 
     return isJoin ? Room : (isHost ? Creating : Quit);
 }
 
-void Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
+void client::Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
     sf::Event event;
 
     while(_window->pollEvent(event)) {

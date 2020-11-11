@@ -43,7 +43,7 @@ void game_engine::MoveSystem::moveEntitie()
         for (componentIter = entitieComponent.begin(); componentIter != entitieComponent.end(); ++componentIter) {
             if (componentIter->get()->getType() == ComponentType::TRANSFORM) {
                 Transform *transfromComponent = static_cast<Transform *>(componentIter->get());
-                if (checkGameBorder(*transfromComponent) != true || iter->get()->getEntitiesID() == EntitiesType::DESTROYABLETILE || iter->get()->getEntitiesID() == EntitiesType::STAGEOBSTACLE) {
+                if (checkGameBorder(*transfromComponent) != true || iter->get()->getEntitiesID() != EntitiesType::PLAYER) {
                     transfromComponent->setOldPosition(transfromComponent->getPosition());
                     transfromComponent->applyDirection(transfromComponent->getDirection());
                 }

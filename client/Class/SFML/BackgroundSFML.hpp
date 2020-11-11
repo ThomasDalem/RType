@@ -15,23 +15,26 @@
 #include "ImageSFML.hpp"
 
 using namespace std;
-class Background {
-    public:
-        Background(int refresh = 0);
-        ~Background();
 
-        void move(void);
-        void stop(void);
-        void speedUp(int sp = 0);
-        shared_ptr<ImageSFML> getImage(void) const;
+namespace client {
+    class Background {
+        public:
+            Background(int refresh = 0);
+            ~Background();
 
-    private:
-        int _refresh;
-        int _position;
-        bool _movement;
-        shared_ptr<ImageSFML> _image;
+            void move(void);
+            void stop(void);
+            void speedUp(int sp = 0);
+            shared_ptr<ImageSFML> getImage(void) const;
 
-    protected:
-};
+        private:
+            int _refresh;
+            int _position;
+            bool _movement;
+            shared_ptr<ImageSFML> _image;
+
+        protected:
+    };
+}
 
 #endif

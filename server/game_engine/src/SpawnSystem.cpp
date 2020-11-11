@@ -63,8 +63,8 @@ game_engine::SpawnSystem::SpawnSystem(std::shared_ptr<std::vector<std::shared_pt
             throw (Exception("can't load"));
         _enemyLoader.push_back(libLoader);
     }
-    blockSpawnTimer = time(0);
-    enemySpawnTimer = time(0);
+    blockSpawnChrono = std::chrono::high_resolution_clock::now();
+    enemySpawnChrono = std::chrono::high_resolution_clock::now();
     id = 1;
 }
 
@@ -92,12 +92,12 @@ void game_engine::SpawnSystem::spawnSystem()
 
 void game_engine::SpawnSystem::spawnEnemy()
 {
-    double timePassed = difftime(time(0), enemySpawnTimer) * 1000.0;
+    std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
     int enemyChancetoSpawn;
 
-    if (timePassed >= 4000) {
-        std::cout << "spawn enemy" << std::endl;
-        enemySpawnTimer = time(0);
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - enemySpawnChrono).count() >= 2000) {
+        //std::cout << "spawn enemy" << std::endl;
+        enemySpawnChrono = std::chrono::high_resolution_clock::now();
         int x = rand() % _enemyLoader.size();
         _entities->push_back(_enemyLoader[x].getInstance("entryPoint", Vector(1920, (rand() % 780) + 50), getAndIncID()));
         setEnnemyRender();
@@ -109,11 +109,14 @@ void game_engine::SpawnSystem::setEnnemyRender()
     std::vector<std::shared_ptr<AComponents>> entitiesComponents;
     std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
     Render *entitieRenderComponent;
+    Health *entitieHealthComponent;
 
     entitiesComponents = (*_entities)[_entities->size() - 1].get()->getComponentList();
     for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
         if (componentListIter->get()->getType() == ComponentType::RENDER)
             entitieRenderComponent = static_cast<Render *>(componentListIter->get());
+        if (componentListIter->get()->getType() == ComponentType::HEALTH)
+            entitieHealthComponent = static_cast<Health *>(componentListIter->get());
     }
     if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYALIEN)
         entitieRenderComponent->setRect(game_engine::Rectangle(0, 67, 33, 36));
@@ -121,6 +124,8 @@ void game_engine::SpawnSystem::setEnnemyRender()
         entitieRenderComponent->setRect(game_engine::Rectangle(0, 0, 65, 50));
     if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYTROOPER)
         entitieRenderComponent->setRect(game_engine::Rectangle(18, 68, 33, 30));
+    entitieHealthComponent->setIsDamageable(true);
+    entitieHealthComponent->setHealthPoint(1);
 }
 
 int game_engine::SpawnSystem::newPlayer(boost::asio::ip::udp::endpoint &endpoint)
@@ -147,11 +152,11 @@ void game_engine::SpawnSystem::spawnObstacle()
     int nbObstacletoSpawn;
     int upOrDownSpawn;
 
-    double timePassed = difftime(time(0), blockSpawnTimer) * 1000.0;
+    std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 
-    if (timePassed >= 1000) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - blockSpawnChrono).count() >= 200) {
         //std::cout << "spawn block" << std::endl;
-        blockSpawnTimer = time(0);
+        blockSpawnChrono = std::chrono::high_resolution_clock::now();
 
         _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 0), getAndIncID()));
         _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, 960), getAndIncID()));
@@ -167,15 +172,15 @@ void game_engine::SpawnSystem::addObstacle()
     int downStart = 960;
     int stageObstacleOrNot;
 
-    obstacleChancetoSpawn = rand() % 2;
+    obstacleChancetoSpawn = rand() % 6;
     if (obstacleChancetoSpawn == 1) {
         nbObstacletoSpawn = rand() % 4 + 1;
         for (upStart = 60; upStart <= nbObstacletoSpawn * 60; upStart += 60) {
             stageObstacleOrNot = rand() % 2;
             if (stageObstacleOrNot == 0)
-                _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart + rand() % 500), getAndIncID()));
+                _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, ((upStart + rand()) % 16) * 60), getAndIncID()));
             else
-                _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart + rand() % 500), getAndIncID()));
+                _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, ((upStart + rand()) % 16) * 60), getAndIncID()));
         }
     }
 }

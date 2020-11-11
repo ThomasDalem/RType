@@ -11,17 +11,20 @@
 #include <vector>
 
 using namespace std;
-class ErrorHandler {
-    public:
-        ErrorHandler();
-        ~ErrorHandler();
 
-        bool isDisplayEnv(char **env);
-        vector<string> getArgs(char **av);
+namespace client {
+    class ErrorHandler {
+        public:
+            ErrorHandler();
+            ~ErrorHandler();
 
-    private:
+            bool isDisplayEnv(char **env);
+            vector<string> getArgs(char **av);
 
-    protected:
-};
+        private:
+
+        protected:
+    };
+}
 
 #endif

@@ -8,15 +8,15 @@
 #ifndef ANIMATION_HPP_
 #define ANIMATION_HPP_
 
-#include "Client.hpp"
+namespace client {
+    class Animation {
+        public:
+            Animation();
+            ~Animation();
 
-class client::Animation {
-    public:
-        Animation();
-        ~Animation();
+        protected:
+        private:
+    };
+}
 
-    private:
-    protected:
-};
-
-#endif
+#endif /* !ANIMATION_HPP_ */

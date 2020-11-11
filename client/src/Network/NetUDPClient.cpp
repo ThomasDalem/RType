@@ -24,7 +24,8 @@ namespace network
         }
     }
 
-    NetUDPClient::~NetUDPClient() {
+    NetUDPClient::~NetUDPClient()
+    {
         _context.stop();
         _thread.join();
     }

@@ -27,13 +27,14 @@ bool game_engine::GameLoop::areTherePlayers()
     int newPlayerID = 0;
 
     while (server.hasMessages()) {
-        //std::cout << "receive message" << std::endl;
         playerExisting = false;
         message = server.getFirstMessage();
         if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION){
             std::cout << "create new player" << std::endl;
             newPlayerID = spawnSystem.newPlayer(message->second);
             network::UDPClientMessage responseMessage = {network::SendEvent::UPDATE , 0, newPlayerID};
+            memset(&responseMessage, 0, sizeof(network::UDPClientMessage));
+            responseMessage.event = network::SendEvent::UPDATE;
             responseMessage.value[0] = -1;
             server.sendMessage(responseMessage, message->second);
         }
@@ -79,19 +80,18 @@ void game_engine::GameLoop::sendToClients()
         }
         if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x ||
             entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
+            memset(&clientMessage, 0, sizeof(network::UDPClientMessage));
             clientMessage.event = network::SendEvent::UPDATE;
             clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
             clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
             clientMessage.value[0] = 1;
             clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
             clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
-            clientMessage.value[3] = entitieTransfromComponent->getRotation();
+            clientMessage.value[3] = 0;
             clientMessage.value[4] = entitieRenderComponent->getRect().x;
             clientMessage.value[5] = entitieRenderComponent->getRect().y;
             clientMessage.value[6] = entitieRenderComponent->getRect().L;
             clientMessage.value[7] = entitieRenderComponent->getRect().l;
-            clientMessage.value[8] = 0;
-            clientMessage.value[9] = 0;
             server.broadcastMessage(clientMessage);
         }
     }
