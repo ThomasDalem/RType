@@ -19,7 +19,7 @@ string randomGen(void) {
         case 9: return "XxDarkKikoudu91xx"; break;
         default: return "KevinDu16"; break;
     }
-    return "";
+    return "Genius5000";
 }
 
 Mainmenu::Mainmenu() {

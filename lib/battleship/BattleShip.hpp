@@ -18,7 +18,7 @@ namespace enemies {
         public:
             BattleShip(game_engine::Vector position, int id);
             ~BattleShip();
-            void pathEnemy();
+            void enemyIA();
 
         protected:
         private:

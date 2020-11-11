@@ -77,40 +77,42 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
         } for (size_t i = 0; i < roomlist.size(); i ++) {
             if (roomlist[i]->isClicked(event, _window))
                 player.setRoom(i + 1);
-        } if (_play->isClicked(event, _window)) {
+        } if (_play->isClicked(event, _window))
             isPlay = true;
-        }
     }
 }
 
-ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, Player &player) {
+ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<Player>> players) {
     sf::Event event;
-    string roomname = "Partie de " + player.getName();
+    string roomname = "Partie de " + players[0]->getName();
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
-    shared_ptr<ImageSFML> P1 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
-    shared_ptr<ImageSFML> P2 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
-    shared_ptr<ImageSFML> P3 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
-    shared_ptr<ImageSFML> P4 = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     _name = roomname;
     _window->setFramerateLimit(120);
     while(_window->isOpen() && !isPlay) {
-        EventHandler(_window, player);
+        EventHandler(_window, *players[0]);
 
         name_txt->setString("Nom de la Partie: " + _name);
         name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
         _window->draw(*back->getSprite());
         _window->draw(*name_txt->getData());
+        for (size_t i = 0; i < players.size(); i ++) {
+            players[i]->setPosition(sf::Vector2f(800, 250 + (i * 50)));
+            players[i]->getNameText()->setSize(30);
+            players[i]->getNameText()->setPosition(sf::Vector2f(800 - (players[i]->getNameText()->getData()->getString().getSize() * 30), 265 + (i * 50)));
 
+            _window->draw(*players[i]->getImage()->getSprite());
+            _window->draw(*players[i]->getNameText()->getData());
+        }
         _play->drawButton(_window);
         _window->display();
         _window->clear();
         while(_window->pollEvent(event)) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            EventHandler(_window, *players[0]);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 return Back;
-            EventHandler(_window, player);
         }
     }
     return Continue;

@@ -20,17 +20,25 @@ enemies::Alien::~Alien()
 {
 }
 
-void enemies::Alien::pathEnemy()
+void enemies::Alien::enemyIA()
 {
-    if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y < 0 &&
-        this->getTransform()->getPosition().y >= 40)
-        this->getTransform()->setNewDirection(game_engine::Vector(2, -2));
-    else {
-        if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y > 0 &&
-            this->getTransform()->getPosition().y <= 1040)
-            this->getTransform()->setNewDirection(game_engine::Vector(2, 2));
+    double timePassed = difftime(time(0), _fireTimer) * 1000.0;
+
+    if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y < 0) {
+        if (this->getTransform()->getPosition().y >= 70)
+            this->getTransform()->setNewDirection(game_engine::Vector(-5, -3));
         else
-            this->getTransform()->setNewDirection(game_engine::Vector(2, -2));
+            this->getTransform()->setNewDirection(game_engine::Vector(-5, 3));
+    } else {
+        if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y > 0 &&
+            this->getTransform()->getPosition().y <= 750)
+            this->getTransform()->setNewDirection(game_engine::Vector(-5, 3));
+        else
+            this->getTransform()->setNewDirection(game_engine::Vector(-5, -3));
+    }
+    if (timePassed >= 550) {
+        _fireTimer = time(0);
+        inputBuffer.push_back(game_engine::InputEnum::SHOOTINPUT);
     }
 }
 

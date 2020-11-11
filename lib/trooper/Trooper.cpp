@@ -18,9 +18,9 @@ enemies::Trooper::~Trooper()
 {
 }
 
-void enemies::Trooper::pathEnemy()
+void enemies::Trooper::enemyIA()
 {
-    this->getTransform()->setNewDirection(game_engine::Vector(2, 0));
+    this->getTransform()->setNewDirection(game_engine::Vector(-15, 0));
 }
 
 extern "C" enemies::Trooper *entryPoint(game_engine::Vector position, int id)

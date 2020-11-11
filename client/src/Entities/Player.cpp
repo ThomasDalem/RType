@@ -19,7 +19,11 @@ Player::Player(int id) {
     _image->getSprite()->setScale(sf::Vector2f(3, 3));
     _image->getSprite()->setPosition(sf::Vector2f(250, 250));
 }
-Player::~Player() {}
+Player::~Player() {
+//     _image->~ImageSFML();
+//     _name.~basic_string();
+//     _textname->~TextSfml();
+}
 
 void Player::setPosition(sf::Vector2f newpos) {
     newpos = newpos.x < 0 ? sf::Vector2f(0, newpos.y) : (newpos.y < 0 ? sf::Vector2f(newpos.x, 0) : newpos);

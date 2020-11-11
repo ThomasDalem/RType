@@ -43,7 +43,7 @@ void game_engine::MoveSystem::moveEntitie()
         for (componentIter = entitieComponent.begin(); componentIter != entitieComponent.end(); ++componentIter) {
             if (componentIter->get()->getType() == ComponentType::TRANSFORM) {
                 Transform *transfromComponent = static_cast<Transform *>(componentIter->get());
-                if (checkGameBorder(*transfromComponent) != true || iter->get()->getEntitiesID() == EntitiesType::DESTROYABLETILE || iter->get()->getEntitiesID() == EntitiesType::STAGEOBSTACLE) {
+                if (checkGameBorder(*transfromComponent) != true || iter->get()->getEntitiesID() != EntitiesType::PLAYER) {
                     transfromComponent->setOldPosition(transfromComponent->getPosition());
                     transfromComponent->applyDirection(transfromComponent->getDirection());
                 }
@@ -74,12 +74,21 @@ void game_engine::MoveSystem::changePlayerDirection(std::shared_ptr<std::vector<
                 player->getTransform()->changeDirection(Vector(0, -10 * player->getSpeedMultiplicator()));
             if (player->getFirstEnum() == InputEnum::MOVELEFT)
                 player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), 0));
-            if (player->getFirstEnum() == InputEnum::MOVERIGHT) {
+            if (player->getFirstEnum() == InputEnum::MOVERIGHT)
                 player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), 0));
-            }
+
+            //Direction Diagonale NON FONCTIONNEL
+            // if (player->getFirstEnum() == InputEnum::LeftUp)
+            //     player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+            // if (player->getFirstEnum() == InputEnum::RightUp)
+            //     player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+            // if (player->getFirstEnum() == InputEnum::LeftDown)
+            //     player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+            // if (player->getFirstEnum() == InputEnum::RightDown)
+            //     player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+
             player->popFirstInput();
-        }
-        else
+        } else
             player->getTransform()->changeDirection(Vector(0, 0));
     }
 }
@@ -90,19 +99,7 @@ void game_engine::MoveSystem::changeEnnemyDirection(std::shared_ptr<std::vector<
 
     for (listEnnemyIter = newListEnnemy->begin(); listEnnemyIter != newListEnnemy->end(); listEnnemyIter++) {
         ennemy = static_cast<Enemy *>(listEnnemyIter->get());
-        if (ennemy->getFirstEnum() != InputEnum::NOTHING && ennemy->getFirstEnum() != InputEnum::SHOOTINPUT) {
-            if (ennemy->getFirstEnum() == InputEnum::MOVEDOWN)
-                ennemy->getTransform()->changeDirection(Vector(0, -5));
-            if (ennemy->getFirstEnum() == InputEnum::MOVEUP)
-                ennemy->getTransform()->changeDirection(Vector(0, 5));
-            if (ennemy->getFirstEnum() == InputEnum::MOVELEFT)
-                ennemy->getTransform()->changeDirection(Vector(-5, 0));
-            if (ennemy->getFirstEnum() == InputEnum::MOVERIGHT)
-                ennemy->getTransform()->changeDirection(Vector(5, 0));
-            ennemy->popFirstInput();
-        }
-        else
-            ennemy->getTransform()->changeDirection(Vector(0, 0));
+        ennemy->enemyIA();
     }
 }
 

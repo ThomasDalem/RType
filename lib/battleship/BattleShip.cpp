@@ -18,17 +18,25 @@ enemies::BattleShip::~BattleShip()
 {
 }
 
-void enemies::BattleShip::pathEnemy()
+void enemies::BattleShip::enemyIA()
 {
-    if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y < 0 &&
-        this->getTransform()->getPosition().y >= 40)
-        this->getTransform()->setNewDirection(game_engine::Vector(0, -2));
-    else {
-        if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y > 0 &&
-            this->getTransform()->getPosition().y <= 1040)
-            this->getTransform()->setNewDirection(game_engine::Vector(0, 2));
+    double timePassed = difftime(time(0), _fireTimer) * 1000.0;
+
+    if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y < 0) {
+        if (this->getTransform()->getPosition().y >= 70)
+        this->getTransform()->setNewDirection(game_engine::Vector(-3, -6));
         else
-            this->getTransform()->setNewDirection(game_engine::Vector(0, -2));
+            this->getTransform()->setNewDirection(game_engine::Vector(-3, 6));
+    } else {
+        if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y > 0 &&
+            this->getTransform()->getPosition().y <= 750)
+            this->getTransform()->setNewDirection(game_engine::Vector(-3, 6));
+        else
+            this->getTransform()->setNewDirection(game_engine::Vector(-3, -6));
+    }
+    if (timePassed >= 300) {
+        inputBuffer.push_back(game_engine::InputEnum::SHOOTINPUT);
+        _fireTimer = time(0);
     }
 }
 
