@@ -20,7 +20,6 @@ set(SERVER_SRCS
     ./server/game_engine/src/CollisionSystem.cpp
     ./server/game_engine/src/Entities/Bullet.cpp
     ./server/game_engine/src/Entities/DestroyableTile.cpp
-    ./server/game_engine/src/Entities/Enemy.cpp
     ./server/game_engine/src/Entities/Player.cpp
     ./server/game_engine/src/Entities/PowerUp.cpp
     ./server/game_engine/src/Entities/StageObstacle.cpp

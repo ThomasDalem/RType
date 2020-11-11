@@ -39,6 +39,7 @@ namespace game_engine
         ~SpawnSystem();
         SpawnSystem &operator=(const SpawnSystem &deathSystem);
         void spawnSystem();
+        void setEnnemyRender();
         void spawnEnemy();
         int newPlayer(boost::asio::ip::udp::endpoint &endpoint);
         void checkEntitieShoot();

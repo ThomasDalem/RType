@@ -10,7 +10,7 @@
 
 enemies::BattleShip::BattleShip(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
-    this->getRender()->setRect(game_engine::Rectangle(0, 0, 65, 50)); //r-typesheet26.gif
+    //this->getRender()->setRect(game_engine::Rectangle(0, 0, 65, 50)); //r-typesheet26.gif
     _entitesID = game_engine::EntitiesType::ENEMYBATTLESHIP;
 }
 
