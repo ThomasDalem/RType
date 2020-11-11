@@ -11,8 +11,7 @@
 // #include "Exception.hpp"
 #include "NetTCPClient.hpp"
 
-namespace network
-{
+namespace network {
     NetTCPClient::NetTCPClient(std::string const& ip, std::string const& port) :
         _resolver(_context), _endpoints(_resolver.resolve(ip, port)), _socket(_context) {
         connect();

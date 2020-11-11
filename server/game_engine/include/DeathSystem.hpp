@@ -29,24 +29,23 @@
 #include "./DDLoader.hpp"
 #include "EntitiesParser.hpp"
 
-namespace game_engine
-{
-    class DeathSystem
-    {
-    public:
-        DeathSystem();
-        DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
-        ~DeathSystem();
-        DeathSystem &operator=(const DeathSystem &deathSystem);
-        void deathSystem(network::NetUDPServer &server);
-        bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
-        void spawnPowerUp(game_engine::IEntities *entitie);
-        void disconnectClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server);
-        bool checkGameBorder(Transform &transform, Collision &collision);
+namespace game_engine {
+    class DeathSystem {
+        public:
+            DeathSystem();
+            DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
+            ~DeathSystem();
+            void deathSystem(network::NetUDPServer &server);
+            void spawnPowerUp(game_engine::IEntities *entitie);
+            DeathSystem &operator=(const DeathSystem &deathSystem);
+            bool checkGameBorder(Transform &transform, Collision &collision);
+            bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
+            void deadClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server);
+            void disconnectClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server);
 
-    protected:
-    private:
-        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
+        protected:
+        private:
+            std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
     };
 } // namespace game_engine
 

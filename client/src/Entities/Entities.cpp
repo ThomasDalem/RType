@@ -5,8 +5,10 @@
 ** Client Entities
 */
 
+#include "Client.hpp"
 #include "Entities.hpp"
 
+using namespace std;
 client::Entities::Entities(int id, size_t type, string name) {
     _id = id;
     _name = name;

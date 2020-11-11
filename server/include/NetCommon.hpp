@@ -30,6 +30,7 @@ namespace network
         UPDATE,
         ADD,
         REMOVE,
+        DEAD,
         DESCONNECTCLIENT,
     };
 
