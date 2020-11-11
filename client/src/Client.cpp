@@ -22,11 +22,9 @@ Client::Client() {
     _windowhdl->addImage(_players[0]->getImage());
     _windowhdl->addText(_players[0]->getNameText());
 }
-Client::~Client() {
-    // for(size_t i = 0; i < _players.size(); i ++)
-    //     _players[i]->~Player();
-    // _players.~vector();
-    // _windowhdl->~WindowHandler();
+Client::~Client()
+{
+    _entities.clear();
 }
 
 // value[0] : 1 = message à afficher, 0 = le joueur est mort
