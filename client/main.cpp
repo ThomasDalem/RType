@@ -15,20 +15,23 @@
 #include "Player.hpp"
 #include "Client.hpp"
 #include "NetCommon.hpp"
+#include "MusicSFML.hpp"
 #include "ErrorHandler.hpp"
 #include "NetUDPClient.hpp"
 #include "WindowHandler.hpp"
 
 using namespace std;
 void core(vector<string> av) {
+    MusicSFML music;
     shared_ptr<Client> client = make_shared<Client>();
 
+    music.load("./resources/sounds/main.ogg");
+    music.start();
     client->waitConnection();
     client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
     while(!client->getNetwork()->hasMessages());
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getPlayer(0)->setId(message.uniqueID);
-    // cout << "Client Id: " << to_string(client->getPlayer(0)->getId()) << endl;
     if (client->MenusLoop())
         client->game();
 }

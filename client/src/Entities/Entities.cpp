@@ -32,4 +32,5 @@ void Entities::setId(int id) {_id = id;}
 int Entities::getId(void) const {return _id;}
 void Entities::setName(string name) {_name = name;}
 string Entities::getName(void) const {return _name;}
+size_t Entities::getEntityType(void) const {return (_type);};
 shared_ptr<ImageSFML> Entities::getImage(void) const {return _image;}

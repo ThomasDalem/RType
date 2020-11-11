@@ -10,6 +10,8 @@
 #include "Client.hpp"
 #include "Entities.hpp"
 
+#include "MusicSFML.hpp"
+
 Client::Client() {
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
@@ -58,6 +60,12 @@ void Client::game(void) {
                     } if (!find) {
                         shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
 
+                        if (message->entitieType == 1) {
+                            MusicSFML sound;
+
+                            sound.load("./resources/sounds/shot.ogg");
+                            sound.start();
+                        }
                         newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                         newone->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
                         _entities.push_back(newone);
@@ -68,16 +76,8 @@ void Client::game(void) {
         formatInput(0);
         _windowhdl->getWindow()->clear();
         _windowhdl->dispBackground();
-        for (size_t i = 0; i < _entities.size(); i ++) {
-            cout << i << ": Entities Id: " << to_string(_entities[i]->getId()) << endl;
+        for (size_t i = 0; i < _entities.size(); i ++)
             _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-            // for (size_t j = 0; j < _players.size(); j ++)
-            //     if (_entities[i]->getId() == _players[j]->getId()) {
-            //         _players[j]->getNameText()->setPosition(_entities[i]->getImage()->getSprite()->getPosition());
-            //         cout << "Set \"" << _players[j]->getName() << "\" at x:" << _entities[i]->getImage()->getSprite()->getPosition().x << " && y:" << _entities[i]->getImage()->getSprite()->getPosition().y << endl;
-            //         _windowhdl->getWindow()->draw(*_players[j]->getNameText()->getData());
-            //     }
-        }
         cout << endl << endl;
         _windowhdl->display();
     }
