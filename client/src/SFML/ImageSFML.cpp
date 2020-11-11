@@ -32,6 +32,7 @@ void client::ImageSFML::setRectangleSheep(sf::IntRect rect) {
 }
 
 string client::ImageSFML::getPath() const {return _path;}
+sf::IntRect client::ImageSFML::getRectangleSheep() const {return (_sprite->getTextureRect());};
 shared_ptr<sf::Sprite> client::ImageSFML::getSprite() const {return(_sprite);}
 void client::ImageSFML::setPosition(sf::Vector2f pos) {_sprite->setPosition(pos);}
 void client::ImageSFML::setScale(sf::Vector2f size) {this->_sprite->setScale(size);}

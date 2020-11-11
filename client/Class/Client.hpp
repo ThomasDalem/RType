@@ -41,6 +41,7 @@ namespace client {
             vector<shared_ptr<Player>> _players;
             shared_ptr<WindowHandler> _windowhdl;
             vector<shared_ptr<Entities>> _entities;
+            Animation _animation;
             shared_ptr<network::NetUDPClient> _net;
 
         protected:
