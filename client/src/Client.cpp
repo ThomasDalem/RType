@@ -73,7 +73,7 @@ void Client::game(void) {
         _windowhdl->getWindow()->clear();
         _windowhdl->dispBackground();
         for (size_t i = 0; i < _entities.size(); i ++) {
-            cout << i << ": Entities Id: " << to_string(_entities[i]->getId()) << endl;
+            //cout << i << ": Entities Id: " << to_string(_entities[i]->getId()) << endl;
             _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
             // for (size_t j = 0; j < _players.size(); j ++)
             //     if (_entities[i]->getId() == _players[j]->getId()) {
@@ -82,7 +82,7 @@ void Client::game(void) {
             //         _windowhdl->getWindow()->draw(*_players[j]->getNameText()->getData());
             //     }
         }
-        cout << endl << endl;
+        //cout << endl << endl;
         _windowhdl->display();
     }
 }

@@ -20,6 +20,11 @@ namespace game_engine
     class Health : public AComponents
     {
     public:
+        Health()
+            : AComponents(ComponentType::HEALTH), _healthPoint(1), _isDamageable(true)
+        {
+            _type = ComponentType::HEALTH;
+        }
         Health(int healthPoint, bool isDamageable)
             : AComponents(ComponentType::HEALTH), _healthPoint(healthPoint), _isDamageable(isDamageable)
         {

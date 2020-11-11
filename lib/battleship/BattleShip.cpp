@@ -12,6 +12,8 @@ enemies::BattleShip::BattleShip(game_engine::Vector position, int id) : game_eng
 {
     //this->getRender()->setRect(game_engine::Rectangle(0, 0, 65, 50)); //r-typesheet26.gif
     _entitesID = game_engine::EntitiesType::ENEMYBATTLESHIP;
+    _collision = std::make_shared<game_engine::Collision>(game_engine::Rectangle(0, 0, 195, 150), true);
+    _componentList.push_back(_collision);
 }
 
 enemies::BattleShip::~BattleShip()
@@ -34,7 +36,7 @@ void enemies::BattleShip::enemyIA()
         else
             this->getTransform()->setNewDirection(game_engine::Vector(-3, -6));
     }
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - _fireChrono).count() >= 400) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - _fireChrono).count() >= 1500) {
         _fireChrono = std::chrono::high_resolution_clock::now();
         inputBuffer.push_back(game_engine::InputEnum::SHOOTINPUT);
     }

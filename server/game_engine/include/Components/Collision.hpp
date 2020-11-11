@@ -16,6 +16,11 @@ namespace game_engine
     class Collision : public AComponents
     {
     public:
+        Collision()
+            : AComponents(ComponentType::COLLISION), _rectSize(Rectangle(0, 0, 0, 0)), _damagePlayer(true)
+        {
+            _type = ComponentType::COLLISION;
+        }
         Collision(Rectangle rectSize, bool damagePlayer)
             : AComponents(ComponentType::COLLISION), _rectSize(rectSize), _damagePlayer(damagePlayer)
         {

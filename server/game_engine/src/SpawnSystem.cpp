@@ -95,7 +95,7 @@ void game_engine::SpawnSystem::spawnEnemy()
     std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
     int enemyChancetoSpawn;
 
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - enemySpawnChrono).count() >= 2000) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - enemySpawnChrono).count() >= 5000) {
         //std::cout << "spawn enemy" << std::endl;
         enemySpawnChrono = std::chrono::high_resolution_clock::now();
         int x = rand() % _enemyLoader.size();
@@ -235,7 +235,7 @@ void game_engine::SpawnSystem::checkEnnemyShoot(std::shared_ptr<std::vector<std:
             //player = static_cast<Player *>(listPlayerIter->get());
             vecBulletX = -10;
             vecBulletY = 0;
-            _entities->push_back(std::make_shared<Bullet>(false, Vector(vecBulletX, vecBulletY), Vector(bulletPosX, bulletPosY), getAndIncID()));
+            _entities->push_back(std::make_shared<Bullet>(true, Vector(vecBulletX, vecBulletY), Vector(bulletPosX, bulletPosY), getAndIncID()));
             ennemy->popFirstInput();
         }
     }
