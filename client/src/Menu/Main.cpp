@@ -6,6 +6,8 @@
 #include <stdlib.h>
 
 string randomGen(void) {
+    srand(time(nullptr));
+
     switch(rand() % 10) {
         case 0: return "Superman" + to_string(rand() % 100); break;
         case 1: return "Batman" + to_string(rand() % 100); break;
@@ -19,7 +21,7 @@ string randomGen(void) {
         case 9: return "XxDarkKikoudu91xx"; break;
         default: return "KevinDu16"; break;
     }
-    return "Genius5000";
+    return "Faker";
 }
 
 Mainmenu::Mainmenu() {

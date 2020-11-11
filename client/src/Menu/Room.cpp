@@ -77,8 +77,7 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
         } for (size_t i = 0; i < roomlist.size(); i ++) {
             if (roomlist[i]->isClicked(event, _window))
                 player.setRoom(i + 1);
-        } if (_play->isClicked(event, _window))
-            isPlay = true;
+        }
     }
 }
 
@@ -89,6 +88,7 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     _name = roomname;
+    players[0]->setAdmin(true);
     _window->setFramerateLimit(120);
     while(_window->isOpen() && !isPlay) {
         EventHandler(_window, *players[0]);
@@ -106,13 +106,16 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
             _window->draw(*players[i]->getImage()->getSprite());
             _window->draw(*players[i]->getNameText()->getData());
         }
-        _play->drawButton(_window);
+        if (players[0]->getAdmin())
+            _play->drawButton(_window);
         _window->display();
         _window->clear();
         while(_window->pollEvent(event)) {
             EventHandler(_window, *players[0]);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 return Back;
+            if (players[0]->getAdmin() && _play->isClicked(event, _window))
+                return Continue;
         }
     }
     return Continue;

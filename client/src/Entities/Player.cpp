@@ -11,6 +11,7 @@ Player::Player(int id) {
     _id = id;
     _room = -1;
     _name = "";
+    isAdmin = false;
     _image = make_shared<ImageSFML>("./resources/sprites/r-typesheet42.gif");
     _textname = make_shared<TextSfml>(_name, "./resources/fonts/2MASS.otf", sf::Color::White, 250, 250 - 15);
 
@@ -36,11 +37,13 @@ void Player::setName(string str) {
     _textname->setString(_name);
 }
 
-void Player::setRoom(int room) {_room = room;}
-int Player::getRoom(void) const {return _room;}
 void Player::setId(int id) {_id = id;}
 int Player::getId(void) const {return _id;}
+void Player::setRoom(int room) {_room = room;}
+int Player::getRoom(void) const {return _room;}
 string Player::getName(void) const {return _name;}
+bool Player::getAdmin(void) const {return isAdmin;}
+void Player::setAdmin(bool boolean) {isAdmin = boolean;}
 shared_ptr<ImageSFML> Player::getImage(void) const {return _image;}
 shared_ptr<TextSfml> Player::getNameText(void) const {return _textname;}
 void Player::setImage(ImageSFML news) {_image = make_shared<ImageSFML>(news);}

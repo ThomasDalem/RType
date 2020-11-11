@@ -129,13 +129,14 @@ void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComp
 void game_engine::GameLoop::gameLoop()
 {
     auto start = std::chrono::steady_clock::now();
-    while (areTherePlayers() == false);
+
+    while (!areTherePlayers());
     //un joueur c'est connecté
     while (areTherePlayers()) {
         auto now = std::chrono::steady_clock::now();
         auto diff = now - start;
         auto end = now + std::chrono::milliseconds(16);
-        if(diff >= std::chrono::milliseconds(10)) {
+        if (diff >= std::chrono::milliseconds(10)) {
             moveSystem.moveSystem();
             collisionSystem.collisionSystem();
             damageSystem.damageSystem();

@@ -7,8 +7,9 @@
 
 #include "Entities.hpp"
 
-Entities::Entities(int id, size_t type) {
+Entities::Entities(int id, size_t type, string name) {
     _id = id;
+    _name = name;
 
     switch(type) {
         case 0: _path = "./resources/sprites/r-typesheet42.gif"; break; // Player
@@ -29,4 +30,6 @@ Entities::~Entities() {}
 
 void Entities::setId(int id) {_id = id;}
 int Entities::getId(void) const {return _id;}
+void Entities::setName(string name) {_name = name;}
+string Entities::getName(void) const {return _name;}
 shared_ptr<ImageSFML> Entities::getImage(void) const {return _image;}
