@@ -175,7 +175,7 @@ void game_engine::SpawnSystem::addObstacle()
             if (stageObstacleOrNot == 0)
                 _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart + rand() % 500), getAndIncID()));
             else
-                _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart), getAndIncID()));
+                _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart + rand() % 500), getAndIncID()));
         }
     }
 }
