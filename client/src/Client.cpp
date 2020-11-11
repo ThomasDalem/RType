@@ -23,13 +23,6 @@ Client::Client() {
     _windowhdl->addText(_players[0]->getNameText());
 }
 Client::~Client() {
-    // for(size_t i = 0; i < _players.size(); i ++)
-    //     _players[i]->~Player();
-    // _players.~vector();
-    // _windowhdl->~WindowHandler();
-
-    // //Test
-    // _net->~NetUDPClient();
 }
 
 // value[0] : 1 = message à afficher, 0 = le joueur est mort
@@ -101,7 +94,7 @@ void Client::formatInput(size_t row) {
 
 bool Client::MenusLoop(void) {
     switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
-        case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), *_players[0]); break;
+        case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
         case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
         case Quit: return false;
         default: return false;
@@ -124,6 +117,7 @@ void Client::waitConnection(void) {
     }
 }
 
+size_t Client::getNumbersPlayer(void) const {return _players.size();}
 shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
 shared_ptr<WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}

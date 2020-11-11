@@ -37,9 +37,6 @@ int main(int ac, char **argv, char **env) {
 
     if (!ErrorHandler().isDisplayEnv(env))
         return 84;
-    try {
-        core(av);
-    } catch (std::bad_alloc) {
-    }
+    core(av);
     return 0;
 }

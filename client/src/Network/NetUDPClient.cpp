@@ -25,10 +25,8 @@ namespace network
     }
 
     NetUDPClient::~NetUDPClient() {
-        _thread.~thread();
-        _context.~io_context();
-        _socket.~basic_datagram_socket();
-        _resolver.~basic_resolver();
+        _context.stop();
+        _thread.join();
     }
 
     void NetUDPClient::sendMessage(UDPMessage const& message){

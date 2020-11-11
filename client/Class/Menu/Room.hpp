@@ -15,7 +15,6 @@
 #include "Sfml.hpp"
 #include "Button.hpp"
 #include "Player.hpp"
-#include "Button.hpp"
 
 using namespace std;
 enum ReturnRoom {Continue, Salle, Back};
@@ -25,10 +24,10 @@ class RoomMenu {
         RoomMenu(string = "", size_t = 0);
         ~RoomMenu();
 
+        void addItems(vector<shared_ptr<Button>> &, size_t);
         ReturnRoom loop(shared_ptr<sf::RenderWindow>, Player &);
         void EventHandler(shared_ptr<sf::RenderWindow>, Player &);
-        void addItems(vector<shared_ptr<Button>> &roomlist, size_t row);
-        ReturnRoom creatingGame(shared_ptr<sf::RenderWindow>, Player &);
+        ReturnRoom creatingGame(shared_ptr<sf::RenderWindow>, vector<shared_ptr<Player>> players);
 
     private:
         bool isMenu;
