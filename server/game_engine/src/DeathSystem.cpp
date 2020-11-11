@@ -7,11 +7,12 @@
 
 #include "DeathSystem.hpp"
 
+using namespace std;
 game_engine::DeathSystem::DeathSystem()
 {
 }
 
-game_engine::DeathSystem::DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities) : _entities(entities)
+game_engine::DeathSystem::DeathSystem(shared_ptr<vector<shared_ptr<IEntities>>> entities) : _entities(entities)
 {
 }
 
@@ -27,10 +28,10 @@ game_engine::DeathSystem &game_engine::DeathSystem::operator=(const game_engine:
 
 void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
 {
-    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter;
+    vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter;
     Health *entitieHealthComponent;
-    std::vector<std::shared_ptr<AComponents>> entitieComponent;
-    std::vector<std::shared_ptr<AComponents>>::iterator entitieComponentIter;
+    vector<shared_ptr<AComponents>> entitieComponent;
+    vector<shared_ptr<AComponents>>::iterator entitieComponentIter;
 
     for (listEntitieIter = _entities->begin(); listEntitieIter != _entities->end(); listEntitieIter++) {
         if (listEntitieIter->get()->getEntitiesID() != EntitiesType::MUSIC
@@ -40,11 +41,9 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
                 if (EntitiesParser::isAnEnemy(listEntitieIter->get()->getEntitiesID()))
                     spawnPowerUp(listEntitieIter->get());
                 if (listEntitieIter->get()->getEntitiesID() == EntitiesType::PLAYER) {
-                    // disconnectClient(listEntitieIter, server);
                     deadClient(listEntitieIter, server);
                     listEntitieIter = _entities->begin();
-                }
-                else {
+                } else {
                     network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),
                         listEntitieIter->get()->getUniqueID()};
                     server.broadcastMessage(suppressMessage);
@@ -56,15 +55,17 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
     }
 }
 
-void game_engine::DeathSystem::deadClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server) {
+void game_engine::DeathSystem::deadClient(vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server) {
     Player *player = static_cast<Player *>(listEntitieIter->get());
-    network::UDPClientMessage suppressMessage = {network::SendEvent::DEAD, listEntitieIter->get()->getEntitiesID(),
-        listEntitieIter->get()->getUniqueID()};
+    network::UDPClientMessage deadMessage = {network::SendEvent::DEAD, listEntitieIter->get()->getEntitiesID(), listEntitieIter->get()->getUniqueID()};
+    network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(), listEntitieIter->get()->getUniqueID()};
 
-    server.sendMessage(suppressMessage, player->getClientEndpoint());
+    server.sendMessage(deadMessage, player->getClientEndpoint());
+    server.broadcastMessage(suppressMessage);
+    _entities->erase(listEntitieIter);
 }
 
-void game_engine::DeathSystem::disconnectClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server)
+void game_engine::DeathSystem::disconnectClient(vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server)
 {
     Player *player = static_cast<Player *>(listEntitieIter->get());
     network::UDPClientMessage suppressMessage = {network::SendEvent::DESCONNECTCLIENT, listEntitieIter->get()->getEntitiesID(),
@@ -75,12 +76,12 @@ void game_engine::DeathSystem::disconnectClient(std::vector<std::shared_ptr<game
     _entities->erase(listEntitieIter);
 }
 
-bool game_engine::DeathSystem::isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent)
+bool game_engine::DeathSystem::isDead(vector<shared_ptr<AComponents>> entitieComponent)
 {
     Health *entitieHealthComponent;
     Transform *entitieTransformComponent;
     Collision *entitieCollisionComponent;
-    std::vector<std::shared_ptr<AComponents>>::iterator entitieComponentIter;
+    vector<shared_ptr<AComponents>>::iterator entitieComponentIter;
 
     for (entitieComponentIter = entitieComponent.begin(); entitieComponentIter != entitieComponent.end(); ++entitieComponentIter) {
         if (entitieComponentIter->get()->getType() == ComponentType::HEALTH)
@@ -103,7 +104,7 @@ void game_engine::DeathSystem::spawnPowerUp(game_engine::IEntities *entitie)
 
     if (powerUpSpawn == 1)
         return;
-    _entities->push_back(std::make_shared<PowerUp>(ennemy->getTransform()->getPosition()));
+    _entities->push_back(make_shared<PowerUp>(ennemy->getTransform()->getPosition()));
 }
 
 bool game_engine::DeathSystem::checkGameBorder(Transform &transform, Collision &collision)
