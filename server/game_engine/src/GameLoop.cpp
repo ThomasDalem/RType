@@ -138,7 +138,7 @@ void game_engine::GameLoop::gameLoop()
         if(diff >= std::chrono::milliseconds(10)) {
             moveSystem.moveSystem();
             collisionSystem.collisionSystem();
-            //damageSystem.damageSystem();
+            damageSystem.damageSystem();
             deathSystem.deathSystem(server);
             spawnSystem.spawnSystem();
             sendToClients();

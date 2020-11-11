@@ -31,8 +31,8 @@ game_engine::DamageSystem &game_engine::DamageSystem::operator=(const game_engin
 void game_engine::DamageSystem::damageSystem()
 {
     _player = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
-    _ennemy = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMYALIEN,
-        game_engine::EntitiesType::ENEMYBATTLESHIP, game_engine::EntitiesType::ENEMYTROOPER}, _entities);
+    //_ennemy = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::ENEMYALIEN,
+    //    game_engine::EntitiesType::ENEMYBATTLESHIP, game_engine::EntitiesType::ENEMYTROOPER}, _entities);
     _object = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET, game_engine::EntitiesType::STAGEOBSTACLE, game_engine::EntitiesType::DESTROYABLETILE}, _entities);
     applyDamage();
 }
@@ -65,7 +65,7 @@ void game_engine::DamageSystem::applyDamage()
     //             healthComponent->getDamage();
     //     }
     // }
-    ennemyDamageSystem();
+    //ennemyDamageSystem();
     environnementDamageSystem();
 }
 
@@ -102,6 +102,8 @@ void game_engine::DamageSystem::environnementDamageSystem()
     std::vector<std::shared_ptr<IEntities>>::iterator envIter;
     std::vector<std::shared_ptr<AComponents>> envComponent;
 
+    if (bulletList->size() <= 1)
+        return;
     bulletList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::BULLET}, _object);
     for (bulletIter = bulletList->begin(); bulletIter != bulletList->end(); bulletIter++) {
         bulletComponents = bulletIter->get()->getComponentList();
