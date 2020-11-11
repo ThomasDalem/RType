@@ -13,7 +13,7 @@
 #include <memory>
 #include <tuple>
 #include <cstdio>
-#include <ctime>
+#include <chrono>
 #include <dirent.h>
 #include "Components/Collision.hpp"
 #include "Components/Transform.hpp"
@@ -54,8 +54,8 @@ namespace game_engine
 
     protected:
     private:
-        std::time_t blockSpawnTimer;
-        std::time_t enemySpawnTimer;
+        std::chrono::high_resolution_clock::time_point blockSpawnChrono;
+        std::chrono::high_resolution_clock::time_point enemySpawnChrono;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
         std::vector<DDloader<game_engine::Enemy>> _enemyLoader;
         int id;

@@ -29,6 +29,7 @@ void core(vector<string> av) {
     network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
     client->getPlayer(0)->setId(message.uniqueID);
     //if (client->MenusLoop())
+    // cout << "Client Id: " << to_string(client->getPlayer(0)->getId()) << endl;
     client->game();
 }
 

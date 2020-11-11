@@ -20,7 +20,7 @@ enemies::BattleShip::~BattleShip()
 
 void enemies::BattleShip::enemyIA()
 {
-    double timePassed = difftime(time(0), _fireTimer) * 1000.0;
+    std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
 
     if (this->getTransform()->getPosition().y - this->getTransform()->getOldPosition().y < 0) {
         if (this->getTransform()->getPosition().y >= 70)
@@ -34,9 +34,9 @@ void enemies::BattleShip::enemyIA()
         else
             this->getTransform()->setNewDirection(game_engine::Vector(-3, -6));
     }
-    if (timePassed >= 300) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - _fireChrono).count() >= 400) {
+        _fireChrono = std::chrono::high_resolution_clock::now();
         inputBuffer.push_back(game_engine::InputEnum::SHOOTINPUT);
-        _fireTimer = time(0);
     }
 }
 

@@ -26,7 +26,9 @@ class Player {
         int getRoom(void) const;
         int getId(void) const;
         void setName(string str);
+        bool getAdmin(void) const;
         string getName(void) const;
+        void setAdmin(bool boolean);
         void setImage(ImageSFML news);
         void setPosition(sf::Vector2f newpos);
         shared_ptr<ImageSFML> getImage(void) const;
@@ -36,6 +38,7 @@ class Player {
         int _id;
         int _room;
         string _name;
+        bool isAdmin;
 
         shared_ptr<ImageSFML> _image;
         shared_ptr<TextSfml> _textname;

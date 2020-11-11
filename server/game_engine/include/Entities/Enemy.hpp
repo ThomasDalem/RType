@@ -8,7 +8,7 @@
 #ifndef ENEMY_HPP_
 #define ENEMY_HPP_
 
-#include <ctime>
+#include <chrono>
 
 #include "IEntities.hpp"
 #include "../Components/Transform.hpp"
@@ -52,7 +52,7 @@ namespace game_engine {
             int _uniqueID;
             EntitiesType _entitesID;
             std::vector<InputEnum> inputBuffer;
-            std::time_t _fireTimer;
+            std::chrono::high_resolution_clock::time_point _fireChrono;
 
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Sound> _deathSound;
