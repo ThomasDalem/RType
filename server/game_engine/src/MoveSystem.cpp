@@ -74,12 +74,21 @@ void game_engine::MoveSystem::changePlayerDirection(std::shared_ptr<std::vector<
                 player->getTransform()->changeDirection(Vector(0, -10 * player->getSpeedMultiplicator()));
             if (player->getFirstEnum() == InputEnum::MOVELEFT)
                 player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), 0));
-            if (player->getFirstEnum() == InputEnum::MOVERIGHT) {
+            if (player->getFirstEnum() == InputEnum::MOVERIGHT)
                 player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), 0));
-            }
+
+            //Direction Diagonale NON FONCTIONNEL
+            // if (player->getFirstEnum() == InputEnum::LeftUp)
+            //     player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+            // if (player->getFirstEnum() == InputEnum::RightUp)
+            //     player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+            // if (player->getFirstEnum() == InputEnum::LeftDown)
+            //     player->getTransform()->changeDirection(Vector(-10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+            // if (player->getFirstEnum() == InputEnum::RightDown)
+            //     player->getTransform()->changeDirection(Vector(10 * player->getSpeedMultiplicator(), -10 * player->getSpeedMultiplicator()));
+
             player->popFirstInput();
-        }
-        else
+        } else
             player->getTransform()->changeDirection(Vector(0, 0));
     }
 }

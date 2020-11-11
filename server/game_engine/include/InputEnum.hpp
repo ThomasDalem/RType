@@ -12,13 +12,20 @@ namespace game_engine {
     enum InputEnum
     {
         NOTHING = -1,
+
         MOVELEFT = 0,
         MOVERIGHT = 1,
         MOVEUP = 2,
         MOVEDOWN = 3,
+
         SHOOTINPUT = 4,
+
+        LeftUp = 5,
+        RightUp = 6,
+        LeftDown = 7,
+        RightDown = 8,
     };
 }
 
 
-#endif /* !MOVEENUM_HPP_ */
+#endif

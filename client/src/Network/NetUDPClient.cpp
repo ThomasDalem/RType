@@ -17,26 +17,28 @@ namespace network
         _endpoints(_resolver.resolve(asio::ip::udp::v4(), ip, port))
     {
         receiveMessage();
-        _thread = std::thread([this] { return _context.run(); });
+        try {
+            _thread = std::thread([this] {return _context.run();});
+        } catch (std::bad_alloc e) {
+            _thread.detach();
+        }
     }
 
-    NetUDPClient::~NetUDPClient()
-    {
+    NetUDPClient::~NetUDPClient() {
+        _context.stop();
+        _thread.join();
     }
 
-    void NetUDPClient::sendMessage(UDPMessage const& message)
-    {
+    void NetUDPClient::sendMessage(UDPMessage const& message){
         _socket.send_to(asio::buffer(&message, sizeof(UDPMessage)), *_endpoints.begin());
     }
 
-    void NetUDPClient::receiveMessage()
-    {
+    void NetUDPClient::receiveMessage() {
         _socket.async_receive_from(asio::buffer(_data, sizeof(UDPClientMessage)), _endpoint,
             std::bind(&NetUDPClient::handleMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    void NetUDPClient::handleMessage(boost::system::error_code const& ec, std::size_t receivedBytes)
-    {
+    void NetUDPClient::handleMessage(boost::system::error_code const& ec, std::size_t receivedBytes) {
         std::unique_ptr<UDPClientMessage> message = std::make_unique<UDPClientMessage>();
 
         if (!ec && receivedBytes == sizeof(UDPClientMessage)) {

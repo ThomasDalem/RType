@@ -33,8 +33,8 @@ class Player {
         shared_ptr<TextSfml> getNameText(void) const;
 
     private:
-        int _room;
         int _id;
+        int _room;
         string _name;
 
         shared_ptr<ImageSFML> _image;

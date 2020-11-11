@@ -23,10 +23,6 @@ Client::Client() {
     _windowhdl->addText(_players[0]->getNameText());
 }
 Client::~Client() {
-    for(size_t i = 0; i < _players.size(); i ++)
-        _players[i]->~Player();
-    _players.~vector();
-    _windowhdl->~WindowHandler();
 }
 
 // value[0] : 1 = message à afficher, 0 = le joueur est mort
@@ -39,18 +35,19 @@ Client::~Client() {
 // value[7] : largeur dans le sprite sheet
 
 void Client::game(void) {
+    bool find = false;
+
     while (_windowhdl->isOpen()) {
         if (_net->hasMessages()) {
             while (_net->hasMessages()) {
-                bool find = false;
+                find = false;
                 unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
                 if (message->event == network::SendEvent::REMOVE) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
                         if (message->uniqueID == _entities[i]->getId())
                             _entities.erase(_entities.begin() + i);
                     }
-                }
-                if (message->value[0] != 0) {
+                } if (message->value[0] != 0) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
                         if (message->uniqueID == _entities[i]->getId()) {
                             _entities[i]->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
@@ -58,15 +55,7 @@ void Client::game(void) {
                             _entities[i]->getImage()->setScale(sf::Vector2f(3, 3));
                             find = true;
                         }
-                    }
-                    if (!find) {
-                        std::cout << "Create new entitie = " << message->entitieType << std::endl;
-                        std::cout << "coord x = " << message->value[1] <<  std::endl;
-                        std::cout << "coord y = " << message->value[2] <<  std::endl;
-                        std::cout << "pos x = " << message->value[4] <<  std::endl;
-                        std::cout << "pos y = " << message->value[5] <<  std::endl;
-                        std::cout << "L = " << message->value[6] <<  std::endl;
-                        std::cout << "l = " << message->value[7] <<  std::endl;
+                    } if (!find) {
                         shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
 
                         newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
@@ -93,19 +82,24 @@ void Client::formatInput(size_t row) {
         case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
         case Input::Up: lastinput = {_players[0]->getId(), {0, -1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
         case Input::Down: lastinput = {_players[0]->getId(), {0, 1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
+        case Input::LeftUp: lastinput = {_players[0]->getId(), {-1, -1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
+        case Input::RightUp: lastinput = {_players[0]->getId(), {1, -1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
+        case Input::LeftDown: lastinput = {_players[0]->getId(), {-1, 1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
+        case Input::RightDown: lastinput = {_players[0]->getId(), {1, 1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
         case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT}; _net->sendMessage(lastinput); break;
         case Input::Escape: _windowhdl->~WindowHandler(); break;
         default: break;
     }
 }
 
-void Client::MenusLoop(void) {
+bool Client::MenusLoop(void) {
     switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
-        case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), *_players[0]); break;
+        case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
         case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
-        default: break;
+        case Quit: return false;
+        default: return false;
     }
-    return;
+    return true;
 }
 
 void Client::waitConnection(void) {
@@ -123,6 +117,7 @@ void Client::waitConnection(void) {
     }
 }
 
+size_t Client::getNumbersPlayer(void) const {return _players.size();}
 shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
 shared_ptr<WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}
