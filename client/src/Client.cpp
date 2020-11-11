@@ -9,14 +9,9 @@
 #include "Main.hpp"
 #include "Client.hpp"
 #include "Entities.hpp"
-
-<<<<<<< HEAD
 #include "MusicSFML.hpp"
 
-Client::Client() {
-=======
 client::Client::Client() {
->>>>>>> 37db647d159404fdcecca9a2c2c5827e660b1c67
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);

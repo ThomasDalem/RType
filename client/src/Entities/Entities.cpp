@@ -5,8 +5,10 @@
 ** Client Entities
 */
 
+#include "Client.hpp"
 #include "Entities.hpp"
 
+using namespace std;
 client::Entities::Entities(int id, size_t type, string name) {
     _id = id;
     _name = name;
@@ -28,17 +30,9 @@ client::Entities::Entities(int id, size_t type, string name) {
 }
 client::Entities::~Entities() {}
 
-<<<<<<< HEAD
-void Entities::setId(int id) {_id = id;}
-int Entities::getId(void) const {return _id;}
-void Entities::setName(string name) {_name = name;}
-string Entities::getName(void) const {return _name;}
-size_t Entities::getEntityType(void) const {return (_type);};
-shared_ptr<ImageSFML> Entities::getImage(void) const {return _image;}
-=======
 void client::Entities::setId(int id) {_id = id;}
 int client::Entities::getId(void) const {return _id;}
 void client::Entities::setName(string name) {_name = name;}
 string client::Entities::getName(void) const {return _name;}
+size_t client::Entities::getEntityType(void) const {return _type;}
 shared_ptr<client::ImageSFML> client::Entities::getImage(void) const {return _image;}
->>>>>>> 37db647d159404fdcecca9a2c2c5827e660b1c67
