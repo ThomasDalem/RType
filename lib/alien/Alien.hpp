@@ -19,7 +19,7 @@ namespace enemies {
         public:
             Alien(game_engine::Vector position, int id);
             ~Alien();
-            void pathEnemy();
+            void enemyIA();
 
         protected:
         private:

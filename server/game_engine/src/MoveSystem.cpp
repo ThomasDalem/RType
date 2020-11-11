@@ -99,19 +99,7 @@ void game_engine::MoveSystem::changeEnnemyDirection(std::shared_ptr<std::vector<
 
     for (listEnnemyIter = newListEnnemy->begin(); listEnnemyIter != newListEnnemy->end(); listEnnemyIter++) {
         ennemy = static_cast<Enemy *>(listEnnemyIter->get());
-        if (ennemy->getFirstEnum() != InputEnum::NOTHING && ennemy->getFirstEnum() != InputEnum::SHOOTINPUT) {
-            if (ennemy->getFirstEnum() == InputEnum::MOVEDOWN)
-                ennemy->getTransform()->changeDirection(Vector(0, -5));
-            if (ennemy->getFirstEnum() == InputEnum::MOVEUP)
-                ennemy->getTransform()->changeDirection(Vector(0, 5));
-            if (ennemy->getFirstEnum() == InputEnum::MOVELEFT)
-                ennemy->getTransform()->changeDirection(Vector(-5, 0));
-            if (ennemy->getFirstEnum() == InputEnum::MOVERIGHT)
-                ennemy->getTransform()->changeDirection(Vector(5, 0));
-            ennemy->popFirstInput();
-        }
-        else
-            ennemy->getTransform()->changeDirection(Vector(0, 0));
+        ennemy->enemyIA();
     }
 }
 

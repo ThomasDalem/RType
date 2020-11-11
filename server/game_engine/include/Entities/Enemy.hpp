@@ -8,6 +8,8 @@
 #ifndef ENEMY_HPP_
 #define ENEMY_HPP_
 
+#include <ctime>
+
 #include "IEntities.hpp"
 #include "../Components/Transform.hpp"
 #include "../Components/Sound.hpp"
@@ -44,12 +46,13 @@ namespace game_engine {
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
 
-            virtual void pathEnemy() {};
+            virtual void enemyIA() {};
 
         protected:
             int _uniqueID;
             EntitiesType _entitesID;
             std::vector<InputEnum> inputBuffer;
+            std::time_t _fireTimer;
 
             std::shared_ptr<Transform> _transform;
             std::shared_ptr<Sound> _deathSound;
