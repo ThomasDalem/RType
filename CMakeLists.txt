@@ -44,12 +44,13 @@ target_include_directories(r-type_server PUBLIC
 
 set(CLIENT_SRCS
     ./client/main.cpp
-    ./client/src/Client.cpp
-    ./client/src/ErrorHandler.cpp
-    ./client/src/Exception.cpp
-    ./client/src/WindowHandler.cpp
-    ./client/src/Entities/Player.cpp
+    ./client/src/Env/ErrorHandler.cpp
+    ./client/src/Env/Exception.cpp
     ./client/src/Entities/Entities.cpp
+    ./client/src/Entities/Player.cpp
+    ./client/src/Game/Animation.cpp
+    ./client/src/Game/Client.cpp
+    ./client/src/Game/WindowHandler.cpp
     ./client/src/SFML/BackgroundSFML.cpp
     ./client/src/SFML/ImageSFML.cpp
     ./client/src/SFML/MusicSFML.cpp
@@ -59,7 +60,6 @@ set(CLIENT_SRCS
     ./client/src/Menu/Room.cpp
     ./client/src/Network/NetUDPClient.cpp
     ./client/src/Network/NetTCPClient.cpp
-    ./client/src/Animation.cpp
 )
 
 add_executable(r-type_client ${CLIENT_SRCS})
