@@ -30,6 +30,7 @@ namespace network
         UPDATE,
         ADD,
         REMOVE,
+        DESCONNECTCLIENT,
     };
 
     enum class TCPEvent : std::uint8_t

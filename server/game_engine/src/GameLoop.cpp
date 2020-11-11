@@ -130,7 +130,6 @@ void game_engine::GameLoop::gameLoop()
 {
     auto start = std::chrono::steady_clock::now();
     while (areTherePlayers() == false);
-    //un joueur c'est connecté
     while (areTherePlayers()) {
         auto now = std::chrono::steady_clock::now();
         auto diff = now - start;
@@ -145,4 +144,5 @@ void game_engine::GameLoop::gameLoop()
         }
         std::this_thread::sleep_until(end);
     }
+    _entities->clear();
 }

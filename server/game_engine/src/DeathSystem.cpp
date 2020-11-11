@@ -39,14 +39,30 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
             if (isDead(entitieComponent)) {
                 if (EntitiesParser::isAnEnemy(listEntitieIter->get()->getEntitiesID()))
                     spawnPowerUp(listEntitieIter->get());
-                network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),
-                    listEntitieIter->get()->getUniqueID()};
-                server.broadcastMessage(suppressMessage);
-                listEntitieIter = _entities->erase(listEntitieIter);
-                listEntitieIter = _entities->begin();
+                if (listEntitieIter->get()->getEntitiesID() == EntitiesType::PLAYER)
+                    disconnectClient(listEntitieIter, server);
+                else {
+                    network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),
+                        listEntitieIter->get()->getUniqueID()};
+                    server.broadcastMessage(suppressMessage);
+                    listEntitieIter = _entities->erase(listEntitieIter);
+                    listEntitieIter = _entities->begin();
+                }
             }
         }
     }
+}
+
+void game_engine::DeathSystem::disconnectClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server)
+{
+    Player *player = static_cast<Player *>(listEntitieIter->get());
+    network::UDPClientMessage suppressMessage = {network::SendEvent::DESCONNECTCLIENT, listEntitieIter->get()->getEntitiesID(),
+        listEntitieIter->get()->getUniqueID()};
+
+    server.sendMessage(suppressMessage, player->getClientEndpoint());
+    server.killClient(player->getClientEndpoint());
+    listEntitieIter = _entities->erase(listEntitieIter);
+    listEntitieIter = _entities->begin();
 }
 
 bool game_engine::DeathSystem::isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent)

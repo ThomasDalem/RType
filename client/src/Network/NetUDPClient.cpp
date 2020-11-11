@@ -22,6 +22,8 @@ namespace network
 
     NetUDPClient::~NetUDPClient()
     {
+        _context.stop();
+        _thread.join();
     }
 
     void NetUDPClient::sendMessage(UDPMessage const& message)

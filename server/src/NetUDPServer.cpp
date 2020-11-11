@@ -21,6 +21,8 @@ namespace network
 
     NetUDPServer::~NetUDPServer()
     {
+        _context.stop();
+        _thread.join();
     }
 
     void NetUDPServer::sendMessage(UDPClientMessage const& message, asio::ip::udp::endpoint const& endpoint)
@@ -60,6 +62,17 @@ namespace network
     bool NetUDPServer::hasMessages() const
     {
         return !_messages.empty();
+    }
+
+    void NetUDPServer::killClient(boost::asio::ip::udp::endpoint client)
+    {
+        for (int i = 0; i < _clients.size(); i++) {
+            if (_clients[i] == client) {
+                _deadClients.push_back(_clients[i]);
+                _clients.erase(_clients.begin() + i);
+                return;
+            }
+        }
     }
 
     std::unique_ptr<std::pair<UDPMessage, asio::ip::udp::endpoint>> NetUDPServer::getFirstMessage()

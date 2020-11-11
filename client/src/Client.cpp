@@ -23,10 +23,10 @@ Client::Client() {
     _windowhdl->addText(_players[0]->getNameText());
 }
 Client::~Client() {
-    for(size_t i = 0; i < _players.size(); i ++)
-        _players[i]->~Player();
-    _players.~vector();
-    _windowhdl->~WindowHandler();
+    // for(size_t i = 0; i < _players.size(); i ++)
+    //     _players[i]->~Player();
+    // _players.~vector();
+    // _windowhdl->~WindowHandler();
 }
 
 // value[0] : 1 = message à afficher, 0 = le joueur est mort
@@ -44,6 +44,8 @@ void Client::game(void) {
             while (_net->hasMessages()) {
                 bool find = false;
                 unique_ptr<network::UDPClientMessage> message = _net->getFirstMessage();
+                if (message->event == network::SendEvent::DESCONNECTCLIENT)
+                    return;
                 if (message->event == network::SendEvent::REMOVE) {
                     for (size_t i = 0; i < _entities.size(); i ++) {
                         if (message->uniqueID == _entities[i]->getId())
