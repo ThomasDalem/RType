@@ -108,11 +108,14 @@ void game_engine::SpawnSystem::setEnnemyRender()
     std::vector<std::shared_ptr<AComponents>> entitiesComponents;
     std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
     Render *entitieRenderComponent;
+    Health *entitieHealthComponent;
 
     entitiesComponents = (*_entities)[_entities->size() - 1].get()->getComponentList();
     for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
         if (componentListIter->get()->getType() == ComponentType::RENDER)
             entitieRenderComponent = static_cast<Render *>(componentListIter->get());
+        if (componentListIter->get()->getType() == ComponentType::HEALTH)
+            entitieHealthComponent = static_cast<Health *>(componentListIter->get());
     }
     if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYALIEN)
         entitieRenderComponent->setRect(game_engine::Rectangle(0, 67, 33, 36));
@@ -120,6 +123,8 @@ void game_engine::SpawnSystem::setEnnemyRender()
         entitieRenderComponent->setRect(game_engine::Rectangle(0, 0, 65, 50));
     if ((*_entities)[_entities->size() - 1].get()->getEntitiesID() == EntitiesType::ENEMYTROOPER)
         entitieRenderComponent->setRect(game_engine::Rectangle(18, 68, 33, 30));
+    entitieHealthComponent->setIsDamageable(true);
+    entitieHealthComponent->setHealthPoint(1);
 }
 
 int game_engine::SpawnSystem::newPlayer(boost::asio::ip::udp::endpoint &endpoint)

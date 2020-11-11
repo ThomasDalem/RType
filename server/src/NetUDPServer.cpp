@@ -16,7 +16,11 @@ namespace network
         _socket(_context, asio::ip::udp::endpoint(asio::ip::udp::v4(), port))
     {
         receiveMessage();
+        try {
         _thread = std::thread([this] { return _context.run(); });
+        } catch (std::bad_alloc e) {
+            _thread.detach();
+        }
     }
 
     NetUDPServer::~NetUDPServer()

@@ -20,15 +20,16 @@ namespace game_engine
     class Health : public AComponents
     {
     public:
-        Health(size_t healthPoint, bool isDamageable)
+        Health(int healthPoint, bool isDamageable)
             : AComponents(ComponentType::HEALTH), _healthPoint(healthPoint), _isDamageable(isDamageable)
         {
             _type = ComponentType::HEALTH;
         }
         ~Health() {}
-        size_t getHealthPoint() const { return _healthPoint; }
+        int getHealthPoint() const { return _healthPoint; }
         bool getDamabeable() const { return _isDamageable; }
 
+        void setHealthPoint(int healthPoint) {_healthPoint = healthPoint;}
         void setIsDamageable(bool isDamageable) {_isDamageable = isDamageable;}
 
         void getDamage() {
@@ -37,8 +38,8 @@ namespace game_engine
         }
 
     private:
-        size_t _healthPoint;
-        bool _isDamageable;
+        int _healthPoint = 1;
+        bool _isDamageable = true;
     };
 } // namespace game_engine
 

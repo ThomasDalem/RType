@@ -16,6 +16,7 @@ int main()
         entities = std::make_shared<std::vector<std::shared_ptr<game_engine::IEntities>>>();
         gameLoop = std::make_shared<game_engine::GameLoop>(entities);
         gameLoop->gameLoop();
+        entities->clear();
     }
     catch (std::bad_alloc const &bad)
     {
