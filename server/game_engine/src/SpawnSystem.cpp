@@ -143,7 +143,6 @@ void game_engine::SpawnSystem::addObstacle()
 {
     int obstacleChancetoSpawn;
     int nbObstacletoSpawn;
-    int upOrDownSpawn;
     int upStart = 60;
     int downStart = 960;
     int stageObstacleOrNot;
@@ -151,24 +150,12 @@ void game_engine::SpawnSystem::addObstacle()
     obstacleChancetoSpawn = rand() % 2;
     if (obstacleChancetoSpawn == 1) {
         nbObstacletoSpawn = rand() % 4 + 1;
-        upOrDownSpawn = rand() % 2;
-        if (upOrDownSpawn == 0) {
-            for (upStart = 60; upStart <= nbObstacletoSpawn * 60; upStart += 60) {
-                stageObstacleOrNot = rand() % 2;
-                if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart + rand() % 700), getAndIncID()));
-                else
-                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart), getAndIncID()));
-            }
-        }
-        else {
-            for (downStart = 960; downStart <= 1040 - 60 * nbObstacletoSpawn; downStart -= 60) {
-                stageObstacleOrNot = rand() % 2;
-                if (stageObstacleOrNot == 0)
-                    _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, downStart), getAndIncID()));
-                else
-                    _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, downStart), getAndIncID()));
-            }
+        for (upStart = 60; upStart <= nbObstacletoSpawn * 60; upStart += 60) {
+            stageObstacleOrNot = rand() % 2;
+            if (stageObstacleOrNot == 0)
+                _entities->push_back(std::make_shared<StageObstacle>(Vector(1920, upStart + rand() % 500), getAndIncID()));
+            else
+                _entities->push_back(std::make_shared<DestroyableTile>(Vector(1920, upStart), getAndIncID()));
         }
     }
 }
