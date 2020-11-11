@@ -9,25 +9,28 @@
 #include "Player.hpp"
 
 using namespace std;
-enum ReturnMain {Room, Creating, Quit};
 
-class Mainmenu {
-    public:
-        Mainmenu();
-        ~Mainmenu();
+namespace client {
+    enum ReturnMain {Room, Creating, Quit};
 
-        void EventHandler(shared_ptr<sf::RenderWindow> _window);
-        ReturnMain loop(shared_ptr<sf::RenderWindow> _window, Player &player);
+    class Mainmenu {
+        public:
+            Mainmenu();
+            ~Mainmenu();
 
-    private:
-        bool isHost;
-        bool isJoin;
-        bool isQuit;
-        string _name;
-        shared_ptr<Button> _host;
-        shared_ptr<Button> _join;
+            void EventHandler(shared_ptr<sf::RenderWindow> _window);
+            ReturnMain loop(shared_ptr<sf::RenderWindow> _window, Player &player);
 
-    protected:
-};
+        private:
+            bool isHost;
+            bool isJoin;
+            bool isQuit;
+            string _name;
+            shared_ptr<Button> _host;
+            shared_ptr<Button> _join;
+
+        protected:
+    };
+}
 
 #endif

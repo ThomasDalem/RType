@@ -10,7 +10,7 @@
 #include "Client.hpp"
 #include "Entities.hpp"
 
-Client::Client() {
+client::Client::Client() {
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
@@ -22,7 +22,8 @@ Client::Client() {
     _windowhdl->addImage(_players[0]->getImage());
     _windowhdl->addText(_players[0]->getNameText());
 }
-Client::~Client()
+
+client::Client::~Client()
 {
     _entities.clear();
 }
@@ -36,7 +37,7 @@ Client::~Client()
 // value[6] : Longueur dans le sprite cheet
 // value[7] : largeur dans le sprite sheet
 
-void Client::game(void) {
+void client::Client::game(void) {
     bool find = false;
 
     while (_windowhdl->isOpen()) {
@@ -87,7 +88,7 @@ void Client::game(void) {
     }
 }
 
-void Client::formatInput(size_t row) {
+void client::Client::formatInput(size_t row) {
     network::UDPMessage lastinput;
 
     switch(_windowhdl->isEvent(*_players[row])) {
@@ -105,7 +106,7 @@ void Client::formatInput(size_t row) {
     }
 }
 
-bool Client::MenusLoop(void) {
+bool client::Client::MenusLoop(void) {
     switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
         case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
         case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
@@ -115,7 +116,7 @@ bool Client::MenusLoop(void) {
     return true;
 }
 
-void Client::waitConnection(void) {
+void client::Client::waitConnection(void) {
     network::UDPMessage msg = {-1, {84}, network::Event::ADD};
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
@@ -130,7 +131,19 @@ void Client::waitConnection(void) {
     }
 }
 
-size_t Client::getNumbersPlayer(void) const {return _players.size();}
-shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
-shared_ptr<WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
-shared_ptr<Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}
+/*void client::Client::setAnimation() {
+    sf::Time time;
+    float seconds = 0;
+
+    time = _clock.getElapsedTime();
+    seconds = time.asMicroseconds() / 300000.0;
+    if (seconds > 0.3) {
+        _clock.restart();
+        _animation;
+    }
+}*/
+
+size_t client::Client::getNumbersPlayer(void) const {return _players.size();}
+shared_ptr<network::NetUDPClient> client::Client::getNetwork(void) const {return _net;}
+shared_ptr<client::WindowHandler> client::Client::getWindowHandler(void) const {return _windowhdl;}
+shared_ptr<client::Player> client::Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}

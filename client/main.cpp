@@ -21,7 +21,7 @@
 
 using namespace std;
 void core(vector<string> av) {
-    shared_ptr<Client> client = make_shared<Client>();
+    shared_ptr<client::Client> client = make_shared<client::Client>();
 
     client->waitConnection();
     //client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
@@ -34,9 +34,9 @@ void core(vector<string> av) {
 }
 
 int main(int ac, char **argv, char **env) {
-    vector<string> av = ErrorHandler().getArgs(argv);
+    vector<string> av = client::ErrorHandler().getArgs(argv);
 
-    if (!ErrorHandler().isDisplayEnv(env))
+    if (!client::ErrorHandler().isDisplayEnv(env))
         return 84;
     core(av);
     return 0;

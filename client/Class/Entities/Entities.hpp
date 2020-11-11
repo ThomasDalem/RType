@@ -14,27 +14,30 @@
 #include "ImageSFML.hpp"
 
 using namespace std;
-class Entities {
-    public:
-        Entities(int, size_t, string = "");
-        ~Entities();
 
-        void setId(int);
-        void setName(string);
-        int getId(void) const;
-        string getName(void) const;
-        shared_ptr<ImageSFML> getImage(void) const;
+namespace client {
+    class Entities {
+        public:
+            Entities(int, size_t, string = "");
+            ~Entities();
 
-        size_t getEntityType() {return (_type);};
+            void setId(int);
+            void setName(string);
+            int getId(void) const;
+            string getName(void) const;
+            shared_ptr<ImageSFML> getImage(void) const;
 
-    private:
-        int _id;
-        string _name;
-        size_t _type;
-        string _path;
-        shared_ptr<ImageSFML> _image;
+            size_t getEntityType() {return (_type);};
 
-    protected:
-};
+        private:
+            int _id;
+            string _name;
+            size_t _type;
+            string _path;
+            shared_ptr<ImageSFML> _image;
+
+        protected:
+    };
+}
 
 #endif

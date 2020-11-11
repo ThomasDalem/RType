@@ -57,6 +57,7 @@ set(CLIENT_SRCS
     ./client/src/Menu/Room.cpp
     ./client/src/Network/NetUDPClient.cpp
     ./client/src/Network/NetTCPClient.cpp
+    ./client/src/Animation.cpp
 )
 
 add_executable(r-type_client ${CLIENT_SRCS})

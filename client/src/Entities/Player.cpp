@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-Player::Player(int id) {
+client::Player::Player(int id) {
     _id = id;
     _room = -1;
     _name = "";
@@ -20,30 +20,30 @@ Player::Player(int id) {
     _image->getSprite()->setScale(sf::Vector2f(3, 3));
     _image->getSprite()->setPosition(sf::Vector2f(250, 250));
 }
-Player::~Player() {
+client::Player::~Player() {
 //     _image->~ImageSFML();
 //     _name.~basic_string();
 //     _textname->~TextSfml();
 }
 
-void Player::setPosition(sf::Vector2f newpos) {
+void client::Player::setPosition(sf::Vector2f newpos) {
     newpos = newpos.x < 0 ? sf::Vector2f(0, newpos.y) : (newpos.y < 0 ? sf::Vector2f(newpos.x, 0) : newpos);
     _image->getSprite()->setPosition(newpos);
     _textname->setPosition(sf::Vector2f(newpos.x, newpos.y - 15));
 }
 
-void Player::setName(string str) {
+void client::Player::setName(string str) {
     _name = str;
     _textname->setString(_name);
 }
 
-void Player::setId(int id) {_id = id;}
-int Player::getId(void) const {return _id;}
-void Player::setRoom(int room) {_room = room;}
-int Player::getRoom(void) const {return _room;}
-string Player::getName(void) const {return _name;}
-bool Player::getAdmin(void) const {return isAdmin;}
-void Player::setAdmin(bool boolean) {isAdmin = boolean;}
-shared_ptr<ImageSFML> Player::getImage(void) const {return _image;}
-shared_ptr<TextSfml> Player::getNameText(void) const {return _textname;}
-void Player::setImage(ImageSFML news) {_image = make_shared<ImageSFML>(news);}
+void client::Player::setId(int id) {_id = id;}
+int client::Player::getId(void) const {return _id;}
+void client::Player::setRoom(int room) {_room = room;}
+int client::Player::getRoom(void) const {return _room;}
+string client::Player::getName(void) const {return _name;}
+bool client::Player::getAdmin(void) const {return isAdmin;}
+void client::Player::setAdmin(bool boolean) {isAdmin = boolean;}
+shared_ptr<client::ImageSFML> client::Player::getImage(void) const {return _image;}
+shared_ptr<client::TextSfml> client::Player::getNameText(void) const {return _textname;}
+void client::Player::setImage(ImageSFML news) {_image = make_shared<client::ImageSFML>(news);}

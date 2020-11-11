@@ -8,15 +8,15 @@
 #include "BackgroundSFML.hpp"
 
 using namespace std;
-Background::Background(int refresh) {
+client::Background::Background(int refresh) {
     _position = 0;
     _refresh = refresh;
     _movement = refresh == 0 ? false : true;
     _image = make_shared<ImageSFML>("./resources/sprites/background.png");
 }
-Background::~Background() {}
+client::Background::~Background() {}
 
-void Background::move(void) {
+void client::Background::move(void) {
     if (this->_movement) {
         this->_position -= 3;
         if (this->_position < _refresh)
@@ -25,12 +25,12 @@ void Background::move(void) {
     }
 }
 
-void Background::speedUp(int sp) {
+void client::Background::speedUp(int sp) {
     if (sp == 0)
         _movement = false;
     else
         _refresh = sp;
 }
 
-void Background::stop(void) {_movement = false;}
-shared_ptr<ImageSFML> Background::getImage(void) const {return _image;}
+void client::Background::stop(void) {_movement = false;}
+shared_ptr<client::ImageSFML> client::Background::getImage(void) const {return _image;}

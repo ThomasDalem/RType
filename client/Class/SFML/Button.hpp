@@ -14,27 +14,30 @@
 #include "Sfml.hpp"
 
 using namespace std;
-class Button {
-    public:
-        Button(sf::Vector2f pos, sf::Vector2f size);
-        ~Button();
 
-        void drawButton(shared_ptr<sf::RenderWindow> window);
-        int isClicked(sf::Event event, shared_ptr<sf::RenderWindow> window);
-        void setColor(sf::Color buttonColor, sf::Color boundColor, float boundSize);
-        void setText(string fontPath, string Text, int size, const sf::Color textColor);
+namespace client {
+    class Button {
+        public:
+            Button(sf::Vector2f pos, sf::Vector2f size);
+            ~Button();
 
-    private:
-        sf::Font font;
-        sf::Text text;
-        int is_clicked;
-        int is_hovered;
-        sf::Vector2f pos;
-        sf::Vector2f size;
-        sf::Color buttonColor;
-        sf::RectangleShape button;
+            void drawButton(shared_ptr<sf::RenderWindow> window);
+            int isClicked(sf::Event event, shared_ptr<sf::RenderWindow> window);
+            void setColor(sf::Color buttonColor, sf::Color boundColor, float boundSize);
+            void setText(string fontPath, string Text, int size, const sf::Color textColor);
 
-    protected:
-};
+        private:
+            sf::Font font;
+            sf::Text text;
+            int is_clicked;
+            int is_hovered;
+            sf::Vector2f pos;
+            sf::Vector2f size;
+            sf::Color buttonColor;
+            sf::RectangleShape button;
+
+        protected:
+    };
+}
 
 #endif

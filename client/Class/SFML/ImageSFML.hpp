@@ -17,24 +17,27 @@
 #include <iostream>
 
 using namespace std;
-class ImageSFML {
-    public:
-        ImageSFML(string filepath);
-        ~ImageSFML();
 
-        void destroyTexture(void);
-        string getPath(void) const;
-        void setTexture(string filepath);
-        void setScale(sf::Vector2f size);
-        void setSprite(sf::Sprite newone);
-        void setPosition(sf::Vector2f pos);
-        shared_ptr<sf::Sprite> getSprite(void) const;
-        void setRectangleSheep(sf::IntRect rect);
+namespace client {
+    class ImageSFML {
+        public:
+            ImageSFML(string filepath);
+            ~ImageSFML();
 
-    private:
-        string _path;
-        shared_ptr<sf::Sprite> _sprite;
-        shared_ptr<sf::Texture> _texture;
-};
+            void destroyTexture(void);
+            string getPath(void) const;
+            void setTexture(string filepath);
+            void setScale(sf::Vector2f size);
+            void setSprite(sf::Sprite newone);
+            void setPosition(sf::Vector2f pos);
+            shared_ptr<sf::Sprite> getSprite(void) const;
+            void setRectangleSheep(sf::IntRect rect);
+
+        private:
+            string _path;
+            shared_ptr<sf::Sprite> _sprite;
+            shared_ptr<sf::Texture> _texture;
+    };
+}
 
 #endif

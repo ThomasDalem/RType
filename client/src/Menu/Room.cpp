@@ -9,7 +9,7 @@
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
 
-RoomMenu::RoomMenu(string name, size_t ndx) {
+client::RoomMenu::RoomMenu(string name, size_t ndx) {
     _name = "";
     isMenu = true;
     isPlay = false;
@@ -21,15 +21,15 @@ RoomMenu::RoomMenu(string name, size_t ndx) {
     for (; row < ndx; row ++)
         addItems(roomlist, row);
 }
-RoomMenu::~RoomMenu() {}
+client::RoomMenu::~RoomMenu() {}
 
-void RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
+void client::RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
     roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (row * 110)), sf::Vector2f(250, 100)));
     roomlist[row]->setColor(sf::Color::Black, sf::Color::White, 5);
     roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
 }
 
-ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
+client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
@@ -61,7 +61,7 @@ ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) 
     return player.getRoom() > 0 ? Salle : Back;
 }
 
-void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player) {
+void client::RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, client::Player &player) {
     sf::Event event;
 
     while(_window->pollEvent(event)) {
@@ -81,7 +81,7 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
     }
 }
 
-ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<Player>> players) {
+client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<client::Player>> players) {
     sf::Event event;
     string roomname = "Partie de " + players[0]->getName();
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");

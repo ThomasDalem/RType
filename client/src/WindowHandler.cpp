@@ -7,7 +7,7 @@
 
 #include "WindowHandler.hpp"
 
-WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fps) {
+client::WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fps) {
     _width = width;
     _height = height;
     _window = make_shared<sf::RenderWindow>(sf::VideoMode(_width, _height), "R-Type");
@@ -19,10 +19,10 @@ WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fp
     _window->setIcon(appIcon.getSize().x, appIcon.getSize().y, appIcon.getPixelsPtr());
 }
 
-WindowHandler::~WindowHandler() {
+client::WindowHandler::~WindowHandler() {
 }
 
-void WindowHandler::dispBackground() {
+void client::WindowHandler::dispBackground() {
     _background->move();
 
     _window->draw(*_background->getImage()->getSprite());
@@ -30,26 +30,26 @@ void WindowHandler::dispBackground() {
         _window->draw(*_texts[i]->getData());
 }
 
-void WindowHandler::display(void) const {
+void client::WindowHandler::display(void) const {
     _window->display();
     _window->clear();
 }
 
-void WindowHandler::rmText(size_t row) {
+void client::WindowHandler::rmText(size_t row) {
     size_t i = 0;
 
     for (; i < _texts.size() && i < row; i ++);
     _texts.erase(_texts.begin() + i);
 }
 
-void WindowHandler::rmImage(size_t row) {
+void client::WindowHandler::rmImage(size_t row) {
     size_t i = 0;
 
     for (; i < this->_images.size() && i < row; i ++);
     _images.erase(_images.begin() + i);
 }
 
-Input WindowHandler::isEvent(Player &player) {
+client::Input client::WindowHandler::isEvent(client::Player &player) {
     sf::Event event;
 
     while (_window->pollEvent(event)) {
@@ -79,15 +79,15 @@ Input WindowHandler::isEvent(Player &player) {
     return Nothing;
 }
 
-size_t WindowHandler::getWidth(void) const {return _width;}
-string WindowHandler::getTitle(void) const {return _title;}
-size_t WindowHandler::getHeight(void) const {return _height;}
-void WindowHandler::setWidth(size_t width) {this->_width = width;}
-void WindowHandler::setTitle(string title) {this->_title = title;}
-bool WindowHandler::isOpen(void) const {return _window->isOpen();}
-void WindowHandler::setHeight(size_t height) {this->_height = height;}
-void WindowHandler::addText(shared_ptr<TextSfml> news) {_texts.push_back(news);}
-shared_ptr<sf::RenderWindow> WindowHandler::getWindow(void) const {return _window;}
-void WindowHandler::addImage(shared_ptr<ImageSFML> news) {_images.push_back(news);}
-shared_ptr<Background> WindowHandler::getBackground(void) const {return _background;}
-void WindowHandler::setFramerate(size_t fps) const {_window->setFramerateLimit(fps);}
+size_t client::WindowHandler::getWidth(void) const {return _width;}
+string client::WindowHandler::getTitle(void) const {return _title;}
+size_t client::WindowHandler::getHeight(void) const {return _height;}
+void client::WindowHandler::setWidth(size_t width) {this->_width = width;}
+void client::WindowHandler::setTitle(string title) {this->_title = title;}
+bool client::WindowHandler::isOpen(void) const {return _window->isOpen();}
+void client::WindowHandler::setHeight(size_t height) {this->_height = height;}
+void client::WindowHandler::addText(shared_ptr<TextSfml> news) {_texts.push_back(news);}
+shared_ptr<sf::RenderWindow> client::WindowHandler::getWindow(void) const {return _window;}
+void client::WindowHandler::addImage(shared_ptr<ImageSFML> news) {_images.push_back(news);}
+shared_ptr<client::Background> client::WindowHandler::getBackground(void) const {return _background;}
+void client::WindowHandler::setFramerate(size_t fps) const {_window->setFramerateLimit(fps);}
