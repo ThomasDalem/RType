@@ -16,30 +16,36 @@
 #include "Entities.hpp"
 #include "NetUDPClient.hpp"
 #include "WindowHandler.hpp"
+#include "Animation.hpp"
 
 using namespace std;
-class Client {
-    public:
-        Client();
-        ~Client();
 
-        void game(void);
-        bool MenusLoop(void);
-        void formatInput(size_t);
-        void waitConnection(void);
-        size_t getNumbersPlayer(void) const;
-        shared_ptr<Player> getPlayer(size_t) const;
-        shared_ptr<WindowHandler> getWindowHandler(void) const;
-        shared_ptr<network::NetUDPClient> getNetwork(void) const;
+namespace client {
+    class Client {
+        public:
+            Client();
+            ~Client();
 
-    private:
-        shared_ptr<TextSfml> _score;
-        vector<shared_ptr<Player>> _players;
-        shared_ptr<WindowHandler> _windowhdl;
-        vector<shared_ptr<Entities>> _entities;
-        shared_ptr<network::NetUDPClient> _net;
+            void game(void);
+            bool MenusLoop(void);
+            void formatInput(size_t);
+            void waitConnection(void);
+            size_t getNumbersPlayer(void) const;
+            shared_ptr<Player> getPlayer(size_t) const;
+            shared_ptr<WindowHandler> getWindowHandler(void) const;
+            shared_ptr<network::NetUDPClient> getNetwork(void) const;
 
-    protected:
-};
+        private:
+            bool isDead;
+            shared_ptr<TextSfml> _score;
+            vector<shared_ptr<Player>> _players;
+            shared_ptr<WindowHandler> _windowhdl;
+            vector<shared_ptr<Entities>> _entities;
+            Animation _animation;
+            shared_ptr<network::NetUDPClient> _net;
+
+        protected:
+    };
+}
 
 #endif

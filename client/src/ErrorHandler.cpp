@@ -11,10 +11,10 @@
 #include "ErrorHandler.hpp"
 
 using namespace std;
-ErrorHandler::ErrorHandler() {}
-ErrorHandler::~ErrorHandler() {}
+client::ErrorHandler::ErrorHandler() {}
+client::ErrorHandler::~ErrorHandler() {}
 
-vector<string> ErrorHandler::getArgs(char **av) {
+vector<string> client::ErrorHandler::getArgs(char **av) {
     vector<string> args;
 
     for (size_t i = 0; av && av[i]; i ++)
@@ -22,7 +22,7 @@ vector<string> ErrorHandler::getArgs(char **av) {
     return args;
 }
 
-bool ErrorHandler::isDisplayEnv(char **env) {
+bool client::ErrorHandler::isDisplayEnv(char **env) {
     vector<string> myEnv = getArgs(env);
 
     if (myEnv.size() == 0)

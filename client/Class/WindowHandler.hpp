@@ -19,64 +19,67 @@
 #include "BackgroundSFML.hpp"
 
 using namespace std;
-enum Input {
-    Left,
-    Right,
-    Up,
-    Down,
 
-    LeftUp,
-    RightUp,
-    LeftDown,
-    RightDown,
+namespace client {
+    enum Input {
+        Left,
+        Right,
+        Up,
+        Down,
 
-    Shoot,
+        LeftUp,
+        RightUp,
+        LeftDown,
+        RightDown,
 
-    Nothing,
-    Escape
-};
+        Shoot,
 
-class WindowHandler {
-    public:
-        WindowHandler(size_t, size_t, string, size_t = 60);
-        ~WindowHandler();
+        Nothing,
+        Escape
+    };
 
-        //Setter
-        void setTitle(string);
-        void setWidth(size_t);
-        void setHeight(size_t);
+    class WindowHandler {
+        public:
+            WindowHandler(size_t, size_t, string, size_t = 60);
+            ~WindowHandler();
 
-        //Getter
-        size_t getWidth(void) const;
-        string getTitle(void) const;
-        size_t getHeight(void) const;
-        shared_ptr<Background> getBackground(void) const;
-        shared_ptr<sf::RenderWindow> getWindow(void) const;
-        void dispBackground();
+            //Setter
+            void setTitle(string);
+            void setWidth(size_t);
+            void setHeight(size_t);
 
-        //Graphics Data
-        void rmText(size_t);
-        void rmImage(size_t);
-        void addText(shared_ptr<TextSfml>);
-        void addImage(shared_ptr<ImageSFML>);
+            //Getter
+            size_t getWidth(void) const;
+            string getTitle(void) const;
+            size_t getHeight(void) const;
+            shared_ptr<Background> getBackground(void) const;
+            shared_ptr<sf::RenderWindow> getWindow(void) const;
+            void dispBackground();
 
-        //Window data
-        bool isOpen(void) const;
-        Input isEvent(Player &);
-        void display(void) const;
-        void setFramerate(size_t) const;
+            //Graphics Data
+            void rmText(size_t);
+            void rmImage(size_t);
+            void addText(shared_ptr<TextSfml>);
+            void addImage(shared_ptr<ImageSFML>);
 
-    private:
-        string _title;
-        size_t _width;
-        size_t _height;
+            //Window data
+            bool isOpen(void) const;
+            Input isEvent(Player &);
+            void display(void) const;
+            void setFramerate(size_t) const;
 
-        shared_ptr<Background> _background;
-        vector<shared_ptr<TextSfml>> _texts;
-        shared_ptr<sf::RenderWindow> _window;
-        vector<shared_ptr<ImageSFML>> _images;
+        private:
+            string _title;
+            size_t _width;
+            size_t _height;
 
-    protected:
-};
+            shared_ptr<Background> _background;
+            vector<shared_ptr<TextSfml>> _texts;
+            shared_ptr<sf::RenderWindow> _window;
+            vector<shared_ptr<ImageSFML>> _images;
+
+        protected:
+    };
+}
 
 #endif

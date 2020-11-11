@@ -29,6 +29,7 @@ namespace network
         UPDATE,
         ADD,
         REMOVE,
+        DEAD,
         DESCONNECTCLIENT,
     };
 
@@ -64,4 +65,4 @@ namespace network
         //value[4] value[5] value[6] value[7] : les positions x y dans le sprite cheet et la Longueur et largeur à prendre
     };
 }
-#endif /* !NETCOMMON_HPP_ */
+#endif

@@ -7,13 +7,13 @@
 
 #include "Button.hpp"
 
-Button::Button(sf::Vector2f _pos, sf::Vector2f _size): pos(_pos), size(_size) {
+client::Button::Button(sf::Vector2f _pos, sf::Vector2f _size): pos(_pos), size(_size) {
     button.setPosition(_pos);
     button.setSize(_size);
 }
-Button::~Button() {}
+client::Button::~Button() {}
 
-void Button::setText(string fontPath, string _text, int _size, const sf::Color textColor) {
+void client::Button::setText(string fontPath, string _text, int _size, const sf::Color textColor) {
     sf::Vector2f textPos;
 
     if (!font.loadFromFile(fontPath))
@@ -27,13 +27,13 @@ void Button::setText(string fontPath, string _text, int _size, const sf::Color t
     text.setFillColor(textColor);
 }
 
-void Button::setColor(sf::Color buttonColor, sf::Color boundColor, float boundSize) {
+void client::Button::setColor(sf::Color buttonColor, sf::Color boundColor, float boundSize) {
     button.setFillColor(buttonColor);
     button.setOutlineThickness(boundSize);
     button.setOutlineColor(boundColor);
 }
 
-void Button::drawButton(shared_ptr<sf::RenderWindow> window) {
+void client::Button::drawButton(shared_ptr<sf::RenderWindow> window) {
     sf::Vector2i cursorPos = sf::Mouse::getPosition();
     sf::Vector2i windowPos = window->getPosition();
 
@@ -50,7 +50,7 @@ void Button::drawButton(shared_ptr<sf::RenderWindow> window) {
     window->draw(text);
 }
 
-int Button::isClicked(sf::Event event, shared_ptr<sf::RenderWindow> window) {
+int client::Button::isClicked(sf::Event event, shared_ptr<sf::RenderWindow> window) {
     sf::Vector2i cursorPos;
     sf::Vector2i windowPos = window->getPosition();
 

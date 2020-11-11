@@ -16,34 +16,37 @@
 #include "ImageSFML.hpp"
 
 using namespace std;
-class Player {
-    public:
-        Player(int32_t id);
-        ~Player();
 
-        void setId(int id);
-        void setRoom(int room);
-        int getRoom(void) const;
-        int getId(void) const;
-        void setName(string str);
-        bool getAdmin(void) const;
-        string getName(void) const;
-        void setAdmin(bool boolean);
-        void setImage(ImageSFML news);
-        void setPosition(sf::Vector2f newpos);
-        shared_ptr<ImageSFML> getImage(void) const;
-        shared_ptr<TextSfml> getNameText(void) const;
+namespace client {
+    class Player {
+        public:
+            Player(int32_t id);
+            ~Player();
 
-    private:
-        int _id;
-        int _room;
-        string _name;
-        bool isAdmin;
+            void setId(int id);
+            void setRoom(int room);
+            int getRoom(void) const;
+            int getId(void) const;
+            void setName(string str);
+            bool getAdmin(void) const;
+            string getName(void) const;
+            void setAdmin(bool boolean);
+            void setImage(ImageSFML news);
+            void setPosition(sf::Vector2f newpos);
+            shared_ptr<ImageSFML> getImage(void) const;
+            shared_ptr<TextSfml> getNameText(void) const;
 
-        shared_ptr<ImageSFML> _image;
-        shared_ptr<TextSfml> _textname;
+        private:
+            int _id;
+            int _room;
+            string _name;
+            bool isAdmin;
 
-    protected:
-};
+            shared_ptr<ImageSFML> _image;
+            shared_ptr<TextSfml> _textname;
+
+        protected:
+    };
+}
 
 #endif

@@ -38,7 +38,7 @@ void enemies::Alien::enemyIA()
         else
             this->getTransform()->setNewDirection(game_engine::Vector(-5, -3));
     }
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - _fireChrono).count() >= 1500) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - _fireChrono).count() >= 1000) {
         _fireChrono = std::chrono::high_resolution_clock::now();
         inputBuffer.push_back(game_engine::InputEnum::SHOOTINPUT);
     }
