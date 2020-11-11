@@ -23,4 +23,5 @@ game_engine::Enemy::Enemy(Vector _position, int id)
     _componentList.push_back(_deathSound);
     _componentList.push_back(_collision);
     _componentList.push_back(_render);
+    _fireTimer = time(0);
 }

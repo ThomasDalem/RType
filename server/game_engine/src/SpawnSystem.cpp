@@ -85,7 +85,7 @@ game_engine::SpawnSystem &game_engine::SpawnSystem::operator=(const game_engine:
 
 void game_engine::SpawnSystem::spawnSystem()
 {
-    //spawnEnemy();
+    spawnEnemy();
     spawnObstacle();
     checkEntitieShoot();
 }
@@ -99,7 +99,7 @@ void game_engine::SpawnSystem::spawnEnemy()
         std::cout << "spawn enemy" << std::endl;
         enemySpawnTimer = time(0);
         int x = rand() % _enemyLoader.size();
-        _entities->push_back(_enemyLoader[x].getInstance("entryPoint", Vector(1000, (rand() % 780) + 50), getAndIncID()));
+        _entities->push_back(_enemyLoader[x].getInstance("entryPoint", Vector(1920, (rand() % 780) + 50), getAndIncID()));
         setEnnemyRender();
     }
 }
@@ -210,14 +210,14 @@ void game_engine::SpawnSystem::checkEnnemyShoot(std::shared_ptr<std::vector<std:
     std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> newListPlayer)
 {
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEnnemyIter;
-    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listPlayerIter;
+    //std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listPlayerIter;
     game_engine::Enemy *ennemy;
-    game_engine::Player *player;
+    //game_engine::Player *player;
     int bulletPosX = 0;
     int bulletPosY = 0;
     int vecBulletX = 0;
     int vecBulletY = 0;
-    int playerSelected = 0;
+    //int playerSelected = 0;
     int i = 0;
 
     for (listEnnemyIter = newListEnnemy->begin(); listEnnemyIter != newListEnnemy->end(); listEnnemyIter++) {
@@ -225,11 +225,11 @@ void game_engine::SpawnSystem::checkEnnemyShoot(std::shared_ptr<std::vector<std:
         if (ennemy->getFirstEnum() == InputEnum::SHOOTINPUT) {
             bulletPosX = ennemy->getTransform()->getPosition().x;
             bulletPosY = ennemy->getTransform()->getPosition().y + (ennemy->getCollision()->getRectSize().l / 2);
-            playerSelected = rand() % newListPlayer->size();
-            for (listPlayerIter = newListPlayer->begin(); listPlayerIter != newListPlayer->end() && i != playerSelected; listPlayerIter++, i++);
-            player = static_cast<Player *>(listPlayerIter->get());
-            vecBulletX = player->getTransform()->getPosition().x - bulletPosX;
-            vecBulletY = player->getTransform()->getPosition().y - bulletPosY;
+            //playerSelected = rand() % newListPlayer->size();
+            //for (listPlayerIter = newListPlayer->begin(); listPlayerIter != newListPlayer->end() && i != playerSelected; listPlayerIter++, i++);
+            //player = static_cast<Player *>(listPlayerIter->get());
+            vecBulletX = -10;
+            vecBulletY = 0;
             _entities->push_back(std::make_shared<Bullet>(false, Vector(vecBulletX, vecBulletY), Vector(bulletPosX, bulletPosY), getAndIncID()));
             ennemy->popFirstInput();
         }

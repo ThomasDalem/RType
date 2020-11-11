@@ -15,7 +15,7 @@ Entities::Entities(int id, size_t type) {
         case 1: _path = "./resources/sprites/r-typesheet1.gif"; break; // Bullet
         case 2: _path = "./resources/sprites/r-typesheet18.gif"; break; // Environnement
         // case 3: _path = "./resources/sprites/r-typesheet18.gif"; break; // Music
-        case 4: _path = "./resources/sprites/power_up.png"; break; // Power Up
+        case 4: _path = "./resources/sprites/block.png"; break; // Power Up
         case 5: _path = "./resources/sprites/block.png"; break; // Destroyable
         case 6: _path = "./resources/sprites/block.png"; break; // StageObstacle
         case 7: _path = "./resources/sprites/r-typesheet18.gif"; break; // Alien

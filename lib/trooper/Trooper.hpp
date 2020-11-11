@@ -18,7 +18,7 @@ namespace enemies {
         public:
             Trooper(game_engine::Vector position, int id);
             ~Trooper();
-            void pathEnemy();
+            void enemyIA();
 
         protected:
         private:
