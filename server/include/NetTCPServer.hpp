@@ -8,8 +8,8 @@
 #ifndef NETTCPSERVER_HPP_
 #define NETTCPSERVER_HPP_
 
-#include <boost/asio.hpp>
 #include <thread>
+#include <boost/asio.hpp>
 #include "NetTCPRoom.hpp"
 
 namespace network
@@ -28,10 +28,10 @@ namespace network
         void receiveMessage();
 
     private:
-        boost::asio::io_context _context;
-        boost::asio::ip::tcp::acceptor _acceptor;
         NetTCPRoom _room;
         std::thread _thread;
+        boost::asio::io_context _context;
+        boost::asio::ip::tcp::acceptor _acceptor;
     };
 }
 

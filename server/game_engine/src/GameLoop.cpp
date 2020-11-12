@@ -126,24 +126,34 @@ void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComp
     }
 }
 
-void game_engine::GameLoop::gameLoop()
-{
-    auto start = std::chrono::steady_clock::now();
+void game_engine::GameLoop::oneLoop() {
+    moveSystem.moveSystem();
+    collisionSystem.collisionSystem();
+    damageSystem.damageSystem();
+    deathSystem.deathSystem(server);
+    spawnSystem.spawnSystem();
+    sendToClients();
+}
+
+using namespace std;
+void game_engine::GameLoop::gameLoop() {
+    auto start = chrono::steady_clock::now();
 
     while (!areTherePlayers());
-    //un joueur c'est connecté
+
+    // while (true) {
+    //     while (serverTCP.getFirstMessage()->event != network::TCPEvent::START) {
+    //         // serverTCP.getFirstMessage()->event != network::TCPEvent::
+    //         cout << "J'attend le début de la partie" << endl;
+    //     }
+    // }
+
     while (areTherePlayers()) {
-        auto now = std::chrono::steady_clock::now();
+        auto now = chrono::steady_clock::now();
         auto diff = now - start;
-        auto end = now + std::chrono::milliseconds(16);
-        if (diff >= std::chrono::milliseconds(10)) {
-            moveSystem.moveSystem();
-            collisionSystem.collisionSystem();
-            damageSystem.damageSystem();
-            deathSystem.deathSystem(server);
-            spawnSystem.spawnSystem();
-            sendToClients();
-        }
-        std::this_thread::sleep_until(end);
+        auto end = now + chrono::milliseconds(16);
+        if (diff >= chrono::milliseconds(10))
+            oneLoop();
+        this_thread::sleep_until(end);
     }
 }

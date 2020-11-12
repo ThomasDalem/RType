@@ -9,35 +9,40 @@
 #define GAMELOOP_HPP_
 
 #include "MoveSystem.hpp"
-#include "DamageSystem.hpp"
-#include "CollisionSystem.hpp"
+#include "./DDLoader.hpp"
 #include "SpawnSystem.hpp"
 #include "DeathSystem.hpp"
-#include "./DDLoader.hpp"
+#include "DamageSystem.hpp"
 #include "EntitiesParser.hpp"
+#include "CollisionSystem.hpp"
 #include "../../include/NetUDPServer.hpp"
+#include "../../include/NetTCPServer.hpp"
 
-namespace game_engine
-{
-    class GameLoop
-    {
-    public:
-        GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
-        ~GameLoop();
-        void gameLoop();
-        bool areTherePlayers();
-        void sendToClients();
-        void getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *collisionComponent);
-    protected:
-    private:
-        MoveSystem moveSystem;
-        DeathSystem deathSystem;
-        CollisionSystem collisionSystem;
-        DamageSystem damageSystem;
-        SpawnSystem spawnSystem;
-        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
-        network::NetUDPServer server;
+using namespace std;
+namespace game_engine {
+    class GameLoop {
+        public:
+            GameLoop(shared_ptr<vector<shared_ptr<IEntities>>> entities);
+            ~GameLoop();
+
+            void oneLoop(void);
+            void gameLoop(void);
+            void sendToClients(void);
+            bool areTherePlayers(void);
+            void getComponentToDisp(vector<shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *collisionComponent);
+
+        private:
+            MoveSystem moveSystem;
+            SpawnSystem spawnSystem;
+            DeathSystem deathSystem;
+            DamageSystem damageSystem;
+            network::NetUDPServer server;
+            CollisionSystem collisionSystem;
+            // network::NetTCPServerClient serverTCP;
+            shared_ptr<vector<shared_ptr<IEntities>>> _entities;
+
+        protected:
     };
-} // namespace game_engine
+}
 
-#endif /* !GAMELOOP_HPP_ */
+#endif

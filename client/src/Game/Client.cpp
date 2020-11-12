@@ -58,7 +58,6 @@ void Client::game(void) {
                     create(message);
         }
         formatInput(0);
-        _windowhdl->getWindow()->clear();
         _windowhdl->dispBackground();
         if (_animation.checkTimerAnimation())
             _animation.updateAnimation(_entities);
@@ -77,12 +76,10 @@ void Client::disconnection(network::UDPClientMessage message) {
 }
 
 void Client::remove(network::UDPClientMessage message) {
-    if (message.event == network::SendEvent::REMOVE) {
-        for (size_t i = 0; i < _entities.size(); i ++) {
+    if (message.event == network::SendEvent::REMOVE)
+        for (size_t i = 0; i < _entities.size(); i ++)
             if (message.uniqueID == _entities[i]->getId())
                 _entities.erase(_entities.begin() + i);
-        }
-    }
 }
 
 bool Client::update(network::UDPClientMessage message) {
@@ -109,9 +106,11 @@ void Client::create(network::UDPClientMessage message) {
 void Client::formatInput(size_t row) {
     network::UDPMessage lastinput;
 
-    if (isDead)
+    if (isDead) {
+        if (_windowhdl->isEvent(*_players[row]) == Input::Escape)
+            _windowhdl->~WindowHandler();
         return;
-    switch(_windowhdl->isEvent(*_players[row])) {
+    } switch(_windowhdl->isEvent(*_players[row])) {
         case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
         case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
         case Input::Up: lastinput = {_players[0]->getId(), {0, -1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
