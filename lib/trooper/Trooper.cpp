@@ -12,6 +12,8 @@ enemies::Trooper::Trooper(game_engine::Vector position, int id) : game_engine::E
 {
     //this->getRender()->setRect(game_engine::Rectangle(18, 68, 33, 30)); //r-typesheet20.gif
     _entitesID = game_engine::EntitiesType::ENEMYTROOPER;
+    _collision = std::make_shared<game_engine::Collision>(game_engine::Rectangle(0, 0, 99, 90), true);
+    _componentList.push_back(_collision);
 }
 
 enemies::Trooper::~Trooper()

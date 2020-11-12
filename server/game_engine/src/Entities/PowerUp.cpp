@@ -13,10 +13,10 @@ game_engine::PowerUp::PowerUp(Vector _position)
 
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, Vector(-5, 0));
-    _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 50, 50), false);
+    _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 60, 60), false);
     _render = std::make_shared<Render>("./resources/sprites/block.png", Rectangle(39, 0, 20, 20));
     _sound = std::make_shared<Sound>("./path_to_powerUp_sound");
-    _health = std::make_shared<Health>(1, false);
+    _health = std::make_shared<Health>(1, true);
     _entitesID = EntitiesType::POWERUP;
     _componentList.push_back(_transform);
     _componentList.push_back(_collision);

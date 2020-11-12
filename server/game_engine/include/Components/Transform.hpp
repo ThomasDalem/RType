@@ -16,6 +16,10 @@ namespace game_engine
     class Transform : public AComponents
     {
     public:
+        Transform(): AComponents(ComponentType::TRANSFORM), _position(Vector(0, 0)), _rotation(0), _direction(Vector(0, 0)), _oldPosition(Vector(0, 0))
+        {
+            _type = ComponentType::TRANSFORM;
+        }
         Transform(Vector position, float rotation, Vector direction)
             : AComponents(ComponentType::TRANSFORM), _position(position), _rotation(rotation), _direction(direction), _oldPosition(Vector(0, 0))
         {
