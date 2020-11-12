@@ -9,10 +9,11 @@
 #include "Main.hpp"
 #include "Client.hpp"
 #include "Entities.hpp"
-#include "MusicSFML.hpp"
 
-client::Client::Client() {
+using namespace client;
+Client::Client() {
     isDead = false;
+    // _musics = MusicSystem();
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
@@ -26,8 +27,7 @@ client::Client::Client() {
     _windowhdl->addText(_players[0]->getNameText());
 }
 
-client::Client::~Client()
-{
+Client::~Client() {
     _entities.clear();
 }
 
@@ -40,7 +40,7 @@ client::Client::~Client()
 // value[6] : Longueur dans le sprite cheet
 // value[7] : largeur dans le sprite sheet
 
-void client::Client::game(void) {
+void Client::game(void) {
     bool find = false;
 
     while (_windowhdl->isOpen()) {
@@ -67,12 +67,8 @@ void client::Client::game(void) {
                     } if (!find) {
                         shared_ptr<Entities> newone = make_shared<Entities>(message->uniqueID, message->entitieType);
 
-                        if (message->entitieType == 1) {
-                            MusicSFML sound;
-
-                            sound.load("./resources/sounds/shot.ogg");
-                            sound.start();
-                        }
+                        if (message->entitieType == 1)
+                            _musics.shot();
                         newone->getImage()->setRectangleSheep(sf::IntRect(message->value[4], message->value[5], message->value[6], message->value[7]));
                         newone->getImage()->setPosition(sf::Vector2f(message->value[1], message->value[2]));
                         _entities.push_back(newone);
@@ -83,17 +79,15 @@ void client::Client::game(void) {
         formatInput(0);
         _windowhdl->getWindow()->clear();
         _windowhdl->dispBackground();
-        if (_animation.checkTimerAnimation() == true)
+        if (_animation.checkTimerAnimation())
             _animation.updateAnimation(_entities);
-        for (size_t i = 0; i < _entities.size(); i ++) {
-            //cout << i << ": Entities Id: " << to_string(_entities[i]->getId()) << endl;
+        for (size_t i = 0; i < _entities.size(); i ++)
             _windowhdl->getWindow()->draw(*_entities[i]->getImage()->getSprite());
-        }
         _windowhdl->display();
     }
 }
 
-void client::Client::formatInput(size_t row) {
+void Client::formatInput(size_t row) {
     network::UDPMessage lastinput;
 
     if (isDead)
@@ -113,7 +107,7 @@ void client::Client::formatInput(size_t row) {
     }
 }
 
-bool client::Client::MenusLoop(void) {
+bool Client::MenusLoop(void) {
     switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
         case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
         case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
@@ -123,7 +117,7 @@ bool client::Client::MenusLoop(void) {
     return true;
 }
 
-void client::Client::waitConnection(void) {
+void Client::waitConnection(void) {
     network::UDPMessage msg = {-1, {84}, network::Event::ADD};
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
@@ -138,7 +132,8 @@ void client::Client::waitConnection(void) {
     }
 }
 
-size_t client::Client::getNumbersPlayer(void) const {return _players.size();}
-shared_ptr<network::NetUDPClient> client::Client::getNetwork(void) const {return _net;}
-shared_ptr<client::WindowHandler> client::Client::getWindowHandler(void) const {return _windowhdl;}
-shared_ptr<client::Player> client::Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}
+MusicSystem Client::getMusicSystem(void) const {return _musics;}
+size_t Client::getNumbersPlayer(void) const {return _players.size();}
+shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
+shared_ptr<client::WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
+shared_ptr<client::Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}

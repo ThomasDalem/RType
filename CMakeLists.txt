@@ -50,6 +50,7 @@ set(CLIENT_SRCS
     ./client/src/Entities/Player.cpp
     ./client/src/Game/Animation.cpp
     ./client/src/Game/Client.cpp
+    ./client/src/Game/MusicSystem.cpp
     ./client/src/Game/WindowHandler.cpp
     ./client/src/SFML/BackgroundSFML.cpp
     ./client/src/SFML/ImageSFML.cpp
@@ -71,6 +72,8 @@ target_include_directories(r-type_client PUBLIC
     ./client/include
     ./client/Class/
     ./client/Class/Entities/
+    ./client/Class/Env/
+    ./client/Class/Game/
     ./client/Class/Menu/
     ./client/Class/SFML/
 )

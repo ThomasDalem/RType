@@ -22,11 +22,8 @@
 
 using namespace std;
 void core(vector<string> av) {
-    MusicSFML music;
     shared_ptr<client::Client> client = make_shared<client::Client>();
 
-    music.load("./resources/sounds/main.ogg");
-    music.start();
     client->waitConnection();
     //client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
     while(!client->getNetwork()->hasMessages());

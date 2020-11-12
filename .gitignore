@@ -32,3 +32,6 @@ build/*
 # Tests
 ServerTest
 CLIENT_TESTER.cpp
+
+# scripts
+rebuild.sh
