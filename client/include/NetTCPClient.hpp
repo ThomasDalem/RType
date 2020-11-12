@@ -5,42 +5,42 @@
 ** NetTCPClient
 */
 
-#ifndef NETTCPCLIENT_HPP_
-#define NETTCPCLIENT_HPP_
+#ifndef __NetTCPClient__
+#define __NetTCPClient__
 
 #include <queue>
 #include <memory>
 #include <boost/asio.hpp>
+
 #include "NetCommon.hpp"
 
-namespace network
-{
-    class NetTCPClient
-    {
-    public:
-        NetTCPClient(std::string const& ip, std::string const& port);
-        ~NetTCPClient();
+using namespace std;
+namespace network {
+    class NetTCPClient {
+        public:
+            NetTCPClient(string const &ip, string const &port);
+            ~NetTCPClient();
 
-        bool isConnected() const;
-        bool hasMessages() const;
-        std::unique_ptr<TCPMessage> getFirstMessage();
-        void sendMessage(TCPMessage const& message);
+            bool isConnected(void) const;
+            bool hasMessages(void) const;
+            void sendMessage(TCPMessage const &message);
+            unique_ptr<TCPMessage> getFirstMessage(void);
 
-    private:
-        void connect();
-        void receiveMessage();
-        void handleMessage(boost::system::error_code ec, std::size_t receivedBytes);
+        private:
+            void connect(void);
+            void receiveMessage(void);
+            void handleMessage(boost::system::error_code ec, size_t receivedBytes);
 
-    private:
-        bool _isConnected;
-        boost::asio::io_context _context;
-        boost::asio::ip::tcp::resolver _resolver;
-        boost::asio::ip::tcp::resolver::results_type _endpoints;
-        boost::asio::ip::tcp::socket _socket;
-        std::thread _thread;
-        std::queue<std::unique_ptr<TCPMessage>> _messages;
-        char _data[MAX_MESSAGE_LENGTH];
-    };
+        private:
+            thread _thread;
+            bool _isConnected;
+            char _data[MAX_MESSAGE_LENGTH];
+            boost::asio::io_context _context;
+            boost::asio::ip::tcp::socket _socket;
+            queue<unique_ptr<TCPMessage>> _messages;
+            boost::asio::ip::tcp::resolver _resolver;
+            boost::asio::ip::tcp::resolver::results_type _endpoints;
+        };
 }
 
-#endif /* !NETTCPCLIENT_HPP_ */
+#endif

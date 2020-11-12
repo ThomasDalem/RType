@@ -21,22 +21,22 @@
 #include "WindowHandler.hpp"
 
 using namespace std;
+using namespace client;
 void core(vector<string> av) {
-    shared_ptr<client::Client> client = make_shared<client::Client>();
+    shared_ptr<Client> client = make_shared<Client>();
 
     client->waitConnection();
-    //client->getNetwork()->sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION});
-    while(!client->getNetwork()->hasMessages());
-    network::UDPClientMessage message = *client->getNetwork()->getFirstMessage();
+    while(!client->getNetworkUDP()->hasMessages());
+    network::UDPClientMessage message = *client->getNetworkUDP()->getFirstMessage();
     client->getPlayer(0)->setId(message.uniqueID);
     if (client->MenusLoop())
         client->game();
 }
 
 int main(int ac, char **argv, char **env) {
-    vector<string> av = client::ErrorHandler().getArgs(argv);
+    vector<string> av = ErrorHandler().getArgs(argv);
 
-    if (!client::ErrorHandler().isDisplayEnv(env))
+    if (!ErrorHandler().isDisplayEnv(env))
         return 84;
     core(av);
     return 0;

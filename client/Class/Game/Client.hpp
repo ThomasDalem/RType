@@ -17,10 +17,10 @@
 #include "Animation.hpp"
 #include "MusicSystem.hpp"
 #include "NetUDPClient.hpp"
+#include "NetTCPClient.hpp"
 #include "WindowHandler.hpp"
 
 using namespace std;
-
 namespace client {
     class Client {
         public:
@@ -34,8 +34,14 @@ namespace client {
             size_t getNumbersPlayer(void) const;
             MusicSystem getMusicSystem(void) const;
             shared_ptr<Player> getPlayer(size_t) const;
+            void death(network::UDPClientMessage message);
+            void create(network::UDPClientMessage message);
+            void remove(network::UDPClientMessage message);
+            bool update(network::UDPClientMessage message);
+            void disconnection(network::UDPClientMessage message);
             shared_ptr<WindowHandler> getWindowHandler(void) const;
-            shared_ptr<network::NetUDPClient> getNetwork(void) const;
+            shared_ptr<network::NetUDPClient> getNetworkUDP(void) const;
+            shared_ptr<network::NetUDPClient> getNetworkUDPTCP(void) const;
 
         private:
             bool isDead;
@@ -45,7 +51,8 @@ namespace client {
             vector<shared_ptr<Player>> _players;
             shared_ptr<WindowHandler> _windowhdl;
             vector<shared_ptr<Entities>> _entities;
-            shared_ptr<network::NetUDPClient> _net;
+            shared_ptr<network::NetUDPClient> _netUPD;
+            shared_ptr<network::NetTCPClient> _netTCP;
 
         protected:
     };

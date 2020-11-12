@@ -30,7 +30,9 @@ void client::WindowHandler::dispBackground() {
         _window->draw(*_texts[i]->getData());
 }
 
-void client::WindowHandler::display(void) const {
+void client::WindowHandler::display(vector<shared_ptr<Entities>> entities) const {
+    for (size_t i = 0; i < entities.size(); i ++)
+        _window->draw(*entities[i]->getImage()->getSprite());
     _window->display();
     _window->clear();
 }

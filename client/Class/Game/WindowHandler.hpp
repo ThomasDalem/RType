@@ -15,6 +15,7 @@
 #include "Sfml.hpp"
 #include "Player.hpp"
 #include "TextSFML.hpp"
+#include "Entities.hpp"
 #include "ImageSFML.hpp"
 #include "BackgroundSFML.hpp"
 
@@ -65,8 +66,8 @@ namespace client {
             //Window data
             bool isOpen(void) const;
             Input isEvent(Player &);
-            void display(void) const;
             void setFramerate(size_t) const;
+            void display(vector<shared_ptr<Entities>> entities) const;
 
         private:
             string _title;
