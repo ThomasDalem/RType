@@ -26,6 +26,8 @@ void core(vector<string> av) {
     shared_ptr<Client> client = make_shared<Client>();
 
     client->waitConnection();
+    if (!client->getWindowHandler()->isOpen())
+        return;
     while(!client->getNetworkUDP()->hasMessages());
     network::UDPClientMessage message = *client->getNetworkUDP()->getFirstMessage();
     client->getPlayer(0)->setId(message.uniqueID);

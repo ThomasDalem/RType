@@ -18,7 +18,7 @@ Client::Client() {
     _players.push_back(make_shared<Player>(0));
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _netUPD = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
-    _netTCP = make_shared<network::NetTCPClient>("127.0.0.1", "8081");
+    //_netTCP = make_shared<network::NetTCPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     //Windows Settings
@@ -28,8 +28,8 @@ Client::Client() {
     _windowhdl->addText(_players[0]->getNameText());
 
     //TCP Connection
-    network::TCPMessage msg = {network::TCPEvent::CONNECT, 0};
-    _netTCP->sendMessage(msg);
+    //network::TCPMessage msg = {network::TCPEvent::CONNECT, 0};
+    //_netTCP->sendMessage(msg);
 }
 
 Client::~Client() {
@@ -108,7 +108,7 @@ void Client::formatInput(size_t row) {
 
     if (isDead) {
         if (_windowhdl->isEvent(*_players[row]) == Input::Escape)
-            _windowhdl->~WindowHandler();
+            _windowhdl->close();
         return;
     } switch(_windowhdl->isEvent(*_players[row])) {
         case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
@@ -120,7 +120,7 @@ void Client::formatInput(size_t row) {
         case Input::LeftDown: lastinput = {_players[0]->getId(), {-1, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
         case Input::RightDown: lastinput = {_players[0]->getId(), {1, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
         case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT}; _netUPD->sendMessage(lastinput); break;
-        case Input::Escape: exit(0);
+        case Input::Escape: _windowhdl->close();
         default: break;
     }
 }
@@ -142,10 +142,10 @@ void Client::waitConnection(void) {
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
 
-    for (size_t frame = 0; !_netUPD->hasMessages(); frame ++) {
+    for (size_t frame = 0; !_netUPD->hasMessages() && _windowhdl->isOpen(); frame ++) {
         while (_windowhdl->getWindow()->pollEvent(event))
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
-                exit(0);
+                _windowhdl->close();
         if (frame > (attempt > 0 ? 300 : 60)) {
             _netUPD->sendMessage(msg);
             frame = 0;

@@ -81,6 +81,7 @@ client::Input client::WindowHandler::isEvent(client::Player &player) {
     return Nothing;
 }
 
+void client::WindowHandler::close() {_window->close();}
 size_t client::WindowHandler::getWidth(void) const {return _width;}
 string client::WindowHandler::getTitle(void) const {return _title;}
 size_t client::WindowHandler::getHeight(void) const {return _height;}

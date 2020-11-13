@@ -19,7 +19,9 @@ namespace network
         try {
         _thread = std::thread([this] { return _context.run(); });
         } catch (std::bad_alloc e) {
+            printf("ok\n");
             _thread.detach();
+            printf("ok\n");
         }
     }
 

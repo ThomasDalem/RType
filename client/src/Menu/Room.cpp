@@ -55,8 +55,8 @@ client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, 
         if (player.getRoom() != -1)
             break;
         while(_window->pollEvent(event))
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                exit(0);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
+                _window->close();
     }
     return player.getRoom() > 0 ? Salle : Back;
 }
@@ -113,7 +113,7 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
         while(_window->pollEvent(event)) {
             EventHandler(_window, *players[0]);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
-                exit(0);
+                _window->close();
             if (players[0]->getAdmin() && _play->isClicked(event, _window))
                 return Continue;
         }

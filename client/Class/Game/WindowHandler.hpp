@@ -68,6 +68,7 @@ namespace client {
             Input isEvent(Player &);
             void setFramerate(size_t) const;
             void display(vector<shared_ptr<Entities>> entities) const;
+            void close();
 
         private:
             string _title;

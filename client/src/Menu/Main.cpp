@@ -83,6 +83,6 @@ void client::Mainmenu::EventHandler(shared_ptr<sf::RenderWindow> _window) {
         else if (_join->isClicked(event, _window))
             isJoin = true;
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
-            exit(0);
+            _window->close();
     }
 }
