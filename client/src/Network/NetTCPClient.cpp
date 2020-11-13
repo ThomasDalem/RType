@@ -41,6 +41,7 @@ namespace network
 
     void NetTCPClient::sendMessage(TCPMessage const& message)
     {
+        std::cout << "Message: " << int(message.event) << std::endl;
         boost::asio::async_write(_socket, boost::asio::buffer(&message, sizeof(TCPMessage)),
             [this](boost::system::error_code ec, std::size_t size)
             {

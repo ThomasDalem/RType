@@ -7,8 +7,8 @@
 
 #include "GameLoop.hpp"
 
-game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities):
-    server(8081), _entities(entities), moveSystem(entities), deathSystem(entities),
+game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities, network::NetUDPServer &server):
+    server(server), _entities(entities), moveSystem(entities), deathSystem(entities),
     spawnSystem(entities), collisionSystem(entities), damageSystem(entities)
 {
 }

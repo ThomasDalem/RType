@@ -17,13 +17,15 @@ namespace network
     class NetTCPServerClient
     {
     public:
-        NetTCPServerClient(boost::asio::ip::tcp::socket &socket);
+        NetTCPServerClient(boost::asio::ip::tcp::socket &socket, int id);
         ~NetTCPServerClient();
 
         boost::asio::ip::tcp::socket &getSocket();
+        int getRoomID() const;
+        int getID() const;
+        void setRoomID(int id);
         void sendMessage(TCPMessage const& message);
         bool isConnected() const;
-        int getID() const;
         bool hasMessages() const;
         std::unique_ptr<TCPMessage> getFirstMessage();
 
@@ -32,6 +34,7 @@ namespace network
         void handleMessage(boost::system::error_code ec, std::size_t receivedBytes);
 
     private:
+        int _roomID;
         int _id;
         bool _isConnected;
         boost::asio::ip::tcp::socket _socket;

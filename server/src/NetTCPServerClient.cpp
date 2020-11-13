@@ -10,8 +10,8 @@
 
 namespace network
 {
-    NetTCPServerClient::NetTCPServerClient(boost::asio::ip::tcp::socket &socket) :
-        _socket(std::move(socket)), _isConnected(true)
+    NetTCPServerClient::NetTCPServerClient(boost::asio::ip::tcp::socket &socket, int id) :
+        _roomID(-1), _id(id), _socket(std::move(socket)), _isConnected(true)
     {
         receiveMessage();
     }
@@ -23,6 +23,21 @@ namespace network
     boost::asio::ip::tcp::socket &NetTCPServerClient::getSocket()
     {
         return _socket;
+    }
+
+    int NetTCPServerClient::getRoomID() const
+    {
+        return _roomID;
+    }
+
+    int NetTCPServerClient::getID() const
+    {
+        return _id;
+    }
+
+    void NetTCPServerClient::setRoomID(int id)
+    {
+        _roomID = id;
     }
 
     void NetTCPServerClient::sendMessage(TCPMessage const& message)
@@ -40,11 +55,6 @@ namespace network
     bool NetTCPServerClient::isConnected() const
     {
         return _isConnected;
-    }
-
-    int NetTCPServerClient::getID() const
-    {
-        return _id;
     }
 
     bool NetTCPServerClient::hasMessages() const
@@ -75,10 +85,8 @@ namespace network
             if (!ec && receivedBytes == sizeof(TCPMessage)) {
                 std::memcpy(message.get(), _data, sizeof(TCPMessage));
                 _messages.push(std::move(message));
-                receiveMessage();
-            } else {
-                receiveMessage();
             }
+            receiveMessage();
         }
     }
 }

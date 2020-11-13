@@ -22,7 +22,7 @@ namespace game_engine
     class GameLoop
     {
     public:
-        GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
+        GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities, network::NetUDPServer &server);
         ~GameLoop();
         void gameLoop();
         bool areTherePlayers();
@@ -36,7 +36,7 @@ namespace game_engine
         DamageSystem damageSystem;
         SpawnSystem spawnSystem;
         std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
-        network::NetUDPServer server;
+        network::NetUDPServer &server;
     };
 } // namespace game_engine
 

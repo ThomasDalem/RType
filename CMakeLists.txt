@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(r-type)
 
-SET(CMAKE_CXX_FLAGS "-ldl")
+SET(CMAKE_CXX_FLAGS "-ldl -g3")
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
@@ -25,8 +25,9 @@ set(SERVER_SRCS
     ./server/game_engine/src/Entities/StageObstacle.cpp
     ./server/src/NetUDPServer.cpp
     ./server/src/NetTCPServer.cpp
-    ./server/src/NetTCPRoom.cpp
     ./server/src/NetTCPServerClient.cpp
+    ./server/src/Room.cpp
+    ./server/src/Server.cpp
 )
 
 add_executable(r-type_server ${SERVER_SRCS})

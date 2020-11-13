@@ -34,15 +34,20 @@ namespace network
 
     enum class TCPEvent : std::uint8_t
     {
-        CONNECT,
-        DISCONNECT,
-        START
+        ERROR,
+        OK,
+        GET_ROOMS,      // Get rooms numbers
+        CONNECT,        // Connect to a room
+        DISCONNECT,     // Disconnect from a room
+        CREATE_ROOM,    // Create a room
+        START           // Start a game inside a room
     };
 
     struct UDPMessage
     {
         int playerID;
         int value[10];
+        std::uint8_t roomNbr;
         Event event;
     };
 

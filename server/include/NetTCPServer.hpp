@@ -10,7 +10,9 @@
 
 #include <boost/asio.hpp>
 #include <thread>
-#include "NetTCPRoom.hpp"
+#include <vector>
+#include <list>
+#include "NetTCPServerClient.hpp"
 
 namespace network
 {
@@ -20,8 +22,7 @@ namespace network
         NetTCPServer(short port);
         ~NetTCPServer();
 
-        NetTCPRoom &getRoom();
-        std::vector<std::unique_ptr<NetTCPServerClient>> &getClients();
+        std::list<std::unique_ptr<NetTCPServerClient>> &getClients();
 
     private:
         void acceptConnection();
@@ -30,8 +31,9 @@ namespace network
     private:
         boost::asio::io_context _context;
         boost::asio::ip::tcp::acceptor _acceptor;
-        NetTCPRoom _room;
+        std::list<std::unique_ptr<NetTCPServerClient>> _clients;
         std::thread _thread;
+        int _clientsIDNbr;
     };
 }
 
