@@ -51,6 +51,7 @@ namespace game_engine {
             float getTimeInvincibility() const {return (_timeInvincibility);};
             float getSpeedMultiplicator() const {return (_speedMultiplicator);};
             int getScore() const {return(_score);}
+            void incScore() {_score++;}
             void setTimeInvincibility(size_t timeInvincibility) {_timeInvincibility = timeInvincibility;}
             void setSpeedMultiplicator(float speedMultiplicateur) {_speedMultiplicator = speedMultiplicateur;}
             void addNewInput(network::Event event, int value[10]);

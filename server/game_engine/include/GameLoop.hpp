@@ -29,6 +29,7 @@ namespace game_engine {
             void gameLoop(void);
             void sendToClients(void);
             bool areTherePlayers(void);
+            void respondToConnection(std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> &message);
             void getComponentToDisp(vector<shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *collisionComponent);
 
         private:

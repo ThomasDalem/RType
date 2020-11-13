@@ -51,6 +51,7 @@ set(CLIENT_SRCS
     ./client/src/Game/Animation.cpp
     ./client/src/Game/Client.cpp
     ./client/src/Game/MusicSystem.cpp
+    ./client/src/Game/Environment.cpp
     ./client/src/Game/WindowHandler.cpp
     ./client/src/SFML/BackgroundSFML.cpp
     ./client/src/SFML/ImageSFML.cpp

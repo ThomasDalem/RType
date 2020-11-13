@@ -37,6 +37,7 @@ namespace game_engine {
             ~DeathSystem();
             void deathSystem(network::NetUDPServer &server);
             void spawnPowerUp(game_engine::IEntities *entitie);
+            void incScoreForAllPlayer();
             DeathSystem &operator=(const DeathSystem &deathSystem);
             bool checkGameBorder(Transform &transform, Collision &collision);
             bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);

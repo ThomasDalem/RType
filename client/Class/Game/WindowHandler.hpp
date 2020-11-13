@@ -18,6 +18,7 @@
 #include "Entities.hpp"
 #include "ImageSFML.hpp"
 #include "BackgroundSFML.hpp"
+#include "Environment.hpp"
 
 using namespace std;
 
@@ -67,7 +68,9 @@ namespace client {
             bool isOpen(void) const;
             Input isEvent(Player &);
             void setFramerate(size_t) const;
-            void display(vector<shared_ptr<Entities>> entities) const;
+            void dispEntities(vector<shared_ptr<Entities>> entities) const;
+            void dispEnvironment(std::shared_ptr<client::Environment> &environment) const;
+            void display() const;
 
         private:
             string _title;

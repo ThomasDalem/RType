@@ -17,6 +17,37 @@ game_engine::GameLoop::~GameLoop()
 {
 }
 
+void game_engine::GameLoop::respondToConnection(std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> &message)
+{
+    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
+    network::UDPClientMessage responseMessage;
+    game_engine::Player *player;
+    int newPlayerID = 0;
+
+    memset(&responseMessage, 0, sizeof(network::UDPClientMessage));
+    newPlayerID = spawnSystem.newPlayer(message->second);
+    responseMessage.event = network::SendEvent::UPDATE;
+    responseMessage.entitieType = 0;
+    responseMessage.uniqueID = newPlayerID;
+
+    for (playerListIter = _entities->begin(); playerListIter != _entities->end(); playerListIter++) {
+        player = static_cast<Player *>(playerListIter->get());
+        if (newPlayerID == player->getUniqueID()) {
+            std::cout << "here" << std::endl;
+            break;
+        }
+    }
+    responseMessage.value[0] = -1;
+    responseMessage.value[1] = 0;
+    responseMessage.value[2] = 0;
+    responseMessage.value[3] = 0;
+    responseMessage.value[4] = player->getRender()->getRect().x;
+    responseMessage.value[5] = player->getRender()->getRect().y;
+    responseMessage.value[6] = player->getRender()->getRect().L;
+    responseMessage.value[7] = player->getRender()->getRect().l;
+    server.sendMessage(responseMessage, message->second);
+}
+
 bool game_engine::GameLoop::areTherePlayers()
 {
     std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
@@ -31,12 +62,7 @@ bool game_engine::GameLoop::areTherePlayers()
         message = server.getFirstMessage();
         if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION){
             std::cout << "create new player" << std::endl;
-            newPlayerID = spawnSystem.newPlayer(message->second);
-            network::UDPClientMessage responseMessage = {network::SendEvent::UPDATE , 0, newPlayerID};
-            memset(&responseMessage, 0, sizeof(network::UDPClientMessage));
-            responseMessage.event = network::SendEvent::UPDATE;
-            responseMessage.value[0] = -1;
-            server.sendMessage(responseMessage, message->second);
+            respondToConnection(message);
         }
         else if (message->first.event != network::Event::CONFIRMCONNECTION) {
             for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
@@ -95,21 +121,21 @@ void game_engine::GameLoop::sendToClients()
             server.broadcastMessage(clientMessage);
         }
     }
-    // for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
-    //     player = static_cast<Player *>(playerListIter->get());
-    //     network::UDPClientMessage clientMessage;
-    //     if (player->getHealth()->getHealthPoint() > 0) {
-    //         clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
-    //         clientMessage.value[0] = 1;
-    //         clientMessage.value[1] = player->getHealth()->getHealthPoint();
-    //         clientMessage.value[2] = player->getScore();
-    //         clientMessage.value[3] = 0;
-    //     }
-    //     else {
-    //         clientMessage.value[0] = 0;
-    //     }
-    //     server.sendMessage(clientMessage, player->getClientEndpoint());
-    // }
+    for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
+        player = static_cast<Player *>(playerListIter->get());
+        network::UDPClientMessage clientMessage;
+        if (player->getHealth()->getHealthPoint() > 0) {
+            clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
+            clientMessage.value[0] = 1;
+            clientMessage.value[1] = player->getHealth()->getHealthPoint();
+            clientMessage.value[2] = player->getScore();
+            clientMessage.value[3] = 0;
+        }
+        else {
+            clientMessage.value[0] = 0;
+        }
+        server.sendMessage(clientMessage, player->getClientEndpoint());
+    }
 }
 
 void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *renderComponent)
