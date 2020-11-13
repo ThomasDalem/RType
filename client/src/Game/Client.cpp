@@ -120,7 +120,7 @@ void Client::formatInput(size_t row) {
         case Input::LeftDown: lastinput = {_players[0]->getId(), {-1, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
         case Input::RightDown: lastinput = {_players[0]->getId(), {1, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
         case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT}; _netUPD->sendMessage(lastinput); break;
-        case Input::Escape: _windowhdl->~WindowHandler(); break;
+        case Input::Escape: exit(0);
         default: break;
     }
 }
