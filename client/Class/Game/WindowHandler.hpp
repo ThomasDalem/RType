@@ -71,6 +71,7 @@ namespace client {
             void dispEntities(vector<shared_ptr<Entities>> entities) const;
             void dispEnvironment(std::shared_ptr<client::Environment> &environment) const;
             void display() const;
+            void close();
 
         private:
             string _title;
