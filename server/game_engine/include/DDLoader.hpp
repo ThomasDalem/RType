@@ -25,7 +25,7 @@ class DDloader
             this->handle = dlopen(name, RTLD_LAZY | RTLD_NOW);
             if (this->handle == NULL)
             {
-                printf("%s\n", dlerror());
+                std::cerr << dlerror() << std::endl;
                 return (84);
             }
             return (0);

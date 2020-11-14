@@ -7,21 +7,24 @@
 
 #include <iostream>
 #include "NetUDPServer.hpp"
+#include "Exception.hpp"
 
 using namespace boost;
 
 namespace network
 {
-    NetUDPServer::NetUDPServer(short port) :
-        _socket(_context, asio::ip::udp::endpoint(asio::ip::udp::v4(), port))
+    NetUDPServer::NetUDPServer(short port)
     {
+        try {
+            _socket = std::make_shared<boost::asio::ip::udp::socket>(_context, asio::ip::udp::endpoint(asio::ip::udp::v4(), port));
+        } catch (const boost::system::system_error &e) {
+            throw (Exception(e.what()));
+        }
         receiveMessage();
         try {
         _thread = std::thread([this] { return _context.run(); });
         } catch (std::bad_alloc e) {
-            printf("ok\n");
             _thread.detach();
-            printf("ok\n");
         }
     }
 
@@ -33,7 +36,7 @@ namespace network
 
     void NetUDPServer::sendMessage(UDPClientMessage const& message, asio::ip::udp::endpoint const& endpoint)
     {
-        _socket.send_to(asio::buffer(&message, sizeof(UDPClientMessage)), endpoint);
+        _socket->send_to(asio::buffer(&message, sizeof(UDPClientMessage)), endpoint);
     }
 
     void NetUDPServer::broadcastMessage(UDPClientMessage &message)
@@ -45,7 +48,7 @@ namespace network
 
     void NetUDPServer::receiveMessage()
     {
-        _socket.async_receive_from(asio::buffer(_data, sizeof(UDPMessage)), _senderEndpoint,
+        _socket->async_receive_from(asio::buffer(_data, sizeof(UDPMessage)), _senderEndpoint,
             std::bind(&NetUDPServer::handleMessage, this, std::placeholders::_1, std::placeholders::_2));
     }
 
