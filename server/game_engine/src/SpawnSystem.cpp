@@ -95,7 +95,7 @@ void game_engine::SpawnSystem::spawnEnemy()
     std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
     int enemyChancetoSpawn;
 
-    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - enemySpawnChrono).count() >= 5000) {
+    if (std::chrono::duration_cast<std::chrono::milliseconds>(end - enemySpawnChrono).count() >= 1800) {
         //std::cout << "spawn enemy" << std::endl;
         enemySpawnChrono = std::chrono::high_resolution_clock::now();
         int x = rand() % _enemyLoader.size();
