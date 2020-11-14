@@ -6,6 +6,7 @@
 */
 
 #include "WindowHandler.hpp"
+#include <SFML/Window/Joystick.hpp>
 
 client::WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fps) {
     _width = width;
@@ -53,30 +54,54 @@ void client::WindowHandler::rmImage(size_t row) {
 
 client::Input client::WindowHandler::isEvent(client::Player &player) {
     sf::Event event;
+    sf::Joystick joys;
+    size_t sensybility = 80;
 
-    while (_window->pollEvent(event)) {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
-            _window->close();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-            return RightUp;
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
-            return LeftUp;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            return RightDown;
-        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            return LeftDown;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-            return Up;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            return Down;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            return Left;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            return Right;
-        if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
+    if (joys.isConnected(0)) {
+        joys.update();
+        sf::Vector2f Jpos(sf::Joystick::getAxisPosition(0, sf::Joystick::X), sf::Joystick::getAxisPosition(0, sf::Joystick::Y));
+
+        // 0 = croix
+        // 1 = rond
+        // 2 = Carré
+        // 3 = Triangle
+
+        // cout << "Button 4 pressed: " << (joys.isButtonPressed(0, 4) ? "true" : "false") << endl;
+        if (joys.isButtonPressed(0, 0))
             return Shoot;
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-            return Escape;
+        if (Jpos.x > sensybility)
+            return Left;
+        if (Jpos.x < (int)(-1 * sensybility))
+            return Right;
+        if (Jpos.y > sensybility)
+            return Down;
+        if (Jpos.y < (int)(-1 * sensybility))
+            return Up;
+    } else {
+        while (_window->pollEvent(event)) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
+                _window->close();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+                return RightUp;
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+                return LeftUp;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                return RightDown;
+            if ((sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+                return LeftDown;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+                return Up;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                return Down;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                return Left;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                return Right;
+            if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
+                return Shoot;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                return Escape;
+        }
     }
     return Nothing;
 }
