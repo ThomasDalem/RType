@@ -1,9 +1,17 @@
-#include "Main.hpp"
-#include "TextSFML.hpp"
-#include "ImageSFML.hpp"
+/*
+** EPITECH PROJECT, 2020
+** R-Type
+** File description:
+** Main Menu Cpp
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "Main.hpp"
+#include "TextSFML.hpp"
+#include "ImageSFML.hpp"
+#include "ManetteSFML.hpp"
 
 static string randomGen(void) {
     srand(time(nullptr));
@@ -41,18 +49,32 @@ client::Mainmenu::Mainmenu() {
 client::Mainmenu::~Mainmenu() {}
 
 client::ReturnMain client::Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
+    int indexe = 0;
+    sf::Event event;
+    ManetteSFML Remote;
+    shared_ptr<ImageSFML> choice = make_shared<ImageSFML>("./resources/sprites/choice.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>("Pseudo: " + _name, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     _window->setFramerateLimit(60);
+    choice->setScale(sf::Vector2f(0.05, 0.05));
+    choice->setRotate(-90);
     while(_window->isOpen() && !isHost && !isJoin && !isQuit) {
+        if (Remote.isConnected())
+            indexe = Remote.getAxis().y == 100 ? 1 : (Remote.getAxis().y == -100 ? 0 : indexe);
         EventHandler(_window);
-
+        if (Remote.isClicked(ManetteSFML::Button::Croix)) {
+            isHost = (indexe == 0 ? true : false);
+            isJoin = (isHost ? false : true);
+        }
         name_txt->setString("Pseudo: " + _name);
         name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
         _window->draw(*back->getSprite());
         _window->draw(*name_txt->getData());
+        choice->setPosition(sf::Vector2f(600, indexe == 0 ? 350 : 500));
+        if (Remote.isConnected())
+            _window->draw(*choice->getSprite());
         _host->drawButton(_window);
         _join->drawButton(_window);
         _window->display();

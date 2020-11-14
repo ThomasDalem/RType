@@ -53,6 +53,7 @@ set(CLIENT_SRCS
     ./client/src/Game/MusicSystem.cpp
     ./client/src/Game/WindowHandler.cpp
     ./client/src/SFML/BackgroundSFML.cpp
+    ./client/src/SFML/ManetteSFML.cpp
     ./client/src/SFML/ImageSFML.cpp
     ./client/src/SFML/MusicSFML.cpp
     ./client/src/SFML/TextSFML.cpp

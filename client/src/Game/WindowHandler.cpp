@@ -6,7 +6,6 @@
 */
 
 #include "WindowHandler.hpp"
-#include <SFML/Window/Joystick.hpp>
 
 client::WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fps) {
     _width = width;

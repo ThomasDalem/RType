@@ -44,8 +44,9 @@ int client::ImageSFML::isClicked(sf::Event event, shared_ptr<sf::RenderWindow> w
 }
 
 string client::ImageSFML::getPath() const {return _path;}
-sf::IntRect client::ImageSFML::getRectangleSheep() const {return (_sprite->getTextureRect());};
+void client::ImageSFML::setRotate(int rot) {_sprite->setRotation(rot);}
 shared_ptr<sf::Sprite> client::ImageSFML::getSprite() const {return(_sprite);}
 void client::ImageSFML::setPosition(sf::Vector2f pos) {_sprite->setPosition(pos);}
 void client::ImageSFML::setScale(sf::Vector2f size) {this->_sprite->setScale(size);}
+sf::IntRect client::ImageSFML::getRectangleSheep() const {return (_sprite->getTextureRect());};
 void client::ImageSFML::setSprite(sf::Sprite newone) {this->_sprite = make_shared<sf::Sprite>(newone);}

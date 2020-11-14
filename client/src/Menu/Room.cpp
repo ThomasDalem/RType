@@ -29,24 +29,31 @@ void client::RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row
     roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
 }
 
+#include "ManetteSFML.hpp"
 client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
+    ManetteSFML Remote;
+    shared_ptr<ImageSFML> choice = make_shared<ImageSFML>("./resources/sprites/choice.png");
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>("Pseudo: " + player.getName(), "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     arrow->setScale(sf::Vector2f(0.25, 0.25));
+    choice->setScale(sf::Vector2f(0.05, 0.05));
+    choice->setRotate(-90);
+    choice->setPosition(sf::Vector2f(600, 500));
     _name = player.getName();
     _window->setFramerateLimit(60);
     while(_window->isOpen() && isMenu) {
         EventHandler(_window, player);
-
         name_txt->setString("Pseudo: " + _name);
         name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
         _window->draw(*back->getSprite());
         _window->draw(*arrow->getSprite());
         _window->draw(*name_txt->getData());
+        if (Remote.isConnected())
+            _window->draw(*choice->getSprite());
         for (size_t i = 0; i < roomlist.size(); i ++)
             roomlist[i]->drawButton(_window);
         _window->display();
@@ -85,23 +92,30 @@ void client::RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, client
 
 client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<client::Player>> players) {
     sf::Event event;
+    ManetteSFML Remote;
     string roomname = "Partie de " + players[0]->getName();
+    shared_ptr<ImageSFML> choice = make_shared<ImageSFML>("./resources/sprites/choice.png");
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
     arrow->setScale(sf::Vector2f(0.25, 0.25));
+    choice->setScale(sf::Vector2f(0.05, 0.05));
+    choice->setRotate(-90);
+    choice->setPosition(sf::Vector2f(650, 800));
+    name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
     _name = roomname;
     players[0]->setAdmin(true);
-    _window->setFramerateLimit(120);
-    while(_window->isOpen() && !isPlay) {
+    _window->setFramerateLimit(60);
+    for (size_t frame = 0; _window->isOpen() && !isPlay; frame ++) {
         EventHandler(_window, *players[0]);
-
         name_txt->setString("Nom de la Partie: " + _name);
         name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
         _window->draw(*back->getSprite());
         _window->draw(*arrow->getSprite());
+        if (Remote.isConnected())
+            _window->draw(*choice->getSprite());
         _window->draw(*name_txt->getData());
         for (size_t i = 0; i < players.size(); i ++) {
             players[i]->setPosition(sf::Vector2f(800, 250 + (i * 50)));
@@ -114,7 +128,11 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
             _play->drawButton(_window);
         _window->display();
         _window->clear();
-        while(_window->pollEvent(event)) {
+        while(_window->pollEvent(event) && frame > 30) {
+            if (Remote.isClicked(ManetteSFML::Button::Croix))
+                return Continue;
+            if (Remote.isClicked(ManetteSFML::Button::Carre))
+                return Back;
             EventHandler(_window, *players[0]);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _window->close();

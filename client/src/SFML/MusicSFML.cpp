@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2020
+** SFML
+** File description:
+** MusicSFML
+*/
+
 #include "MusicSFML.hpp"
 
 MusicSFML::MusicSFML() {

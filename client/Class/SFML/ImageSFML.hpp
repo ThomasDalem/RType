@@ -24,6 +24,7 @@ namespace client {
             ImageSFML(string filepath);
             ~ImageSFML();
 
+            void setRotate(int);
             void setTexture(string);
             void destroyTexture(void);
             string getPath(void) const;
