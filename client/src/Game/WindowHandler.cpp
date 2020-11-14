@@ -99,7 +99,7 @@ client::Input client::WindowHandler::isEvent(client::Player &player) {
                 return Right;
             if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space)
                 return Shoot;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 return Escape;
         }
     }
@@ -117,5 +117,5 @@ void client::WindowHandler::setHeight(size_t height) {this->_height = height;}
 void client::WindowHandler::addText(shared_ptr<TextSfml> news) {_texts.push_back(news);}
 shared_ptr<sf::RenderWindow> client::WindowHandler::getWindow(void) const {return _window;}
 void client::WindowHandler::addImage(shared_ptr<ImageSFML> news) {_images.push_back(news);}
-shared_ptr<client::Background> client::WindowHandler::getBackground(void) const {return _background;}
 void client::WindowHandler::setFramerate(size_t fps) const {_window->setFramerateLimit(fps);}
+shared_ptr<client::Background> client::WindowHandler::getBackground(void) const {return _background;}

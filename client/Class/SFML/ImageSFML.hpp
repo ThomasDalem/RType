@@ -24,15 +24,16 @@ namespace client {
             ImageSFML(string filepath);
             ~ImageSFML();
 
+            void setTexture(string);
             void destroyTexture(void);
             string getPath(void) const;
-            void setTexture(string filepath);
-            void setScale(sf::Vector2f size);
-            void setSprite(sf::Sprite newone);
-            void setPosition(sf::Vector2f pos);
-            shared_ptr<sf::Sprite> getSprite(void) const;
+            void setSprite(sf::Sprite);
+            void setScale(sf::Vector2f);
+            void setPosition(sf::Vector2f);
+            void setRectangleSheep(sf::IntRect);
             sf::IntRect getRectangleSheep() const;
-            void setRectangleSheep(sf::IntRect rect);
+            shared_ptr<sf::Sprite> getSprite(void) const;
+            int isClicked(sf::Event, shared_ptr<sf::RenderWindow>);
 
         private:
             string _path;

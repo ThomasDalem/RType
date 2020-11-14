@@ -1,6 +1,7 @@
 #include "MusicSFML.hpp"
 
 MusicSFML::MusicSFML() {
+    path = "";
     _volume = 20;
     _loop = false;
     isLoad = false;
@@ -15,6 +16,16 @@ MusicSFML::~MusicSFML() {
 
 void MusicSFML::load(string filepath) {
     if (!_music->openFromFile(filepath))
+        throw Exception("Resources load failed (type: Music)");
+    _music->setLoop(_loop);
+    path = filepath;
+    isLoad = true;
+}
+
+void MusicSFML::reload(void) {
+    if (path == "")
+        throw Exception("No path given");
+    if (!_music->openFromFile(path))
         throw Exception("Resources load failed (type: Music)");
     _music->setLoop(_loop);
     isLoad = true;
