@@ -23,6 +23,7 @@ namespace network
         ADD,
         REMOVE,
         CONFIRMCONNECTION,
+        DISCONNECTION,
     };
 
     enum class SendEvent : std::uint8_t

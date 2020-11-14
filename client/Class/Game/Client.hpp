@@ -16,6 +16,7 @@
 #include "Entities.hpp"
 #include "Animation.hpp"
 #include "MusicSystem.hpp"
+#include "Environment.hpp"
 #include "NetUDPClient.hpp"
 #include "NetTCPClient.hpp"
 #include "WindowHandler.hpp"
@@ -31,6 +32,7 @@ namespace client {
             bool MenusLoop(void);
             void formatInput(size_t);
             void waitConnection(void);
+            void sendDisconnection(void);
             size_t getNumbersPlayer(void) const;
             MusicSystem getMusicSystem(void) const;
             shared_ptr<Player> getPlayer(size_t) const;
@@ -40,6 +42,7 @@ namespace client {
             bool update(network::UDPClientMessage message);
             void disconnection(network::UDPClientMessage message);
             shared_ptr<WindowHandler> getWindowHandler(void) const;
+            void setScoreAndSprite(network::UDPClientMessage message);
             shared_ptr<network::NetUDPClient> getNetworkUDP(void) const;
             shared_ptr<network::NetUDPClient> getNetworkUDPTCP(void) const;
 
@@ -50,6 +53,7 @@ namespace client {
             shared_ptr<TextSfml> _score;
             vector<shared_ptr<Player>> _players;
             shared_ptr<WindowHandler> _windowhdl;
+            shared_ptr<Environment> _environment;
             vector<shared_ptr<Entities>> _entities;
             shared_ptr<network::NetUDPClient> _netUPD;
             shared_ptr<network::NetTCPClient> _netTCP;

@@ -13,9 +13,10 @@ client::Player::Player(int id) {
     _name = "";
     isAdmin = false;
     _image = make_shared<ImageSFML>("./resources/sprites/r-typesheet42.gif");
-    _textname = make_shared<TextSfml>(_name, "./resources/fonts/2MASS.otf", sf::Color::White, 250, 250 - 15);
+    _textname = make_shared<TextSfml>(_name, "./resources/fonts/2MASS.otf", sf::Color::White, 840, 880);
 
     _textname->setSize(15);
+
     _image->getSprite()->setTextureRect(sf::IntRect(0, 0, 33, 17));
     _image->getSprite()->setScale(sf::Vector2f(3, 3));
     _image->getSprite()->setPosition(sf::Vector2f(250, 250));
@@ -29,7 +30,7 @@ client::Player::~Player() {
 void client::Player::setPosition(sf::Vector2f newpos) {
     newpos = newpos.x < 0 ? sf::Vector2f(0, newpos.y) : (newpos.y < 0 ? sf::Vector2f(newpos.x, 0) : newpos);
     _image->getSprite()->setPosition(newpos);
-    _textname->setPosition(sf::Vector2f(newpos.x, newpos.y - 15));
+    _textname->setPosition(sf::Vector2f(840, 880));
 }
 
 void client::Player::setName(string str) {

@@ -16,6 +16,7 @@ Client::Client() {
     isDead = false;
     _animation = Animation();
     _players.push_back(make_shared<Player>(0));
+    _environment = make_shared<Environment>();
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
     _netUPD = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
     //_netTCP = make_shared<network::NetTCPClient>("127.0.0.1", "8081");
@@ -23,9 +24,9 @@ Client::Client() {
 
     //Windows Settings
     _windowhdl->setFramerate(60);
-    _windowhdl->addText(_score);
+    //_windowhdl->addText(_score);
     _windowhdl->addImage(_players[0]->getImage());
-    _windowhdl->addText(_players[0]->getNameText());
+    //_windowhdl->addText(_players[0]->getNameText());
 
     //TCP Connection
     //network::TCPMessage msg = {network::TCPEvent::CONNECT, 0};
@@ -33,6 +34,7 @@ Client::Client() {
 }
 
 Client::~Client() {
+    sendDisconnection();
     _entities.clear();
 }
 
@@ -49,7 +51,7 @@ void Client::game(void) {
     while (_windowhdl->isOpen()) {
         while (_netUPD->hasMessages()) {
             network::UDPClientMessage message = *_netUPD->getFirstMessage();
-            if (message.event == network::SendEvent::DESCONNECTCLIENT)
+            if (message.event == network::SendEvent::DEAD)
                 return;
             death(message);
             remove(message);
@@ -61,8 +63,15 @@ void Client::game(void) {
         _windowhdl->dispBackground();
         if (_animation.checkTimerAnimation())
             _animation.updateAnimation(_entities);
-        _windowhdl->display(_entities);
+        _windowhdl->dispEntities(_entities);
+        _windowhdl->dispEnvironment(_environment);
+        _windowhdl->display();
     }
+}
+
+void Client::sendDisconnection()
+{
+    _netUPD->sendMessage({_players[0]->getId(), {-1, 0}, network::Event::DISCONNECTION});
 }
 
 void Client::death(network::UDPClientMessage message) {
@@ -83,6 +92,11 @@ void Client::remove(network::UDPClientMessage message) {
 }
 
 bool Client::update(network::UDPClientMessage message) {
+    if (message.entitieType == 2) {
+        _environment->setHealh(message.value[1]);
+        _environment->setScore(message.value[2]);
+        return true;
+    }
     for (size_t i = 0; i < _entities.size(); i ++) {
         if (message.uniqueID == _entities[i]->getId()) {
             _entities[i]->getImage()->setPosition(sf::Vector2f(message.value[1], message.value[2]));
@@ -91,6 +105,11 @@ bool Client::update(network::UDPClientMessage message) {
         }
     }
     return false;
+}
+
+void Client::setScoreAndSprite(network::UDPClientMessage message)
+{
+    _environment->setPlayerRectangle(sf::IntRect(message.value[4], message.value[5], message.value[6], message.value[7]));
 }
 
 void Client::create(network::UDPClientMessage message) {
@@ -147,6 +166,7 @@ bool Client::MenusLoop(void) {
             return false;
 
     }
+    _environment->setPlayerName(_players[0]->getName());
     // switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
     //     case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
     //     case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
@@ -175,7 +195,7 @@ void Client::waitConnection(void) {
         textw->setString("Wait for Server..." + (attempt > 0 ? "(attempt " + to_string(attempt) + ")" : ""));
         _windowhdl->getWindow()->draw(*waiter->getSprite());
         _windowhdl->getWindow()->draw(*textw->getData());
-        _windowhdl->display(_entities);
+        _windowhdl->display();
     }
 }
 

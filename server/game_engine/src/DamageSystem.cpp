@@ -68,8 +68,9 @@ void game_engine::DamageSystem::applyDamage()
         }
         for (ennemyIter = _ennemy->begin(); ennemyIter != _ennemy->end(); ennemyIter++) {
             ennemyComponent = ennemyIter->get()->getComponentList();
-            if (checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, true) == true)
+            if (checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, true) == true) {
                 healthComponent->getDamage();
+            }
         }
     }
     ennemyDamageSystem();

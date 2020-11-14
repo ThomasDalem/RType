@@ -31,6 +31,7 @@ void core(vector<string> av) {
     while(!client->getNetworkUDP()->hasMessages());
     network::UDPClientMessage message = *client->getNetworkUDP()->getFirstMessage();
     client->getPlayer(0)->setId(message.uniqueID);
+    client->setScoreAndSprite(message);
     if (client->MenusLoop())
         client->game();
 }

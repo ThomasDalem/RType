@@ -7,7 +7,7 @@
 
 #include "Player.hpp"
 
-game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID, boost::asio::ip::udp::endpoint &endpoint)
+game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clientID, boost::asio::ip::udp::endpoint endpoint)
 {
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _uniqueID = clientID;

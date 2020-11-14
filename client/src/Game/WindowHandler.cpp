@@ -30,9 +30,31 @@ void client::WindowHandler::dispBackground() {
         _window->draw(*_texts[i]->getData());
 }
 
-void client::WindowHandler::display(vector<shared_ptr<Entities>> entities) const {
+void client::WindowHandler::dispEnvironment(std::shared_ptr<client::Environment> &environment) const
+{
+    sf::RectangleShape hudBack = sf::RectangleShape(sf::Vector2f(300, 150));
+
+    hudBack.setFillColor(sf::Color::Black);
+    hudBack.setOutlineColor(sf::Color::White);
+    hudBack.setOutlineThickness(1);
+    hudBack.setPosition(810, 850);
+    _window->draw(hudBack);
+    environment->getHealthText()->setString("health: " + to_string(environment->getHealth()));
+    environment->getScoreText()->setString("score: " + to_string(environment->getScore()));
+    _window->draw(*environment->getPlayerSprite()->getSprite());
+    _window->draw(*environment->getScoreText()->getData());
+    _window->draw(*environment->getHealthText()->getData());
+    _window->draw(*environment->getPlayerName()->getData());
+}
+
+
+void client::WindowHandler::dispEntities(vector<shared_ptr<client::Entities>> entities) const
+{
     for (size_t i = 0; i < entities.size(); i ++)
         _window->draw(*entities[i]->getImage()->getSprite());
+}
+
+void client::WindowHandler::display() const {
     _window->display();
     _window->clear();
 }
