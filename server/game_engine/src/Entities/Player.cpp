@@ -27,7 +27,7 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clien
     _deathSound = std::make_shared<Sound>("./path_to_death_sound");
     _entitesID = EntitiesType::PLAYER;
     _timeInvincibility = 0;
-    _speedMultiplicator = 1;
+    _speedMultiplicator = 1.35;
     _score = 0;
     _endpoint = endpoint;
     _componentList.push_back(_transform);

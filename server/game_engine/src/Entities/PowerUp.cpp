@@ -9,7 +9,7 @@
 
 game_engine::PowerUp::PowerUp(Vector _position)
 {
-    _powerUpType = static_cast<PowerUpType>(rand() % PowerUpType::SHIELD + 1);
+    _powerUpType = static_cast<PowerUpType>(PowerUpType::SPEEDBOOST);
 
     //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, Vector(-5, 0));
@@ -50,5 +50,6 @@ void game_engine::PowerUp::activeSheild(game_engine::Player &player)
 
 void game_engine::PowerUp::activeSpeedBoost(game_engine::Player &player)
 {
-    player.setSpeedMultiplicator(player.getSpeedMultiplicator() + 1);
+    if (player.getSpeedMultiplicator() <= 2)
+        player.setSpeedMultiplicator(player.getSpeedMultiplicator() + 0.35);
 }
