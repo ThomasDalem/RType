@@ -69,6 +69,24 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
     }
 }
 
+void game_engine::DeathSystem::disconnectClient(boost::asio::ip::udp::endpoint clientEndpoint, network::NetUDPServer &server)
+{
+    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
+    game_engine::Player *player;
+    network::UDPClientMessage suppressMessage;
+
+    for (playerListIter = _entities->begin(); playerListIter != _entities->end(); playerListIter++) {
+        if (playerListIter->get()->getEntitiesID() == EntitiesType::PLAYER) {
+            player = static_cast<Player *>(playerListIter->get());
+            if (clientEndpoint == player->getClientEndpoint()) {
+                deadClient(playerListIter, server);
+                playerListIter = _entities->begin();
+                return;
+            }
+        }
+    }
+}
+
 void game_engine::DeathSystem::deadClient(vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server) {
     Player *player = static_cast<Player *>(listEntitieIter->get());
     network::UDPClientMessage deadMessage = {network::SendEvent::DEAD, listEntitieIter->get()->getEntitiesID(), listEntitieIter->get()->getUniqueID()};
@@ -77,17 +95,7 @@ void game_engine::DeathSystem::deadClient(vector<shared_ptr<game_engine::IEntiti
     server.sendMessage(deadMessage, player->getClientEndpoint());
     server.broadcastMessage(suppressMessage);
     _entities->erase(listEntitieIter);
-}
-
-void game_engine::DeathSystem::disconnectClient(vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server)
-{
-    Player *player = static_cast<Player *>(listEntitieIter->get());
-    network::UDPClientMessage suppressMessage = {network::SendEvent::DESCONNECTCLIENT, listEntitieIter->get()->getEntitiesID(),
-        listEntitieIter->get()->getUniqueID()};
-
-    server.sendMessage(suppressMessage, player->getClientEndpoint());
     server.killClient(player->getClientEndpoint());
-    _entities->erase(listEntitieIter);
 }
 
 bool game_engine::DeathSystem::isDead(vector<shared_ptr<AComponents>> entitieComponent)

@@ -23,7 +23,7 @@
 namespace game_engine {
     class Player : public IEntities {
         public:
-            Player(Vector _position, PlayerColor playerColor, int clientID, boost::asio::ip::udp::endpoint &endpoint);
+            Player(Vector _position, PlayerColor playerColor, int clientID, boost::asio::ip::udp::endpoint endpoint);
             ~Player() {};
 
             int getUniqueID() const {return (_uniqueID);};

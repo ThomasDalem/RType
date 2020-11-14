@@ -34,9 +34,11 @@ namespace client
         std::shared_ptr<ImageSFML> getPlayerSprite() const;
         std::shared_ptr<TextSfml> getScoreText() const;
         std::shared_ptr<TextSfml> getHealthText() const;
+        std::shared_ptr<TextSfml> getPlayerName() const;
         void setPlayerRectangle(sf::IntRect rect);
         void setScoreText(int score);
         void setHealthText(int health);
+        void setPlayerName(std::string name);
     protected:
     private:
         int _score;
@@ -44,6 +46,7 @@ namespace client
         std::shared_ptr<ImageSFML> _playerSprite;
         std::shared_ptr<TextSfml> _scoreText;
         std::shared_ptr<TextSfml> _healthText;
+        std::shared_ptr<TextSfml> _playerName;
     };
 } // namespace client
 #endif /* !ENVIRONMENT_HPP_ */

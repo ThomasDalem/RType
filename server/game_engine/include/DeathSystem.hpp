@@ -35,6 +35,7 @@ namespace game_engine {
             DeathSystem();
             DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
             ~DeathSystem();
+            void disconnectClient(boost::asio::ip::udp::endpoint clientEndpoint, network::NetUDPServer &server);
             void deathSystem(network::NetUDPServer &server);
             void spawnPowerUp(game_engine::IEntities *entitie);
             void incScoreForAllPlayer();
@@ -42,7 +43,6 @@ namespace game_engine {
             bool checkGameBorder(Transform &transform, Collision &collision);
             bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
             void deadClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server);
-            void disconnectClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server);
 
         protected:
         private:

@@ -44,6 +44,7 @@ void client::WindowHandler::dispEnvironment(std::shared_ptr<client::Environment>
     _window->draw(*environment->getPlayerSprite()->getSprite());
     _window->draw(*environment->getScoreText()->getData());
     _window->draw(*environment->getHealthText()->getData());
+    _window->draw(*environment->getPlayerName()->getData());
 }
 
 

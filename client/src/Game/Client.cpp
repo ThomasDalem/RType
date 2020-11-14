@@ -26,7 +26,7 @@ Client::Client() {
     _windowhdl->setFramerate(60);
     //_windowhdl->addText(_score);
     _windowhdl->addImage(_players[0]->getImage());
-    _windowhdl->addText(_players[0]->getNameText());
+    //_windowhdl->addText(_players[0]->getNameText());
 
     //TCP Connection
     //network::TCPMessage msg = {network::TCPEvent::CONNECT, 0};
@@ -34,6 +34,7 @@ Client::Client() {
 }
 
 Client::~Client() {
+    sendDisconnection();
     _entities.clear();
 }
 
@@ -50,7 +51,7 @@ void Client::game(void) {
     while (_windowhdl->isOpen()) {
         while (_netUPD->hasMessages()) {
             network::UDPClientMessage message = *_netUPD->getFirstMessage();
-            if (message.event == network::SendEvent::DESCONNECTCLIENT)
+            if (message.event == network::SendEvent::DEAD)
                 return;
             death(message);
             remove(message);
@@ -66,6 +67,11 @@ void Client::game(void) {
         _windowhdl->dispEnvironment(_environment);
         _windowhdl->display();
     }
+}
+
+void Client::sendDisconnection()
+{
+    _netUPD->sendMessage({_players[0]->getId(), {-1, 0}, network::Event::DISCONNECTION});
 }
 
 void Client::death(network::UDPClientMessage message) {
@@ -89,6 +95,7 @@ bool Client::update(network::UDPClientMessage message) {
     if (message.entitieType == 2) {
         _environment->setHealh(message.value[1]);
         _environment->setScore(message.value[2]);
+        return true;
     }
     for (size_t i = 0; i < _entities.size(); i ++) {
         if (message.uniqueID == _entities[i]->getId()) {
@@ -144,6 +151,7 @@ bool Client::MenusLoop(void) {
         case Quit: return false;
         default: return false;
     }
+    _environment->setPlayerName(_players[0]->getName());
     return true;
 }
 

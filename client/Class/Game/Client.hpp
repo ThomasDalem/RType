@@ -32,6 +32,7 @@ namespace client {
             bool MenusLoop(void);
             void formatInput(size_t);
             void waitConnection(void);
+            void sendDisconnection(void);
             size_t getNumbersPlayer(void) const;
             MusicSystem getMusicSystem(void) const;
             shared_ptr<Player> getPlayer(size_t) const;

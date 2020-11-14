@@ -12,6 +12,7 @@ client::Environment::Environment()
     _score = 0;
     _health = 0;
     _playerSprite = make_shared<ImageSFML>("./resources/sprites/r-typesheet42.gif");
+    _playerName = make_shared<TextSfml>("name", "./resources/fonts/2MASS.otf", sf::Color::White, 820, 880);
     _scoreText = make_shared<TextSfml>("score: 0", "./resources/fonts/2MASS.otf", sf::Color::White, 820, 920);
     _healthText = make_shared<TextSfml>("health: 0", "./resources/fonts/2MASS.otf", sf::Color::White, 820, 960);
     _playerSprite->setScale(sf::Vector2f(2, 2));
@@ -62,6 +63,16 @@ std::shared_ptr<client::TextSfml> client::Environment::getHealthText() const
     return (_healthText);
 }
 
+std::shared_ptr<client::TextSfml> client::Environment::getPlayerName() const
+{
+    return (_playerName);
+}
+
+void client::Environment::setPlayerName(std::string name)
+{
+    _playerName->setString(name);
+}
+
 void client::Environment::setPlayerRectangle(sf::IntRect rect)
 {
     _playerSprite->setRectangleSheep(rect);
@@ -75,3 +86,4 @@ void client::Environment::setHealthText(int health)
 {
     _scoreText->update("health: " + to_string(health), sf::Color::White);
 }
+

@@ -32,10 +32,8 @@ void game_engine::GameLoop::respondToConnection(std::unique_ptr<std::pair<networ
 
     for (playerListIter = _entities->begin(); playerListIter != _entities->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
-        if (newPlayerID == player->getUniqueID()) {
-            std::cout << "here" << std::endl;
+        if (newPlayerID == player->getUniqueID())
             break;
-        }
     }
     responseMessage.value[0] = -1;
     responseMessage.value[1] = 0;
@@ -73,54 +71,43 @@ bool game_engine::GameLoop::areTherePlayers()
                 }
             }
         }
+        if (message->first.event == network::Event::DISCONNECTION) {
+            deathSystem.disconnectClient(message->second, server);
+            playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
+            break;
+        }
     }
-
     if (playersList->empty())
         return (false);
     return (true);
 }
 
-void game_engine::GameLoop::sendToClients()
+void game_engine::GameLoop::sendEntitiesToClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator entitiesListIter, 
+    Transform *transfrom, Render *render)
+{
+    network::UDPClientMessage clientMessage;
+
+    memset(&clientMessage, 0, sizeof(network::UDPClientMessage));
+    clientMessage.event = network::SendEvent::UPDATE;
+    clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
+    clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
+    clientMessage.value[0] = 1;
+    clientMessage.value[1] = transfrom->getPosition().x;
+    clientMessage.value[2] = transfrom->getPosition().y;
+    clientMessage.value[3] = 0;
+    clientMessage.value[4] = render->getRect().x;
+    clientMessage.value[5] = render->getRect().y;
+    clientMessage.value[6] = render->getRect().L;
+    clientMessage.value[7] = render->getRect().l;
+    server.broadcastMessage(clientMessage);
+}
+
+void game_engine::GameLoop::sendHUDToClient()
 {
     std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
-    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator entitiesListIter;
-    std::vector<std::shared_ptr<AComponents>> entitiesComponents;
-    std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
     game_engine::Player *player;
-    Transform *entitieTransfromComponent;
-    Collision *entitieCollisionComponent;
-    Render *entitieRenderComponent;
-    Health *entitieHealthComponent;
 
-    for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
-        network::UDPClientMessage clientMessage;
-        entitiesComponents = entitiesListIter->get()->getComponentList();
-        for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
-            if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
-                entitieTransfromComponent = static_cast<Transform *>(componentListIter->get());
-            if (componentListIter->get()->getType() == ComponentType::RENDER)
-                entitieRenderComponent = static_cast<Render *>(componentListIter->get());
-            if (componentListIter->get()->getType() == ComponentType::COLLISION)
-                entitieCollisionComponent = static_cast<Collision *>(componentListIter->get());
-        }
-        if (entitieTransfromComponent->getPosition().x != entitieTransfromComponent->getOldPosition().x ||
-            entitieTransfromComponent->getPosition().y != entitieTransfromComponent->getOldPosition().y) {
-            memset(&clientMessage, 0, sizeof(network::UDPClientMessage));
-            clientMessage.event = network::SendEvent::UPDATE;
-            clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
-            clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
-            clientMessage.value[0] = 1;
-            clientMessage.value[1] = entitieTransfromComponent->getPosition().x;
-            clientMessage.value[2] = entitieTransfromComponent->getPosition().y;
-            clientMessage.value[3] = 0;
-            clientMessage.value[4] = entitieRenderComponent->getRect().x;
-            clientMessage.value[5] = entitieRenderComponent->getRect().y;
-            clientMessage.value[6] = entitieRenderComponent->getRect().L;
-            clientMessage.value[7] = entitieRenderComponent->getRect().l;
-            server.broadcastMessage(clientMessage);
-        }
-    }
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
         network::UDPClientMessage clientMessage;
@@ -136,6 +123,27 @@ void game_engine::GameLoop::sendToClients()
         }
         server.sendMessage(clientMessage, player->getClientEndpoint());
     }
+}
+
+void game_engine::GameLoop::sendToClients()
+{
+    std::vector<std::shared_ptr<game_engine::IEntities>>::iterator entitiesListIter;
+    std::vector<std::shared_ptr<AComponents>> entitiesComponents;
+    std::vector<std::shared_ptr<AComponents>>::iterator componentListIter;
+    Transform *entitieTransfromComponent;
+    Render *entitieRenderComponent;
+
+    for (entitiesListIter = _entities->begin(); entitiesListIter != _entities->end(); entitiesListIter++) {
+        entitiesComponents = entitiesListIter->get()->getComponentList();
+        for (componentListIter = entitiesComponents.begin(); componentListIter != entitiesComponents.end(); ++componentListIter) {
+            if (componentListIter->get()->getType() == ComponentType::TRANSFORM)
+                entitieTransfromComponent = static_cast<Transform *>(componentListIter->get());
+            if (componentListIter->get()->getType() == ComponentType::RENDER)
+                entitieRenderComponent = static_cast<Render *>(componentListIter->get());
+        }
+        sendEntitiesToClient(entitiesListIter, entitieTransfromComponent, entitieRenderComponent);
+    }
+    sendHUDToClient();
 }
 
 void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComponents>> componentList, Transform *transfromComponent, Render *renderComponent)
