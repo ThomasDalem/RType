@@ -20,9 +20,9 @@ game_engine::Player::Player(Vector _position, PlayerColor playerColor, int clien
     if (playerColor == PlayerColor::Yellow)
         _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 20, 33, 16));
     if (playerColor == PlayerColor::Red)
-        _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 36, 33, 16));
-    if (playerColor == PlayerColor::Green)
         _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 53, 33, 16));
+    if (playerColor == PlayerColor::Green)
+        _render = std::make_shared<Render>("./path_to_player sprite", Rectangle(0, 36, 33, 16));
 
     _deathSound = std::make_shared<Sound>("./path_to_death_sound");
     _entitesID = EntitiesType::PLAYER;

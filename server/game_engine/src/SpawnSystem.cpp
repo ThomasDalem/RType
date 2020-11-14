@@ -135,11 +135,11 @@ int game_engine::SpawnSystem::newPlayer(boost::asio::ip::udp::endpoint &endpoint
 
     newListPlayer = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
     if (newListPlayer->size() == 0)
-        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, getAndIncID(), endpoint);
-    if (newListPlayer->size() == 1)
         newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Blue, getAndIncID(), endpoint);
-    if (newListPlayer->size() == 2)
+    if (newListPlayer->size() == 1)
         newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Red, getAndIncID(), endpoint);
+    if (newListPlayer->size() == 2)
+        newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Yellow, getAndIncID(), endpoint);
     if (newListPlayer->size() == 3)
         newPlayer = std::make_shared<Player>(Vector(50, 500), PlayerColor::Green, getAndIncID(), endpoint);
     _entities->push_back(newPlayer);

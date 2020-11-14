@@ -14,7 +14,8 @@ client::Background::Background(int refresh) {
     _movement = refresh == 0 ? false : true;
     _image = make_shared<ImageSFML>("./resources/sprites/background.png");
 }
-client::Background::~Background() {}
+client::Background::~Background() {
+}
 
 void client::Background::move(void) {
     if (this->_movement) {
