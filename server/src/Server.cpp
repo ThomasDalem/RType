@@ -6,6 +6,7 @@
 */
 
 #include <list>
+#include <iostream>
 #include "Server.hpp"
 
 Server::Server(short tcpServerPort, short udpServerPort) : _TCPServer(tcpServerPort), _UDPServer(udpServerPort), _roomsCounter(0)
@@ -25,10 +26,16 @@ void Server::mainLoop()
             handleTCPMessages(it->get());
         }
         sendTCPMessagesFromRooms();
-        //while (_UDPServer.hasMessages()) {
-        //    std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message = _UDPServer.getFirstMessage();
-        //}
+        while (_UDPServer.hasMessages()) {
+            std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message = _UDPServer.getFirstMessage();
+        }
+        sendUDPMessagesFromRooms();
     }
+}
+
+void Server::handleUDPMessages(std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> &message)
+{
+    _rooms[message->first.roomNbr]->pushUDPMessage(message);
 }
 
 void Server::handleTCPMessages(network::NetTCPServerClient *client)
@@ -49,6 +56,7 @@ void Server::handleTCPMessages(network::NetTCPServerClient *client)
         case network::TCPEvent::GET_ROOMS:
             sendRoomsToClient(client);
         default:
+            _rooms[message->data[0]]->pushTCPMessage(message, client->getID());
             break;
         }
     }
@@ -57,7 +65,7 @@ void Server::handleTCPMessages(network::NetTCPServerClient *client)
 void Server::broadcastTCPMessageToRoom(network::TCPMessage const& message, int roomNbr)
 {
     for (auto it = _TCPServer.getClients().begin(); it != _TCPServer.getClients().end(); it++) {
-        if (it->get()->getRoomID() == roomNbr) {
+        if (it->get()->getRoomID() == roomNbr && it->get()->isConnected()) {
             it->get()->sendMessage(message);
         }
     }
@@ -69,7 +77,7 @@ void Server::createRoom(network::NetTCPServerClient *client, std::unique_ptr<net
         client->sendMessage(network::TCPMessage{network::TCPEvent::ERROR});
         return;
     }
-    _rooms[_roomsCounter] = std::make_unique<Room>(_roomsCounter, message->data, _TCPMessageToSend);
+    _rooms[_roomsCounter] = std::make_unique<Room>(_roomsCounter, message->data, _TCPMessagesToSend, _UDPMessagesToSend);
     client->sendMessage(network::TCPMessage{network::TCPEvent::CREATE_ROOM, {char(_roomsCounter), '\0'}});
     _roomsCounter++;
 }
@@ -105,16 +113,23 @@ void Server::disconnectClientFromRoom(network::NetTCPServerClient *client, std::
 void Server::sendTCPMessagesFromRooms()
 {
     for (auto it = _rooms.begin(); it != _rooms.end(); it++) {
-        while (it->second->getTCPMessagesToSend().size() > 0) {
-            std::cout << it->second->getTCPMessagesToSend().size() << " messages left" << std::endl;
-            std::pair<network::TCPMessage, int> message = it->second->getTCPMessagesToSend().front();
+        while (!it->second->getTCPMessagesToSend().empty()) {
+            std::pair<network::TCPMessage, int> message = it->second->getTCPMessagesToSend().pop();
             if (message.second == -1) {
                 broadcastTCPMessageToRoom(message.first, it->first);
             } else {
-                sendMessageToClient(message.first, message.second);
+                sendTCPMessageToClient(message.first, message.second);
             }
-            it->second->getTCPMessagesToSend().pop();
         }
+    }
+}
+
+void Server::sendUDPMessagesFromRooms()
+{
+    std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>> message;
+
+    while (_UDPMessagesToSend.tryGetPop(message) != false) {
+        _UDPServer.sendMessage(message->first, message->second);
     }
 }
 
@@ -134,7 +149,7 @@ void Server::sendRoomsToClient(network::NetTCPServerClient *client)
     client->sendMessage(message);
 }
 
-void Server::sendMessageToClient(network::TCPMessage const& message, int clientNbr)
+void Server::sendTCPMessageToClient(network::TCPMessage const& message, int clientNbr)
 {
     for (auto it = _TCPServer.getClients().begin(); it != _TCPServer.getClients().end(); it++) {
         if (it->get()->getID() == clientNbr) {

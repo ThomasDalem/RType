@@ -25,7 +25,7 @@ game_engine::DeathSystem &game_engine::DeathSystem::operator=(const game_engine:
     return (*this);
 }
 
-void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
+void game_engine::DeathSystem::deathSystem(std::vector<network::UDPClientMessage> &messagesList)
 {
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter;
     Health *entitieHealthComponent;
@@ -41,7 +41,7 @@ void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
                     spawnPowerUp(listEntitieIter->get());
                 network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),
                     listEntitieIter->get()->getUniqueID()};
-                server.broadcastMessage(suppressMessage);
+                messagesList.push_back(suppressMessage);
                 listEntitieIter = _entities->erase(listEntitieIter);
                 listEntitieIter = _entities->begin();
             }

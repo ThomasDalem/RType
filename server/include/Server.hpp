@@ -21,23 +21,25 @@ public:
     ~Server();
 
     void mainLoop();
-    void handleTCPMessages(network::NetTCPServerClient *client);
-    void broadcastTCPMessageToRoom(network::TCPMessage const& message, int roomNbr);
 
 private:
+    void handleUDPMessages(std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> &message);
+    void handleTCPMessages(network::NetTCPServerClient *client);
+    void broadcastTCPMessageToRoom(network::TCPMessage const& message, int roomNbr);
     void createRoom(network::NetTCPServerClient *client, std::unique_ptr<network::TCPMessage> const& message);
     void connectClientToRoom(network::NetTCPServerClient *client, int roomNbr, char *data);
     void disconnectClientFromRoom(network::NetTCPServerClient *client, std::unique_ptr<network::TCPMessage> &message);
     void sendTCPMessagesFromRooms();
+    void sendUDPMessagesFromRooms();
     void sendRoomsToClient(network::NetTCPServerClient *clientNbr);
-    void sendMessageToClient(network::TCPMessage const& message, int clientNbr);
+    void sendTCPMessageToClient(network::TCPMessage const& message, int clientNbr);
 
 private:
     network::NetTCPServer _TCPServer;
     network::NetUDPServer _UDPServer;
     std::unordered_map<int, std::unique_ptr<Room>> _rooms;
-    std::queue<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> _UDPmessages;
-    std::queue<std::pair<network::TCPMessage, int>> _TCPMessageToSend;
+    SafeQueue<std::pair<network::TCPMessage, int>> _TCPMessagesToSend;
+    SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> _UDPMessagesToSend;
     int _roomsCounter;
 };
 

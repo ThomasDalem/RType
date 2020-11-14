@@ -40,12 +40,14 @@ public:
         return true;
     }
 
-    void pop()
+    T pop()
     {
-        std::lock_guard<std::mutex> lock(_mutex);
+        std::unique_lock<std::mutex> lock(_mutex);
 
         _cv.wait(lock, [this]{ return (!_queue.empty() || _stop); });
+        T value = _queue.front();
         _queue.pop();
+        return value;
     };
 
     bool empty()

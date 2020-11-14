@@ -5,12 +5,12 @@
 ** main
 */
 
+#include <iostream>
+#include "Exception.hpp"
 #include "Server.hpp"
 
 int main(int ac, char **av)
 {
-    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> entities;
-
     if (ac != 3) {
         std::cerr << "Usage: ./r-type_server [TCP port] [UDP port]" << std::endl;
         return 1;
