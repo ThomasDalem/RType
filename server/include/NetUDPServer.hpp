@@ -33,7 +33,7 @@ namespace network
     private:
         std::thread _thread;
         boost::asio::io_context _context;
-        std::shared_ptr<boost::asio::ip::udp::socket> _socket;
+        std::unique_ptr<boost::asio::ip::udp::socket> _socket;
         boost::asio::ip::udp::endpoint _senderEndpoint;
         char _data[MAX_MESSAGE_LENGTH];
         std::vector<boost::asio::ip::udp::endpoint> _clients;

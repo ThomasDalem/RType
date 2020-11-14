@@ -16,7 +16,7 @@ namespace network
     NetUDPServer::NetUDPServer(short port)
     {
         try {
-            _socket = std::make_shared<boost::asio::ip::udp::socket>(_context, asio::ip::udp::endpoint(asio::ip::udp::v4(), port));
+            _socket = std::make_unique<boost::asio::ip::udp::socket>(_context, asio::ip::udp::endpoint(asio::ip::udp::v4(), port));
         } catch (const boost::system::system_error &e) {
             throw (Exception(e.what()));
         }
