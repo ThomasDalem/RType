@@ -12,9 +12,9 @@
 #include <iostream>
 
 #include "Sfml.hpp"
+#include "MusicSFML.hpp"
 
 using namespace std;
-
 namespace client {
     class Button {
         public:
@@ -27,11 +27,13 @@ namespace client {
             void setText(string fontPath, string Text, int size, const sf::Color textColor);
 
         private:
+            bool isOn;
             sf::Font font;
             sf::Text text;
             int is_clicked;
             int is_hovered;
             sf::Vector2f pos;
+            MusicSFML _sound;
             sf::Vector2f size;
             sf::Color buttonColor;
             sf::RectangleShape button;

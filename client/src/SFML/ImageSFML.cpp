@@ -32,6 +32,18 @@ void client::ImageSFML::setRectangleSheep(sf::IntRect rect) {
     _sprite->setTextureRect(sf::IntRect(rect.left, rect.top, rect.width, rect.height));
 }
 
+int client::ImageSFML::isClicked(sf::Event event, shared_ptr<sf::RenderWindow> window) {
+    sf::Vector2i cursorPos;
+    sf::Vector2i windowPos = window->getPosition();
+
+    if (event.type == sf::Event::MouseButtonPressed) {
+        cursorPos = sf::Mouse::getPosition();
+        if (_sprite->getGlobalBounds().contains(sf::Vector2f(cursorPos.x - windowPos.x, cursorPos.y - windowPos.y)))
+            return true;
+    }
+    return false;
+}
+
 string client::ImageSFML::getPath() const {return _path;}
 sf::IntRect client::ImageSFML::getRectangleSheep() const {return (_sprite->getTextureRect());};
 shared_ptr<sf::Sprite> client::ImageSFML::getSprite() const {return(_sprite);}

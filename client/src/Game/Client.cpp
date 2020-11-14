@@ -145,13 +145,34 @@ void Client::formatInput(size_t row) {
 }
 
 bool Client::MenusLoop(void) {
-    switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
-        case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
-        case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
-        case Quit: return false;
-        default: return false;
+    bool isLooping = true;
+
+    while (isLooping) {
+        ReturnMain mainissue = Mainmenu().loop(_windowhdl->getWindow(), *_players[0]);
+
+        if (mainissue == Creating) {
+            if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players) == ReturnRoom::Continue)
+                isLooping = false;
+            else if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players) == ReturnRoom::Back);
+            else if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players) == ReturnRoom::Salle)
+                cout << "Entering in the room" << endl;
+        } else if (mainissue == Room) {
+            if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Continue)
+                isLooping = false;
+            else if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Back);
+            else if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Salle);
+                cout << "Entering in the room" << endl;
+        } else if (mainissue == Quit)
+            return false;
+
     }
     _environment->setPlayerName(_players[0]->getName());
+    // switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
+    //     case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
+    //     case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
+    //     case Quit: return false;
+    //     default: return false;
+    // }
     return true;
 }
 

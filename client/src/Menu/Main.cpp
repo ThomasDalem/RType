@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-string randomGen(void) {
+static string randomGen(void) {
     srand(time(nullptr));
 
     switch(rand() % 10) {
@@ -29,8 +29,8 @@ client::Mainmenu::Mainmenu() {
     isHost = false;
     isJoin = false;
     isQuit = false;
-    _host = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 250), sf::Vector2f(250, 100));
-    _join = make_shared<Button>(sf::Vector2f((1900 - 250) / 2, 400), sf::Vector2f(250, 100));
+    _host = make_shared<Button>(sf::Vector2f((1900 - 450) / 2, 250), sf::Vector2f(450, 100));
+    _join = make_shared<Button>(sf::Vector2f((1900 - 450) / 2, 400), sf::Vector2f(450, 100));
 
     _host->setColor(sf::Color::Black, sf::Color::White, 5);
     _join->setColor(sf::Color::Black, sf::Color::White, 5);
@@ -41,11 +41,9 @@ client::Mainmenu::Mainmenu() {
 client::Mainmenu::~Mainmenu() {}
 
 client::ReturnMain client::Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
-    shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>("Pseudo: " + _name, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
-    arrow->setScale(sf::Vector2f(0.25, 0.25));
     _window->setFramerateLimit(60);
     while(_window->isOpen() && !isHost && !isJoin && !isQuit) {
         EventHandler(_window);
@@ -54,7 +52,6 @@ client::ReturnMain client::Mainmenu::loop(shared_ptr<sf::RenderWindow> _window, 
         name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
         _window->draw(*back->getSprite());
-        _window->draw(*arrow->getSprite());
         _window->draw(*name_txt->getData());
         _host->drawButton(_window);
         _join->drawButton(_window);

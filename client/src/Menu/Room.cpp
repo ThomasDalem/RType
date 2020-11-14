@@ -57,6 +57,8 @@ client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, 
         while(_window->pollEvent(event))
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _window->close();
+        if (arrow->isClicked(event, _window))
+            return Back;
     }
     return player.getRoom() > 0 ? Salle : Back;
 }
@@ -84,9 +86,11 @@ void client::RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, client
 client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<client::Player>> players) {
     sf::Event event;
     string roomname = "Partie de " + players[0]->getName();
+    shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
+    arrow->setScale(sf::Vector2f(0.25, 0.25));
     _name = roomname;
     players[0]->setAdmin(true);
     _window->setFramerateLimit(120);
@@ -97,6 +101,7 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
         name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
 
         _window->draw(*back->getSprite());
+        _window->draw(*arrow->getSprite());
         _window->draw(*name_txt->getData());
         for (size_t i = 0; i < players.size(); i ++) {
             players[i]->setPosition(sf::Vector2f(800, 250 + (i * 50)));
@@ -105,8 +110,7 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
 
             _window->draw(*players[i]->getImage()->getSprite());
             _window->draw(*players[i]->getNameText()->getData());
-        }
-        if (players[0]->getAdmin())
+        } if (players[0]->getAdmin())
             _play->drawButton(_window);
         _window->display();
         _window->clear();
@@ -114,6 +118,8 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
             EventHandler(_window, *players[0]);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _window->close();
+            if (arrow->isClicked(event, _window))
+                return Back;
             if (players[0]->getAdmin() && _play->isClicked(event, _window))
                 return Continue;
         }

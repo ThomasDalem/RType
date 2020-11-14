@@ -15,6 +15,7 @@ class MusicSFML {
         void stop(void);
         void start(void);
         void pause(void);
+        void reload(void);
         void jump(size_t sec);
         void setLoop(bool loop);
         bool isLoaded(void) const;
@@ -24,6 +25,7 @@ class MusicSFML {
 
     private:
         bool _loop;
+        string path;
         bool isLoad;
         size_t _volume;
         sf::Music *_music;
