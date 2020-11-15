@@ -111,6 +111,7 @@ void game_engine::GameLoop::sendHUDToClient()
     for (playerListIter = playersList->begin(); playerListIter != playersList->end(); playerListIter++) {
         player = static_cast<Player *>(playerListIter->get());
         network::UDPClientMessage clientMessage;
+        std::memset(&clientMessage, 0, sizeof(network::UDPClientMessage));
         if (player->getHealth()->getHealthPoint() > 0) {
             clientMessage.entitieType = EntitiesType::ENVIRONNEMENT;
             clientMessage.value[0] = 1;
