@@ -8,6 +8,7 @@
 #include "Room.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
+#include "ManetteSFML.hpp"
 
 client::RoomMenu::RoomMenu(string name, size_t ndx) {
     _name = "";
@@ -29,7 +30,6 @@ void client::RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row
     roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
 }
 
-#include "ManetteSFML.hpp"
 client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
     ManetteSFML Remote;
