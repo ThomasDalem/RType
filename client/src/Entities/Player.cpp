@@ -39,9 +39,9 @@ void client::Player::setName(string str) {
 }
 
 void client::Player::setId(int id) {_id = id;}
+int client::Player::getRoom(void) {return _room;}
 int client::Player::getId(void) const {return _id;}
 void client::Player::setRoom(int room) {_room = room;}
-int client::Player::getRoom(void) const {return _room;}
 string client::Player::getName(void) const {return _name;}
 bool client::Player::getAdmin(void) const {return isAdmin;}
 void client::Player::setAdmin(bool boolean) {isAdmin = boolean;}

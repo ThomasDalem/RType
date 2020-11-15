@@ -42,28 +42,16 @@ void Server::handleUDPMessages(std::unique_ptr<std::pair<network::UDPMessage, bo
     _rooms[message->first.roomNbr]->pushUDPMessage(message);
 }
 
-void Server::handleTCPMessages(network::NetTCPServerClient *client)
-{
+void Server::handleTCPMessages(network::NetTCPServerClient *client) {
     while (client->hasMessages()) {
         std::unique_ptr<network::TCPMessage> message = client->getFirstMessage();
-        switch (message->event)
-        {
-        case network::TCPEvent::CREATE_ROOM:
-            createRoom(client, message);
-            break;
-        case network::TCPEvent::CONNECT:
-            connectClientToRoom(client, message->data[0], &message->data[1]);
-            break;
-        case network::TCPEvent::DISCONNECT:
-            disconnectClientFromRoom(client, message);
-            break;
-        case network::TCPEvent::GET_ROOMS:
-            sendRoomsToClient(client);
-        case network::TCPEvent::GET_ROOM_INFO:
-            sendRoomInfo(client, message);
-        default:
-            _rooms[message->data[0]]->pushTCPMessage(message, client->getID());
-            break;
+        switch (message->event) {
+            case network::TCPEvent::CREATE_ROOM: createRoom(client, message); break;
+            case network::TCPEvent::CONNECT: connectClientToRoom(client, message->data[0], &message->data[1]); break;
+            case network::TCPEvent::DISCONNECT: disconnectClientFromRoom(client, message); break;
+            case network::TCPEvent::GET_ROOMS: sendRoomsToClient(client); break;
+            case network::TCPEvent::GET_ROOM_INFO: sendRoomInfo(client, message); break;
+            default: _rooms[message->data[0]]->pushTCPMessage(message, client->getID()); break;
         }
     }
 }

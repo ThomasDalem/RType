@@ -23,9 +23,9 @@ namespace client {
             Player(int32_t id);
             ~Player();
 
+            int getRoom(void);
             void setId(int id);
             void setRoom(int room);
-            int getRoom(void) const;
             int getId(void) const;
             void setName(string str);
             bool getAdmin(void) const;

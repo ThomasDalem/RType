@@ -148,31 +148,43 @@ void Client::formatInput(size_t row) {
 
 bool Client::MenusLoop(void) {
     int roomNbr = -1;
+    bool rooms = true;
     bool isLooping = true;
     network::TCPMessage message = {network::TCPEvent::GET_ROOMS, {-1}};
 
     _netTCP.sendMessage(message);
-    // while (!_netUDP.hasMessages()) {
-    //     unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
-    //     if (resp->event == network::TCPEvent::GET_ROOMS) {
-    //         for (roomNbr = 0; resp->data[roomNbr] != -1; roomNbr ++);
-    //         break;
-    //     }
-    // }
-    while (isLooping) {
+    while (rooms) {
+        if (_netTCP.hasMessages()) {
+            unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
+            if (resp->event == network::TCPEvent::GET_ROOMS) {
+                roomNbr = resp->data[0];
+                cout << to_string(roomNbr) << endl;
+                rooms = false;
+            }
+        }
+    } while (isLooping) {
         ReturnMain mainissue = Mainmenu().loop(_windowhdl->getWindow(), *_players[0]);
+
         if (mainissue == Creating) {
-            if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr) == ReturnRoom::Continue)
+            ReturnRoom roomissue = RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr);
+
+            if (roomissue == ReturnRoom::Continue)
                 isLooping = false;
-            else if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr) == ReturnRoom::Back);
-            else if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr) == ReturnRoom::Salle)
+            else if (roomissue == ReturnRoom::Back);
+            else if (roomissue == ReturnRoom::Salle)
                 cout << "Entering in the room" << endl;
         } else if (mainissue == Room) {
-            if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Continue)
+            ReturnRoom roomissue = RoomMenu("wsh", roomNbr).loop(_windowhdl->getWindow(), *_players[0]);
+
+            if (roomissue == ReturnRoom::Continue)
                 isLooping = false;
-            else if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Back);
-            else if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Salle);
+            else if (roomissue == ReturnRoom::Back);
+            else if (roomissue == ReturnRoom::Salle) {
+                int roomer = _players[0]->getRoom();
                 cout << "Entering in the room" << endl;
+
+                RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomer);
+            }
         } else if (mainissue == Quit)
             return false;
 

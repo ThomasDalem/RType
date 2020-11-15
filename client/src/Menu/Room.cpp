@@ -102,18 +102,25 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
-    memcpy(message.data, roomname.c_str(), roomname.length() + 1);
-    client.sendMessage(message);
-    while (!client.hasMessages());
-    while (client.hasMessages()) {
-        unique_ptr<TCPMessage> receivedMessage = client.getFirstMessage();
-        if (receivedMessage->event == TCPEvent::CREATE_ROOM) {
-            cout << "Room " << int(receivedMessage->data[0]) << " created" << endl;
-            roomNbr = int(receivedMessage->data[0]);
-            message.event = TCPEvent::CONNECT;
-            message.data[0] = receivedMessage->data[0];
-            client.sendMessage(message);
+    if (players[0]->getAdmin()) {
+        memcpy(message.data, roomname.c_str(), roomname.length() + 1);
+        client.sendMessage(message);
+        while (!client.hasMessages());
+        while (client.hasMessages()) {
+            unique_ptr<TCPMessage> receivedMessage = client.getFirstMessage();
+            if (receivedMessage->event == TCPEvent::CREATE_ROOM) {
+                cout << "Room " << int(receivedMessage->data[0]) << " created" << endl;
+                roomNbr = int(receivedMessage->data[0]);
+                message.event = TCPEvent::CONNECT;
+                message.data[0] = receivedMessage->data[0];
+                client.sendMessage(message);
+            }
         }
+    } else {
+        TCPMessage connecter = {TCPEvent::CONNECT, {(char)roomNbr}};
+
+        memcpy(&connecter.data[1], players[0]->getName().c_str(), players[0]->getName().length() + 1);
+        client.sendMessage(message);
     }
     cout << "Connected to room " << roomNbr << endl;
     arrow->setScale(sf::Vector2f(0.25, 0.25));

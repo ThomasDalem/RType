@@ -26,7 +26,9 @@ using namespace client;
 void core(vector<string> av) {
     Client client(av[1], av[2], av[3]);
 
+    cout << "Status: ";
     client.waitConnection();
+    cout << "Connected" << endl;
     if (client.MenusLoop())
         client.game();
 }
