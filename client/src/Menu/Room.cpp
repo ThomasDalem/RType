@@ -117,6 +117,7 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
             }
         }
     } else {
+        roomNbr = 0;
         TCPMessage connecter = {TCPEvent::CONNECT, {(char)roomNbr}};
 
         memcpy(&connecter.data[1], players[0]->getName().c_str(), players[0]->getName().length() + 1);
