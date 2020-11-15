@@ -155,6 +155,11 @@ void Server::sendUDPMessagesFromRooms()
 
 void Server::sendRoomsToClient(network::NetTCPServerClient *client)
 {
+    if (_rooms.empty()) {
+        network::TCPMessage message = {network::TCPEvent::GET_ROOMS, {-1}};
+        client->sendMessage(message);
+        return;
+    }
     char _roomsNbr[_rooms.size() + 1];
     int i = 0;
 
