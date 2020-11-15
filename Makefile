@@ -88,12 +88,12 @@ fclean:
 	make fclean -C ./client
 	make fclean -C ./lib
 
-tests_run:	$(OBJ)
-			g++ -o $(CRITERION) $(CRIT) $(OBJ) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST)
+tests_run:
+			g++ -o $(CRITERION) $(CRIT) $(SRC) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST)
 			./$(CRITERION)
 
-clean_test: $(OBJ)
-			g++ -o $(CRITERION) $(CRIT) $(OBJ) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST)
+clean_test:
+			g++ -o $(CRITERION) $(CRIT) $(SRC) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST)
 			./$(CRITERION)
 			gcovr
 			rm -vf *.o

@@ -30,6 +30,58 @@ Test(Client, PlayerNumber, .init = redirect_all_std) {
     cr_assert(_client.getNumbersPlayer() == 1);
 }
 
+Test(Client, Input, .init = redirect_all_std) {
+    Client _client;
+
+    _client.formatInput(0);
+}
+
+Test(Client, Signout, .init = redirect_all_std) {
+    Client _client;
+
+    _client.sendDisconnection();
+}
+
+Test(Client, Death, .init = redirect_all_std) {
+    Client _client;
+    network::UDPClientMessage message = {network::SendEvent::DEAD, 0, 1, {0}};
+
+    _client.death(message);
+}
+
+Test(Client, Creation, .init = redirect_all_std) {
+    Client _client;
+    network::UDPClientMessage message = {network::SendEvent::ADD, 0, 1, {0}};
+
+    _client.create(message);
+}
+
+Test(Client, Remove, .init = redirect_all_std) {
+    Client _client;
+    network::UDPClientMessage message = {network::SendEvent::REMOVE, 0, 1, {0}};
+
+    _client.remove(message);
+}
+
+Test(Client, Update, .init = redirect_all_std) {
+    Client _client;
+    network::UDPClientMessage message = {network::SendEvent::UPDATE, 0, 1, {0}};
+
+    _client.update(message);
+}
+
+// {_players[0]->getId(), {-1, 0}, network::Event::DISCONNECTION}
+// void game(void);
+// bool MenusLoop(void);
+// void waitConnection(void);
+// MusicSystem getMusicSystem(void) const;
+// shared_ptr<Player> getPlayer(size_t) const;
+// void disconnection(network::UDPClientMessage message);
+// shared_ptr<WindowHandler> getWindowHandler(void) const;
+// void setScoreAndSprite(network::UDPClientMessage message);
+// shared_ptr<network::NetUDPClient> getNetworkUDP(void) const;
+// shared_ptr<network::NetUDPClient> getNetworkUDPTCP(void) const;
+
 //Environnement
 Test(Environnement, Score, .init = redirect_all_std) {
     Environment env;

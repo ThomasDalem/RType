@@ -23,11 +23,21 @@ Test(Manette, Connection, .init = redirect_all_std) {
     }
 }
 
-Test(Manette, ButtonClicked, .init = redirect_all_std) {
+Test(Manette, ButtonClicked_1, .init = redirect_all_std) {
     ManetteSFML Remote;
 
     if (Remote.isConnected()) {
         cr_assert(Remote.getButtonsClicked() == ManetteSFML::Nada);
+    } else {
+        cr_assert(Remote.howManyConnected() == 0);
+    }
+}
+
+Test(Manette, ButtonClicked_2, .init = redirect_all_std) {
+    ManetteSFML Remote;
+
+    if (Remote.isConnected()) {
+        cr_assert(!Remote.isClicked(ManetteSFML::Nada));
     } else {
         cr_assert(Remote.howManyConnected() == 0);
     }
@@ -38,6 +48,26 @@ Test(Manette, Sensibility, .init = redirect_all_std) {
 
     Remote.setSensibility(50);
     cr_assert(Remote.getSensibility() == 50);
+}
+
+Test(Manette, Joysticks_1, .init = redirect_all_std) {
+    ManetteSFML Remote;
+
+    if (Remote.isConnected()) {
+        cr_assert(Remote.getAxis().x < 50 && Remote.getAxis().y < 50);
+    } else {
+        cr_assert(Remote.howManyConnected() == 0);
+    }
+}
+
+Test(Manette, Joysticks_2, .init = redirect_all_std) {
+    ManetteSFML Remote;
+
+    if (Remote.isConnected()) {
+        cr_assert(Remote.getJoysDirection() == ManetteSFML::Direction::Nothing);
+    } else {
+        cr_assert(Remote.howManyConnected() == 0);
+    }
 }
 
 //Image(s)
