@@ -48,12 +48,12 @@ Client::~Client() {
 void Client::game(void) {
     _netUDP.sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION, _roomNbr});
     while(!_netUDP.hasMessages());
-    std::unique_ptr<network::UDPClientMessage> message = _netUDP.getFirstMessage();
+    unique_ptr<network::UDPClientMessage> message = _netUDP.getFirstMessage();
     getPlayer(0)->setId(message->uniqueID);
     setScoreAndSprite(*message);
     while (_windowhdl->isOpen()) {
         while (_netUDP.hasMessages()) {
-            std::unique_ptr<network::UDPClientMessage> message = _netUDP.getFirstMessage();
+            unique_ptr<network::UDPClientMessage> message = _netUDP.getFirstMessage();
             if (message->event == network::SendEvent::DEAD)
                 return;
             death(*message);
@@ -150,10 +150,13 @@ void Client::formatInput(size_t row) {
 bool Client::MenusLoop(void) {
     bool isLooping = true;
     int roomNbr = -1;
+    network::TCPMessage message = {network::TCPEvent::GET_ROOMS, {-1}};
 
+    _netTCP.sendMessage(message);
+    unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
+    for (roomNbr = 0; resp->data[roomNbr] != -1; roomNbr ++);
     while (isLooping) {
         ReturnMain mainissue = Mainmenu().loop(_windowhdl->getWindow(), *_players[0]);
-
         if (mainissue == Creating) {
             if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr) == ReturnRoom::Continue)
                 isLooping = false;
@@ -171,12 +174,6 @@ bool Client::MenusLoop(void) {
 
     }
     _environment->setPlayerName(_players[0]->getName());
-    // switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
-    //     case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
-    //     case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
-    //     case Quit: return false;
-    //     default: return false;
-    // }
     return true;
 }
 

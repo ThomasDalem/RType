@@ -147,7 +147,7 @@ void Server::sendRoomsToClient(network::NetTCPServerClient *client)
         _roomsNbr[i] = it->first;
         i++;
     }
-    _roomsNbr[_rooms.size()] = '\0';
+    _roomsNbr[_rooms.size()] = -1;
     network::TCPMessage message = {network::TCPEvent::GET_ROOMS};
     message.data[0] = _rooms.size();
     std::memcpy(&message.data[1], _roomsNbr, _rooms.size());
