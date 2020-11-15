@@ -5,19 +5,18 @@
 ** main
 */
 
-#include <iostream>
-#include "Exception.hpp"
-#include "Server.hpp"
+#include "../game_engine/include/GameLoop.hpp"
 
-int main(int ac, char **av)
+int main()
 {
-    if (ac != 3) {
-        std::cerr << "Usage: ./r-type_server [TCP port] [UDP port]" << std::endl;
-        return 1;
-    }
+    std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> entities;
+    std::shared_ptr<game_engine::GameLoop>gameLoop;
+
     try {
-        Server server(std::atoi(av[1]), std::atoi(av[2]));
-        server.mainLoop();
+        entities = std::make_shared<std::vector<std::shared_ptr<game_engine::IEntities>>>();
+        gameLoop = std::make_shared<game_engine::GameLoop>(entities);
+        gameLoop->gameLoop();
+        entities->clear();
     }
     catch (std::bad_alloc const &bad)
     {

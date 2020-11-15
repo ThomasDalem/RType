@@ -19,18 +19,21 @@
 #include "ErrorHandler.hpp"
 #include "NetUDPClient.hpp"
 #include "WindowHandler.hpp"
-#include "NetTCPClient.hpp"
 
 using namespace std;
 using namespace client;
 void core(vector<string> av) {
-    Client client(av[1], av[2], av[3]);
+    shared_ptr<Client> client = make_shared<Client>();
 
-    cout << "Status: ";
-    client.waitConnection();
-    cout << "Connected" << endl;
-    if (client.MenusLoop())
-        client.game();
+    client->waitConnection();
+    if (!client->getWindowHandler()->isOpen())
+        return;
+    while(!client->getNetworkUDP()->hasMessages());
+    network::UDPClientMessage message = *client->getNetworkUDP()->getFirstMessage();
+    client->getPlayer(0)->setId(message.uniqueID);
+    client->setScoreAndSprite(message);
+    if (client->MenusLoop())
+        client->game();
 }
 
 int main(int ac, char **argv, char **env) {

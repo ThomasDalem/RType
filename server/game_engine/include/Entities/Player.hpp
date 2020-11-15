@@ -47,7 +47,7 @@ namespace game_engine {
             std::shared_ptr<Render> getRender() const {return (_render);};
             std::shared_ptr<Shoot> getShoot() const {return (_shoot);};
 
-            boost::asio::ip::udp::endpoint &getClientEndpoint() {return (_endpoint);}
+            boost::asio::ip::udp::endpoint getClientEndpoint() const {return (_endpoint);}
             float getTimeInvincibility() const {return (_timeInvincibility);};
             float getSpeedMultiplicator() const {return (_speedMultiplicator);};
             int getScore() const {return(_score);}

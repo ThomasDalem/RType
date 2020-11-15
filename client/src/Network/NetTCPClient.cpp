@@ -14,13 +14,14 @@ namespace network {
     NetTCPClient::NetTCPClient(std::string const& ip, std::string const& port) :
         _resolver(_context), _endpoints(_resolver.resolve(ip, port)), _socket(_context) {
         connect();
-        _thread = std::thread([this]{ _context.run(); });
+        try {
+            _thread = std::thread([this]{ _context.run(); });
+        } catch (std::bad_alloc e) {
+            _thread.detach();
+        }
     }
-
-    NetTCPClient::~NetTCPClient()
-    {
-        _context.stop();
-        _thread.join();
+    NetTCPClient::~NetTCPClient() {
+        // _thread.detach();
     }
 
     bool NetTCPClient::isConnected() const {return _isConnected;}

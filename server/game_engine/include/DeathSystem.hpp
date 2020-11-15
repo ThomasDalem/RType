@@ -28,30 +28,25 @@
 #include "Entities/DestroyableTile.hpp"
 #include "./DDLoader.hpp"
 #include "EntitiesParser.hpp"
-#include "SafeQueue.hpp"
 
-namespace game_engine
-{
-    class DeathSystem
-    {
-    public:
-        DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities,
-            SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &messagesToSend);
-        ~DeathSystem();
-        void disconnectClient(boost::asio::ip::udp::endpoint clientEndpoint);
-        void deathSystem();
-        void incScoreForAllPlayer();
-        bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
-        void spawnPowerUp(game_engine::IEntities *entitie);
-        bool checkGameBorder(Transform &transform, Collision &collision);
-        void deadClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter);
-        std::queue<network::UDPClientMessage> &getMessagesToBroadcast();
+namespace game_engine {
+    class DeathSystem {
+        public:
+            DeathSystem();
+            DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities);
+            ~DeathSystem();
+            void disconnectClient(boost::asio::ip::udp::endpoint clientEndpoint, network::NetUDPServer &server);
+            void deathSystem(network::NetUDPServer &server);
+            void spawnPowerUp(game_engine::IEntities *entitie);
+            void incScoreForAllPlayer();
+            DeathSystem &operator=(const DeathSystem &deathSystem);
+            bool checkGameBorder(Transform &transform, Collision &collision);
+            bool isDead(std::vector<std::shared_ptr<AComponents>> entitieComponent);
+            void deadClient(std::vector<std::shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server);
 
         protected:
         private:
-            std::queue<network::UDPClientMessage> _messagesToBroadcast;
             std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
-            SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &_messagesToSend;
     };
 } // namespace game_engine
 

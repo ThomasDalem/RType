@@ -15,7 +15,6 @@
 #include "Sfml.hpp"
 #include "Button.hpp"
 #include "Player.hpp"
-#include "NetTCPClient.hpp"
 
 using namespace std;
 
@@ -30,7 +29,7 @@ namespace client {
             void addItems(vector<shared_ptr<Button>> &, size_t);
             ReturnRoom loop(shared_ptr<sf::RenderWindow>, Player &);
             void EventHandler(shared_ptr<sf::RenderWindow>, Player &);
-            ReturnRoom creatingGame(shared_ptr<sf::RenderWindow>, vector<shared_ptr<Player>> &players, network::NetTCPClient &client, int &roomNbr, bool admin = true);
+            ReturnRoom creatingGame(shared_ptr<sf::RenderWindow>, vector<shared_ptr<Player>> players);
 
         private:
             bool isMenu;

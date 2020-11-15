@@ -22,18 +22,16 @@
 #include "WindowHandler.hpp"
 
 using namespace std;
-
 namespace client {
     class Client {
         public:
-            Client(string const& ip, string const& tcpPort, string const& udpPort);
+            Client();
             ~Client();
 
             void game(void);
             bool MenusLoop(void);
             void formatInput(size_t);
             void waitConnection(void);
-            bool isTCPConnected(void);
             void sendDisconnection(void);
             size_t getNumbersPlayer(void) const;
             MusicSystem getMusicSystem(void) const;
@@ -45,9 +43,8 @@ namespace client {
             void disconnection(network::UDPClientMessage message);
             shared_ptr<WindowHandler> getWindowHandler(void) const;
             void setScoreAndSprite(network::UDPClientMessage message);
-            network::NetUDPClient &getNetworkUDP(void);
-            network::NetUDPClient &getNetworkUDPTCP(void);
-            void setRoomNbr(int nbr);
+            shared_ptr<network::NetUDPClient> getNetworkUDP(void) const;
+            shared_ptr<network::NetUDPClient> getNetworkUDPTCP(void) const;
 
         private:
             bool isDead;
@@ -58,9 +55,8 @@ namespace client {
             shared_ptr<WindowHandler> _windowhdl;
             shared_ptr<Environment> _environment;
             vector<shared_ptr<Entities>> _entities;
-            network::NetUDPClient _netUDP;
-            network::NetTCPClient _netTCP;
-            std::uint8_t _roomNbr;
+            shared_ptr<network::NetUDPClient> _netUPD;
+            shared_ptr<network::NetTCPClient> _netTCP;
 
         protected:
     };

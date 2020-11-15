@@ -11,13 +11,15 @@
 #include "Entities.hpp"
 
 using namespace client;
-Client::Client(string const& ip, string const& tcpPort, string const& udpPort) : _netUDP(ip, udpPort), _netTCP(ip, tcpPort) {
+Client::Client() {
     //Data settings
     isDead = false;
     _animation = Animation();
     _players.push_back(make_shared<Player>(0));
     _environment = make_shared<Environment>();
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
+    _netUPD = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
+    //_netTCP = make_shared<network::NetTCPClient>("127.0.0.1", "8081");
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     //Windows Settings
@@ -46,21 +48,16 @@ Client::~Client() {
 // value[7] : largeur dans le sprite sheet
 
 void Client::game(void) {
-    _netUDP.sendMessage({-1, {84}, network::Event::CONFIRMCONNECTION, _roomNbr});
-    while(!_netUDP.hasMessages());
-    unique_ptr<network::UDPClientMessage> message = _netUDP.getFirstMessage();
-    getPlayer(0)->setId(message->uniqueID);
-    setScoreAndSprite(*message);
     while (_windowhdl->isOpen()) {
-        while (_netUDP.hasMessages()) {
-            unique_ptr<network::UDPClientMessage> message = _netUDP.getFirstMessage();
-            if (message->event == network::SendEvent::DEAD)
+        while (_netUPD->hasMessages()) {
+            network::UDPClientMessage message = *_netUPD->getFirstMessage();
+            if (message.event == network::SendEvent::DEAD)
                 return;
-            death(*message);
-            remove(*message);
-            if (message->value[0] != 0)
-                if (!update(*message))
-                    create(*message);
+            death(message);
+            remove(message);
+            if (message.value[0] != 0)
+                if (!update(message))
+                    create(message);
         }
         formatInput(0);
         _windowhdl->dispBackground();
@@ -74,7 +71,7 @@ void Client::game(void) {
 
 void Client::sendDisconnection()
 {
-    _netUDP.sendMessage({_players[0]->getId(), {-1, 0}, network::Event::DISCONNECTION});
+    _netUPD->sendMessage({_players[0]->getId(), {-1, 0}, network::Event::DISCONNECTION});
 }
 
 void Client::death(network::UDPClientMessage message) {
@@ -110,7 +107,8 @@ bool Client::update(network::UDPClientMessage message) {
     return false;
 }
 
-void Client::setScoreAndSprite(network::UDPClientMessage message) {
+void Client::setScoreAndSprite(network::UDPClientMessage message)
+{
     _environment->setPlayerRectangle(sf::IntRect(message.value[4], message.value[5], message.value[6], message.value[7]));
 }
 
@@ -132,83 +130,65 @@ void Client::formatInput(size_t row) {
             _windowhdl->close();
         return;
     } switch(_windowhdl->isEvent(*_players[row])) {
-        case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::Up: lastinput = {_players[0]->getId(), {0, -1}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::Down: lastinput = {_players[0]->getId(), {0, 1}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::LeftUp: lastinput = {_players[0]->getId(), {-1, -1}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::RightUp: lastinput = {_players[0]->getId(), {1, -1}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::LeftDown: lastinput = {_players[0]->getId(), {-1, 1}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::RightDown: lastinput = {_players[0]->getId(), {1, 1}, network::Event::MOVE, _roomNbr}; _netUDP.sendMessage(lastinput); break;
-        case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT, _roomNbr}; _netUDP.sendMessage(lastinput); break;
+        case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::Up: lastinput = {_players[0]->getId(), {0, -1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::Down: lastinput = {_players[0]->getId(), {0, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::LeftUp: lastinput = {_players[0]->getId(), {-1, -1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::RightUp: lastinput = {_players[0]->getId(), {1, -1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::LeftDown: lastinput = {_players[0]->getId(), {-1, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::RightDown: lastinput = {_players[0]->getId(), {1, 1}, network::Event::MOVE}; _netUPD->sendMessage(lastinput); break;
+        case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT}; _netUPD->sendMessage(lastinput); break;
         case Input::Escape: _windowhdl->close();
         default: break;
     }
 }
 
 bool Client::MenusLoop(void) {
-    int roomNbr = -1;
-    bool rooms = true;
     bool isLooping = true;
-    network::TCPMessage message = {network::TCPEvent::GET_ROOMS, {-1}};
 
-    _netTCP.sendMessage(message);
-    while (rooms) {
-        if (_netTCP.hasMessages()) {
-            unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
-            if (resp->event == network::TCPEvent::GET_ROOMS) {
-                roomNbr = resp->data[0];
-                rooms = false;
-            }
-        }
-    } while (isLooping) {
+    while (isLooping) {
         ReturnMain mainissue = Mainmenu().loop(_windowhdl->getWindow(), *_players[0]);
 
         if (mainissue == Creating) {
-            ReturnRoom roomissue = RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr);
-
-            switch(roomissue) {
-                case ReturnRoom::Continue: isLooping = false; break;
-                case ReturnRoom::Back: break;
-                case ReturnRoom::Salle: cout << "Entering in the room" << endl; break;
-            }
+            if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players) == ReturnRoom::Continue)
+                isLooping = false;
+            else if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players) == ReturnRoom::Back);
+            else if (RoomMenu().creatingGame(_windowhdl->getWindow(), _players) == ReturnRoom::Salle)
+                cout << "Entering in the room" << endl;
         } else if (mainissue == Room) {
-            ReturnRoom roomissue = RoomMenu("wsh", roomNbr).loop(_windowhdl->getWindow(), *_players[0]);
-            int roomer = _players[0]->getRoom();
-
-            switch(roomissue) {
-                case ReturnRoom::Continue:
-                    isLooping = false;
-                    cout << "Continue" << endl;
-                    break;
-                case ReturnRoom::Back:
-                    cout << "Back" << endl;
-                    break;
-                case ReturnRoom::Salle:
-                    cout << "Salle" << endl;
-                    RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomer, false);
-                    break;
-            }
+            if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Continue)
+                isLooping = false;
+            else if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Back);
+            else if (RoomMenu().loop(_windowhdl->getWindow(), *_players[0]) == ReturnRoom::Salle);
+                cout << "Entering in the room" << endl;
         } else if (mainissue == Quit)
             return false;
+
     }
     _environment->setPlayerName(_players[0]->getName());
+    // switch (Mainmenu().loop(_windowhdl->getWindow(), *_players[0])) {
+    //     case Creating: RoomMenu().creatingGame(_windowhdl->getWindow(), _players); break;
+    //     case Room: RoomMenu().loop(_windowhdl->getWindow(), *_players[0]); break;
+    //     case Quit: return false;
+    //     default: return false;
+    // }
     return true;
 }
 
 void Client::waitConnection(void) {
     sf::Event event;
     int attempt = -3;
-    network::UDPMessage _msgCoUdp = {-1, {84}, network::Event::ADD};
-    network::TCPMessage _msgCoTcp = {network::TCPEvent::CREATE_ROOM, {-1}};
+    network::UDPMessage msg = {-1, {84}, network::Event::ADD};
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
 
-    for (size_t frame = 0; !_netTCP.isConnected() && _windowhdl->isOpen(); frame ++) {
+    for (size_t frame = 0; !_netUPD->hasMessages() && _windowhdl->isOpen(); frame ++) {
         while (_windowhdl->getWindow()->pollEvent(event))
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _windowhdl->close();
         if (frame > (attempt > 0 ? 300 : 60)) {
+            _netUPD->sendMessage(msg);
             frame = 0;
             attempt ++;
         }
@@ -219,10 +199,8 @@ void Client::waitConnection(void) {
     }
 }
 
-void Client::setRoomNbr(int nbr) {_roomNbr = nbr;}
 MusicSystem Client::getMusicSystem(void) const {return _musics;}
-bool Client::isTCPConnected(void) {return _netTCP.isConnected();}
-network::NetUDPClient &Client::getNetworkUDP(void) {return _netUDP;}
 size_t Client::getNumbersPlayer(void) const {return _players.size();}
+shared_ptr<network::NetUDPClient> Client::getNetworkUDP(void) const {return _netUPD;}
 shared_ptr<client::WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<client::Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}

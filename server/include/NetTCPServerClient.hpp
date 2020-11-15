@@ -13,34 +13,31 @@
 
 #include "NetCommon.hpp"
 
-namespace network
-{
-    class NetTCPServerClient
-    {
-    public:
-        NetTCPServerClient(boost::asio::ip::tcp::socket &socket, int id);
-        ~NetTCPServerClient();
+namespace network {
+    class NetTCPServerClient {
+        public:
+            NetTCPServerClient(boost::asio::ip::tcp::socket &socket);
+            ~NetTCPServerClient();
 
-        boost::asio::ip::tcp::socket &getSocket();
-        int getRoomID() const;
-        int getID() const;
-        void setRoomID(int id);
-        void sendMessage(TCPMessage const& message);
-        bool isConnected() const;
-        bool hasMessages() const;
-        std::unique_ptr<TCPMessage> getFirstMessage();
+            int getID() const;
+            bool isConnected() const;
+            bool hasMessages() const;
+            boost::asio::ip::tcp::socket &getSocket();
+            void sendMessage(TCPMessage const& message);
+            std::unique_ptr<TCPMessage> getFirstMessage();
 
-    private:
-        void receiveMessage();
-        void handleMessage(boost::system::error_code ec, std::size_t receivedBytes);
+        private:
+            void receiveMessage();
+            void handleMessage(boost::system::error_code ec, std::size_t receivedBytes);
 
-    private:
-        int _roomID;
-        int _id;
-        bool _isConnected;
-        boost::asio::ip::tcp::socket _socket;
-        std::queue<std::unique_ptr<TCPMessage>> _messages;
-        char _data[MAX_MESSAGE_LENGTH];
+        private:
+            int _id;
+            bool _isConnected;
+            boost::asio::ip::tcp::socket _socket;
+            std::queue<std::unique_ptr<TCPMessage>> _messages;
+            char _data[MAX_MESSAGE_LENGTH];
+
+        protected:
     };
 }
 

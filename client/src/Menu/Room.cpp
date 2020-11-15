@@ -8,11 +8,8 @@
 #include "Room.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
-#include "ManetteSFML.hpp"
 
-using namespace client;
-using namespace network;
-RoomMenu::RoomMenu(string name, size_t ndx) {
+client::RoomMenu::RoomMenu(string name, size_t ndx) {
     _name = "";
     isMenu = true;
     isPlay = false;
@@ -24,15 +21,16 @@ RoomMenu::RoomMenu(string name, size_t ndx) {
     for (; row < ndx; row ++)
         addItems(roomlist, row);
 }
-RoomMenu::~RoomMenu() {}
+client::RoomMenu::~RoomMenu() {}
 
-void RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
+void client::RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row) {
     roomlist.push_back(make_shared<Button>(sf::Vector2f(955 - 125, 250 + (row * 110)), sf::Vector2f(250, 100)));
     roomlist[row]->setColor(sf::Color::Black, sf::Color::White, 5);
     roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
 }
 
-ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
+#include "ManetteSFML.hpp"
+client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
     ManetteSFML Remote;
     shared_ptr<ImageSFML> choice = make_shared<ImageSFML>("./resources/sprites/choice.png");
@@ -69,10 +67,10 @@ ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) 
         if (arrow->isClicked(event, _window))
             return Back;
     }
-    return player.getRoom() >= 0 ? Salle : Back;
+    return player.getRoom() > 0 ? Salle : Back;
 }
 
-void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player) {
+void client::RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, client::Player &player) {
     sf::Event event;
 
     while(_window->pollEvent(event)) {
@@ -86,52 +84,28 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
             else if (event.key.code == 57)
                 _name = _name + " ";
         } for (size_t i = 0; i < roomlist.size(); i ++) {
-            if (roomlist[i]->isClicked(event, _window)) {
+            if (roomlist[i]->isClicked(event, _window))
                 player.setRoom(i + 1);
-                cout << "Playing Room set:" << i << endl;
-            }
         }
     }
 }
 
-ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<Player>> &players, NetTCPClient &client, int &roomNbr, bool admin) {
+client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<client::Player>> players) {
     sf::Event event;
     ManetteSFML Remote;
-    TCPMessage message = {TCPEvent::CREATE_ROOM, {0}};
     string roomname = "Partie de " + players[0]->getName();
     shared_ptr<ImageSFML> choice = make_shared<ImageSFML>("./resources/sprites/choice.png");
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
-    if (admin) {
-        memcpy(message.data, roomname.c_str(), roomname.length() + 1);
-        client.sendMessage(message);
-        while (!client.hasMessages());
-        while (client.hasMessages()) {
-            unique_ptr<TCPMessage> receivedMessage = client.getFirstMessage();
-            if (receivedMessage->event == TCPEvent::CREATE_ROOM) {
-                cout << "Room " << int(receivedMessage->data[0]) << " created" << endl;
-                roomNbr = int(receivedMessage->data[0]);
-                message.event = TCPEvent::CONNECT;
-                message.data[0] = receivedMessage->data[0];
-                client.sendMessage(message);
-            }
-        }
-    } else {
-        roomNbr = 0;
-        TCPMessage connecter = {TCPEvent::CONNECT, {(char)roomNbr}};
-
-        memcpy(&connecter.data[1], players[0]->getName().c_str(), players[0]->getName().length() + 1);
-        client.sendMessage(message);
-    }
-    cout << "Connected to room " << roomNbr << endl;
     arrow->setScale(sf::Vector2f(0.25, 0.25));
     choice->setScale(sf::Vector2f(0.05, 0.05));
     choice->setRotate(-90);
     choice->setPosition(sf::Vector2f(650, 800));
     name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
     _name = roomname;
+    players[0]->setAdmin(true);
     _window->setFramerateLimit(60);
     for (size_t frame = 0; _window->isOpen() && !isPlay; frame ++) {
         EventHandler(_window, *players[0]);
@@ -150,7 +124,7 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
 
             _window->draw(*players[i]->getImage()->getSprite());
             _window->draw(*players[i]->getNameText()->getData());
-        } if (admin)
+        } if (players[0]->getAdmin())
             _play->drawButton(_window);
         _window->display();
         _window->clear();
@@ -164,17 +138,8 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
                 _window->close();
             if (arrow->isClicked(event, _window))
                 return Back;
-            if (admin && _play->isClicked(event, _window)) {
-                TCPMessage startMessage = {TCPEvent::START, {char(roomNbr)}};
-                client.sendMessage(startMessage);
-                while (!client.hasMessages());
-                while (client.hasMessages()) {
-                    unique_ptr<TCPMessage> receivedMessage = client.getFirstMessage();
-                    if (receivedMessage->event == TCPEvent::START)
-                        return Continue;
-                }
+            if (players[0]->getAdmin() && _play->isClicked(event, _window))
                 return Continue;
-            }
         }
     }
     return Continue;

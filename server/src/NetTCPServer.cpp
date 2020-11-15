@@ -13,18 +13,19 @@ using namespace boost;
 
 namespace network
 {
-    NetTCPServer::NetTCPServer(short port) :
-        _acceptor(_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)), _clientsIDNbr(0)
+    NetTCPServer::NetTCPServer(short port) : _acceptor(_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
     {
-        std::cout << "ok" << std::endl;
         acceptConnection();
         _thread = std::thread([this]{ _context.run(); });
     }
 
     NetTCPServer::~NetTCPServer()
     {
-        _context.stop();
-        _thread.join();
+    }
+
+    NetTCPRoom &NetTCPServer::getRoom()
+    {
+        return _room;
     }
 
     void NetTCPServer::acceptConnection()
@@ -33,16 +34,15 @@ namespace network
             [this](boost::system::error_code ec, asio::ip::tcp::socket socket)
             {
                 if (!ec) {
-                    _clients.push_back(std::make_unique<NetTCPServerClient>(socket, _clientsIDNbr));
-                    _clientsIDNbr++;
+                    _room.addClient(socket);
                 }
                 acceptConnection();
             }
         );
     }
 
-    std::list<std::unique_ptr<NetTCPServerClient>> &NetTCPServer::getClients()
+    std::vector<std::unique_ptr<NetTCPServerClient>> &NetTCPServer::getClients()
     {
-        return _clients;
+        return _room.getClients();
     }
 }

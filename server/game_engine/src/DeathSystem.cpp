@@ -8,15 +8,22 @@
 #include "DeathSystem.hpp"
 
 using namespace std;
+game_engine::DeathSystem::DeathSystem()
+{
+}
 
-game_engine::DeathSystem::DeathSystem(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities,
-    SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &messagesToSend) :
-    _entities(entities), _messagesToSend(messagesToSend)
+game_engine::DeathSystem::DeathSystem(shared_ptr<vector<shared_ptr<IEntities>>> entities) : _entities(entities)
 {
 }
 
 game_engine::DeathSystem::~DeathSystem()
 {
+}
+
+game_engine::DeathSystem &game_engine::DeathSystem::operator=(const game_engine::DeathSystem &deathSystem)
+{
+    _entities = deathSystem._entities;
+    return (*this);
 }
 
 void game_engine::DeathSystem::incScoreForAllPlayer()
@@ -31,7 +38,7 @@ void game_engine::DeathSystem::incScoreForAllPlayer()
     }
 }
 
-void game_engine::DeathSystem::deathSystem()
+void game_engine::DeathSystem::deathSystem(network::NetUDPServer &server)
 {
     vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter;
     Health *entitieHealthComponent;
@@ -48,12 +55,12 @@ void game_engine::DeathSystem::deathSystem()
                     incScoreForAllPlayer();
                 }
                 if (listEntitieIter->get()->getEntitiesID() == EntitiesType::PLAYER) {
-                    deadClient(listEntitieIter);
+                    deadClient(listEntitieIter, server);
                     listEntitieIter = _entities->begin();
                 } else {
                     network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(),
                         listEntitieIter->get()->getUniqueID()};
-                    _messagesToBroadcast.push(suppressMessage);
+                    server.broadcastMessage(suppressMessage);
                     listEntitieIter = _entities->erase(listEntitieIter);
                     listEntitieIter = _entities->begin();
                 }
@@ -62,7 +69,7 @@ void game_engine::DeathSystem::deathSystem()
     }
 }
 
-void game_engine::DeathSystem::disconnectClient(boost::asio::ip::udp::endpoint clientEndpoint)
+void game_engine::DeathSystem::disconnectClient(boost::asio::ip::udp::endpoint clientEndpoint, network::NetUDPServer &server)
 {
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
     game_engine::Player *player;
@@ -72,7 +79,7 @@ void game_engine::DeathSystem::disconnectClient(boost::asio::ip::udp::endpoint c
         if (playerListIter->get()->getEntitiesID() == EntitiesType::PLAYER) {
             player = static_cast<Player *>(playerListIter->get());
             if (clientEndpoint == player->getClientEndpoint()) {
-                deadClient(playerListIter);
+                deadClient(playerListIter, server);
                 playerListIter = _entities->begin();
                 return;
             }
@@ -80,16 +87,15 @@ void game_engine::DeathSystem::disconnectClient(boost::asio::ip::udp::endpoint c
     }
 }
 
-void game_engine::DeathSystem::deadClient(vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter) {
+void game_engine::DeathSystem::deadClient(vector<shared_ptr<game_engine::IEntities>>::iterator listEntitieIter, network::NetUDPServer &server) {
     Player *player = static_cast<Player *>(listEntitieIter->get());
     network::UDPClientMessage deadMessage = {network::SendEvent::DEAD, listEntitieIter->get()->getEntitiesID(), listEntitieIter->get()->getUniqueID()};
     network::UDPClientMessage suppressMessage = {network::SendEvent::REMOVE, listEntitieIter->get()->getEntitiesID(), listEntitieIter->get()->getUniqueID()};
 
-    std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>> message =
-        std::make_unique<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>(deadMessage, player->getClientEndpoint());
-    _messagesToSend.push(message);
-    _messagesToBroadcast.push(suppressMessage);
+    server.sendMessage(deadMessage, player->getClientEndpoint());
+    server.broadcastMessage(suppressMessage);
     _entities->erase(listEntitieIter);
+    server.killClient(player->getClientEndpoint());
 }
 
 bool game_engine::DeathSystem::isDead(vector<shared_ptr<AComponents>> entitieComponent)
@@ -131,9 +137,4 @@ bool game_engine::DeathSystem::checkGameBorder(Transform &transform, Collision &
         (transform.getPosition().x + transform.getDirection().x + collision.getRectSize().L) <= 0)
         return (true);
     return (false);
-}
-
-std::queue<network::UDPClientMessage> &game_engine::DeathSystem::getMessagesToBroadcast()
-{
-    return _messagesToBroadcast;
 }
