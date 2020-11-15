@@ -147,8 +147,8 @@ void Client::formatInput(size_t row) {
 }
 
 bool Client::MenusLoop(void) {
-    bool isLooping = true;
     int roomNbr = -1;
+    bool isLooping = true;
     network::TCPMessage message = {network::TCPEvent::GET_ROOMS, {-1}};
 
     _netTCP.sendMessage(message);
@@ -189,12 +189,11 @@ void Client::waitConnection(void) {
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
 
-    for (size_t frame = 0; (!_netUDP.hasMessages() || !_netTCP.isConnected()) && _windowhdl->isOpen(); frame ++) {
+    for (size_t frame = 0; !_netTCP.isConnected() && _windowhdl->isOpen(); frame ++) {
         while (_windowhdl->getWindow()->pollEvent(event))
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _windowhdl->close();
         if (frame > (attempt > 0 ? 300 : 60)) {
-            _netUDP.sendMessage(_msgCoUdp);
             // _netTCP.sendMessage(_msgCoTcp);
             frame = 0;
             attempt ++;
