@@ -20,7 +20,7 @@
 using namespace std;
 class Client {
     public:
-        Client();
+        Client(string const& ip, string const& port);
         ~Client();
 
         void game(void);
@@ -30,6 +30,7 @@ class Client {
         shared_ptr<Player> getPlayer(size_t) const;
         shared_ptr<WindowHandler> getWindowHandler(void) const;
         shared_ptr<network::NetUDPClient> getNetwork(void) const;
+        void setRoomNbr(std::uint8_t nbr);
 
     private:
         shared_ptr<TextSfml> _score;
@@ -37,6 +38,7 @@ class Client {
         shared_ptr<WindowHandler> _windowhdl;
         vector<shared_ptr<Entities>> _entities;
         shared_ptr<network::NetUDPClient> _net;
+        std::uint8_t _roomNbr;
 
     protected:
 };

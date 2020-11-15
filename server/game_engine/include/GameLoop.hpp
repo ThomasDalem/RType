@@ -39,12 +39,12 @@ namespace game_engine
     private:
         std::uint8_t _roomNbr;
         std::vector<boost::asio::ip::udp::endpoint> _connectedClientsEndpoints;
+        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
         MoveSystem moveSystem;
         DeathSystem deathSystem;
         CollisionSystem collisionSystem;
         DamageSystem damageSystem;
         SpawnSystem spawnSystem;
-        std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> _entities;
         SafeQueue<std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>>> &_UDPMessages;
         SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &_UDPMessagesToSend;
     };

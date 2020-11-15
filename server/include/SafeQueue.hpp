@@ -45,7 +45,7 @@ public:
         std::unique_lock<std::mutex> lock(_mutex);
 
         _cv.wait(lock, [this]{ return (!_queue.empty() || _stop); });
-        T value = _queue.front();
+        T value = std::move(_queue.front());
         _queue.pop();
         return value;
     };

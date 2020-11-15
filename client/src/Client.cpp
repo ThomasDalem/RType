@@ -10,9 +10,9 @@
 #include "Client.hpp"
 #include "Entities.hpp"
 
-Client::Client() {
+Client::Client(string const& ip, string const& port) {
     _windowhdl = make_shared<WindowHandler>(1910, 1070, "R-Type");
-    _net = make_shared<network::NetUDPClient>("127.0.0.1", "8081");
+    _net = make_shared<network::NetUDPClient>(ip, port);
     _score = make_shared<TextSfml>("Score: ", "./resources/fonts/2MASS.otf", sf::Color::White, 25, 25);
 
     _players.push_back(make_shared<Player>(0));
@@ -90,11 +90,11 @@ void Client::formatInput(size_t row) {
     network::UDPMessage lastinput;
 
     switch(_windowhdl->isEvent(*_players[row])) {
-        case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
-        case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
-        case Input::Up: lastinput = {_players[0]->getId(), {0, -1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
-        case Input::Down: lastinput = {_players[0]->getId(), {0, 1}, network::Event::MOVE}; _net->sendMessage(lastinput); break;
-        case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT}; _net->sendMessage(lastinput); break;
+        case Input::Left: lastinput = {_players[0]->getId(), {-1, 0}, network::Event::MOVE, _roomNbr}; _net->sendMessage(lastinput); break;
+        case Input::Right: lastinput = {_players[0]->getId(), {1, 0}, network::Event::MOVE, _roomNbr}; _net->sendMessage(lastinput); break;
+        case Input::Up: lastinput = {_players[0]->getId(), {0, -1}, network::Event::MOVE, _roomNbr}; _net->sendMessage(lastinput); break;
+        case Input::Down: lastinput = {_players[0]->getId(), {0, 1}, network::Event::MOVE, _roomNbr}; _net->sendMessage(lastinput); break;
+        case Input::Shoot: lastinput = {_players[0]->getId(), {}, network::Event::SHOOT, _roomNbr}; _net->sendMessage(lastinput); break;
         case Input::Escape: _windowhdl->~WindowHandler(); break;
         default: break;
     }
@@ -110,7 +110,8 @@ void Client::MenusLoop(void) {
 }
 
 void Client::waitConnection(void) {
-    network::UDPMessage msg = {-1, {84}, network::Event::ADD};
+    std::cout << "roomnbr " << int(_roomNbr) << std::endl;
+    network::UDPMessage msg = {-1, {84}, network::Event::ADD, _roomNbr};
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
 
@@ -127,3 +128,8 @@ void Client::waitConnection(void) {
 shared_ptr<network::NetUDPClient> Client::getNetwork(void) const {return _net;}
 shared_ptr<WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}
+
+void Client::setRoomNbr(std::uint8_t nbr)
+{
+    _roomNbr = nbr;
+}

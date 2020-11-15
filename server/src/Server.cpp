@@ -28,6 +28,10 @@ void Server::mainLoop()
         sendTCPMessagesFromRooms();
         while (_UDPServer.hasMessages()) {
             std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message = _UDPServer.getFirstMessage();
+            if (message->first.roomNbr > _rooms.size()) {
+                continue;
+            }
+            _rooms[message->first.roomNbr]->pushUDPMessage(message);
         }
         sendUDPMessagesFromRooms();
     }

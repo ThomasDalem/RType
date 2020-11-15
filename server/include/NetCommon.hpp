@@ -48,8 +48,8 @@ namespace network
     {
         int playerID;
         int value[10];
-        std::uint8_t roomNbr;
         Event event;
+        std::uint8_t roomNbr;
     };
 
     struct TCPMessage

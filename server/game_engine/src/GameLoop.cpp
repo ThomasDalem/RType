@@ -10,7 +10,7 @@
 game_engine::GameLoop::GameLoop(int roomNbr,
     SafeQueue<std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>>> &UDPMessages,
     SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &UDPMessagesToSend):
-    _roomNbr(roomNbr), moveSystem(_entities), deathSystem(_entities), spawnSystem(_entities),
+    _entities(std::make_shared<std::vector<std::shared_ptr<game_engine::IEntities>>>()), _roomNbr(roomNbr), moveSystem(_entities), deathSystem(_entities), spawnSystem(_entities),
     collisionSystem(_entities), damageSystem(_entities), _UDPMessages(UDPMessages), _UDPMessagesToSend(UDPMessagesToSend)
 {
 }
@@ -31,9 +31,12 @@ bool game_engine::GameLoop::areTherePlayers()
         playerExisting = false;
         std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message;
         if (_UDPMessages.tryGetPop(message) == false) {
+            std::cout << "Ah" << std::endl;
             continue;
         }
+        std::cout << "ok" << std::endl;
         if (isNewClient(message->second)) {
+            std::cout << "cool" << std::endl;
             _connectedClientsEndpoints.push_back(message->second);
         } else if (message->first.event == network::Event::DISCONNECT) {
             removeClient(message->second);
@@ -137,8 +140,10 @@ void game_engine::GameLoop::getComponentToDisp(std::vector<std::shared_ptr<AComp
 void game_engine::GameLoop::gameLoop()
 {
     auto start = std::chrono::steady_clock::now();
+    std::cout << "Waiting for players" << std::endl;
     while (areTherePlayers() == false);
     //un joueur c'est connecté
+    std::cout << "Someone connected" << std::endl;
     while (areTherePlayers()) {
         auto now = std::chrono::steady_clock::now();
         auto diff = now - start;
@@ -163,10 +168,10 @@ bool game_engine::GameLoop::isNewClient(boost::asio::ip::udp::endpoint const& en
 {
     for (auto it = _connectedClientsEndpoints.begin(); it != _connectedClientsEndpoints.end(); it++) {
         if (endpoint == *it) {
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 void game_engine::GameLoop::removeClient(boost::asio::ip::udp::endpoint const& endpoint)

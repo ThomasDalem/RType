@@ -26,6 +26,7 @@ namespace network
 
     void NetUDPClient::sendMessage(UDPMessage const& message)
     {
+        std::cout << "Sending message" << std::endl;
         _socket.send_to(asio::buffer(&message, sizeof(UDPMessage)), *_endpoints.begin());
     }
 

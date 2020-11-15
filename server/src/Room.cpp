@@ -30,13 +30,10 @@ void Room::roomLoop()
             std::pair<std::unique_ptr<network::TCPMessage>, int> message;
             if (_TCPMessages.tryGetPop(message)) {
                 if (message.first->event == network::TCPEvent::START) {
-                    std::cout << "Received START signal" << std::endl;
                     std::pair<network::TCPMessage, int> messageToSend(network::TCPMessage{network::TCPEvent::START, ""}, -1);
                     _TCPMessagesToSend.push(messageToSend);
                     game_engine::GameLoop gameLoop(_roomNbr, _UDPMessages, _UDPMessagesToSend);
                     gameLoop.gameLoop();
-                } else {
-                    std::cout << "NO" << std::endl;
                 }
             }
         }
