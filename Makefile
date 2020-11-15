@@ -16,6 +16,7 @@ TESTS = ./tests/
 
 SRC =	$(TESTS)test_Entities.cpp	\
 		$(TESTS)test_Env.cpp		\
+		$(TESTS)test_Game.cpp		\
 		$(TESTS)test_SFML.cpp		\
 		\
 		$(ENVS)Exception.cpp		\
@@ -88,11 +89,11 @@ fclean:
 	make fclean -C ./lib
 
 tests_run:	$(OBJ)
-			g++ -o $(CRITERION) $(OBJ) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST) $(CRIT)
+			g++ -o $(CRITERION) $(CRIT) $(OBJ) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST)
 			./$(CRITERION)
 
 clean_test: $(OBJ)
-			g++ -o $(CRITERION) $(OBJ) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST) $(CRIT)
+			g++ -o $(CRITERION) $(CRIT) $(OBJ) $(CPPFLAGS) $(E_SFML) $(E_THREAD) $(E_BOOST)
 			./$(CRITERION)
 			gcovr
 			rm -vf *.o

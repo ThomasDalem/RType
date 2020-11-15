@@ -8,9 +8,10 @@
 #include "WindowHandler.hpp"
 
 client::WindowHandler::WindowHandler(size_t width, size_t height, string name, size_t fps) {
+    _title = name;
     _width = width;
     _height = height;
-    _window = make_shared<sf::RenderWindow>(sf::VideoMode(_width, _height), "R-Type");
+    _window = make_shared<sf::RenderWindow>(sf::VideoMode(_width, _height), name);
     _background = make_shared<Background>(-1914);
 
     auto appIcon = sf::Image {};
