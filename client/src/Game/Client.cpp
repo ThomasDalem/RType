@@ -110,8 +110,7 @@ bool Client::update(network::UDPClientMessage message) {
     return false;
 }
 
-void Client::setScoreAndSprite(network::UDPClientMessage message)
-{
+void Client::setScoreAndSprite(network::UDPClientMessage message) {
     _environment->setPlayerRectangle(sf::IntRect(message.value[4], message.value[5], message.value[6], message.value[7]));
 }
 
@@ -153,8 +152,13 @@ bool Client::MenusLoop(void) {
     network::TCPMessage message = {network::TCPEvent::GET_ROOMS, {-1}};
 
     _netTCP.sendMessage(message);
-    unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
-    for (roomNbr = 0; resp->data[roomNbr] != -1; roomNbr ++);
+    // while (!_netUDP.hasMessages()) {
+    //     unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
+    //     if (resp->event == network::TCPEvent::GET_ROOMS) {
+    //         for (roomNbr = 0; resp->data[roomNbr] != -1; roomNbr ++);
+    //         break;
+    //     }
+    // }
     while (isLooping) {
         ReturnMain mainissue = Mainmenu().loop(_windowhdl->getWindow(), *_players[0]);
         if (mainissue == Creating) {
@@ -180,16 +184,18 @@ bool Client::MenusLoop(void) {
 void Client::waitConnection(void) {
     sf::Event event;
     int attempt = -3;
-    network::UDPMessage msg = {-1, {84}, network::Event::ADD};
+    network::UDPMessage _msgCoUdp = {-1, {84}, network::Event::ADD};
+    network::TCPMessage _msgCoTcp = {network::TCPEvent::CREATE_ROOM, {-1}};
     shared_ptr<ImageSFML> waiter = make_shared<ImageSFML>("./resources/sprites/background.png");
     shared_ptr<TextSfml> textw = make_shared<TextSfml>("Wait for Server...", "./resources/fonts/2MASS.otf", sf::Color::White, 950 - 99, 850);
 
-    for (size_t frame = 0; !_netUDP.hasMessages() && _windowhdl->isOpen(); frame ++) {
+    for (size_t frame = 0; (!_netUDP.hasMessages() || !_netTCP.isConnected()) && _windowhdl->isOpen(); frame ++) {
         while (_windowhdl->getWindow()->pollEvent(event))
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _windowhdl->close();
         if (frame > (attempt > 0 ? 300 : 60)) {
-            _netUDP.sendMessage(msg);
+            _netUDP.sendMessage(_msgCoUdp);
+            // _netTCP.sendMessage(_msgCoTcp);
             frame = 0;
             attempt ++;
         }
@@ -200,11 +206,9 @@ void Client::waitConnection(void) {
     }
 }
 
-bool Client::isTCPConnected(void)
-{
+bool Client::isTCPConnected(void) {
     return _netTCP.isConnected();
 }
-
 MusicSystem Client::getMusicSystem(void) const {return _musics;}
 size_t Client::getNumbersPlayer(void) const {return _players.size();}
 network::NetUDPClient &Client::getNetworkUDP(void) {return _netUDP;}
