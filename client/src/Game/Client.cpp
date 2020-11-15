@@ -158,7 +158,6 @@ bool Client::MenusLoop(void) {
             unique_ptr<network::TCPMessage> resp = _netTCP.getFirstMessage();
             if (resp->event == network::TCPEvent::GET_ROOMS) {
                 roomNbr = resp->data[0];
-                cout << to_string(roomNbr) << endl;
                 rooms = false;
             }
         }
@@ -178,9 +177,17 @@ bool Client::MenusLoop(void) {
             int roomer = _players[0]->getRoom();
 
             switch(roomissue) {
-                case ReturnRoom::Continue: isLooping = false; break;
-                case ReturnRoom::Back: break;
-                case ReturnRoom::Salle: RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomer); break;
+                case ReturnRoom::Continue:
+                    isLooping = false;
+                    cout << "Continue" << endl;
+                    break;
+                case ReturnRoom::Back:
+                    cout << "Back" << endl;
+                    break;
+                case ReturnRoom::Salle:
+                    cout << "Salle" << endl;
+                    RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomer, false);
+                    break;
             }
         } else if (mainissue == Quit)
             return false;
