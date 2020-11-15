@@ -48,6 +48,15 @@ Test(Environnement, Health, .init = redirect_all_std) {
 }
 
 //MusicSystem
+Test(MusicSystem, Musics, .init = redirect_all_std) {
+    MusicSystem core;
+
+    core.shot();
+    core.dead();
+    core.main();
+    core.blowup();
+}
+
 //WindowHandler
 Test(WindowHandler, Title, .init = redirect_all_std) {
     WindowHandler window(1, 1, "unit_test");
@@ -74,16 +83,31 @@ Test(WindowHandler, Open, .init = redirect_all_std) {
     cr_assert(window.isOpen());
 }
 
+Test(WindowHandler, Texts, .init = redirect_all_std) {
+    WindowHandler window(1, 1, "unit_test");
+
+    window.addText(make_shared<TextSfml>("Hello World !", "resources/fonts/2MASS.otf", sf::Color::White, 0, 0));
+    window.rmText(0);
+}
+
+Test(WindowHandler, Images, .init = redirect_all_std) {
+    WindowHandler window(1, 1, "unit_test");
+
+    window.addImage(make_shared<ImageSFML>("resources/sprites/r-typesheet10.gif"));
+    window.rmImage(0);
+}
+
+Test(WindowHandler, Closer, .init = redirect_all_std) {
+    WindowHandler window(1, 1, "unit_test");
+
+    window.close();
+}
+
 // shared_ptr<Background> getBackground(void) const;
 // shared_ptr<sf::RenderWindow> getWindow(void) const;
 // void dispBackground();
-// void rmText(size_t);
-// void rmImage(size_t);
-// void addText(shared_ptr<TextSfml>);
-// void addImage(shared_ptr<ImageSFML>);
 // Input isEvent(Player &);
 // void setFramerate(size_t) const;
 // void dispEntities(vector<shared_ptr<Entities>> entities) const;
 // void dispEnvironment(std::shared_ptr<client::Environment> &environment) const;
 // void display() const;
-// void close();
