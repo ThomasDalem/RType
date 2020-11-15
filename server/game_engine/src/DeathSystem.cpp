@@ -107,8 +107,8 @@ bool game_engine::DeathSystem::isDead(vector<shared_ptr<AComponents>> entitieCom
         if (entitieComponentIter->get()->getType() == ComponentType::COLLISION)
             entitieCollisionComponent = static_cast<Collision *>(entitieComponentIter->get());
     }
-    if (entitieHealthComponent->getDamabeable() == true && entitieHealthComponent->getHealthPoint() == 0 ||
-        checkGameBorder(*entitieTransformComponent, *entitieCollisionComponent) == true)
+    if (entitieHealthComponent->getDamabeable() && entitieHealthComponent->getHealthPoint() == 0 ||
+        checkGameBorder(*entitieTransformComponent, *entitieCollisionComponent))
         return (true);
     return (false);
 }

@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+
 #include "ImageSFML.hpp"
 
 using namespace std;

@@ -13,7 +13,6 @@
 game_engine::Bullet::Bullet(bool _damagePlayer, Vector _direction, Vector _position, int id)
 {
     _uniqueID = id;
-    //le rectangle, les path et la rotation sont à changer avec les vraies valeur
     _transform = std::make_shared<Transform>(_position, 0, _direction);
     _health = std::make_shared<Health>(1, true);
     _collision = std::make_shared<Collision>(Rectangle(_position.x, _position.y, 39, 13), _damagePlayer);

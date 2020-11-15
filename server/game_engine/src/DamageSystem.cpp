@@ -63,12 +63,12 @@ void game_engine::DamageSystem::applyDamage()
         }
         for (objectIter = _object->begin(); objectIter != _object->end(); objectIter++) {
             objectComponent = objectIter->get()->getComponentList();
-            if (checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, true) == true)
+            if (checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, true))
                 healthComponent->getDamage();
         }
         for (ennemyIter = _ennemy->begin(); ennemyIter != _ennemy->end(); ennemyIter++) {
             ennemyComponent = ennemyIter->get()->getComponentList();
-            if (checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, true) == true) {
+            if (checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, true)) {
                 healthComponent->getDamage();
             }
         }
@@ -103,8 +103,7 @@ void game_engine::DamageSystem::ennemyDamageSystem()
         }
         for (objectIter = _object->begin(); objectIter != _object->end(); objectIter++) {
             objectComponent = objectIter->get()->getComponentList();
-            if (objectIter->get()->getEntitiesID() == EntitiesType::BULLET && checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, false) == true) {
-                //std::cout << "damage to ennemy" << std::endl;
+            if (objectIter->get()->getEntitiesID() == EntitiesType::BULLET && checkCollisionObject(*transfromComponent, *collisionComponent, objectComponent, false)) {
                 healthComponent->getDamage();
             }
         }
@@ -138,7 +137,7 @@ void game_engine::DamageSystem::environnementDamageSystem()
         }
         for (envIter = _object->begin(); envIter != _object->end(); envIter++) {
             envComponent = envIter->get()->getComponentList();
-            if (envIter->get()->getEntitiesID() == EntitiesType::BULLET && checkCollisionObject(*transfromComponent, *collisionComponent, envComponent, false) == true) {
+            if (envIter->get()->getEntitiesID() == EntitiesType::BULLET && checkCollisionObject(*transfromComponent, *collisionComponent, envComponent, false)) {
                 healthComponent->getDamage();
             }
         }

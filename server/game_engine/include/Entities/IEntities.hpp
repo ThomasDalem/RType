@@ -22,7 +22,10 @@ namespace game_engine {
             virtual int getUniqueID() const = 0;
             virtual EntitiesType getEntitiesID() const = 0;
             virtual std::vector<std::shared_ptr<AComponents>> getComponentList() const = 0;
+
+        private:
+        protected:
     };
 }
 
-#endif /* !IENTITIES_HPP_ */
+#endif

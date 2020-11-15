@@ -15,6 +15,7 @@ namespace client {
         public:
             Animation();
             ~Animation();
+
             bool checkTimerAnimation();
             void updateAnimation(vector<shared_ptr<Entities>> &entities);
             void updateImageRect(shared_ptr<Entities> &entitie, int max_left, int min_left);
