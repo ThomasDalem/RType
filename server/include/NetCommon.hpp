@@ -40,6 +40,7 @@ namespace network
     {
         ERROR,
         OK,
+        GET_ROOM_INFO,
         GET_ROOMS,      // Get rooms numbers
         CONNECT,        // Connect to a room
         DISCONNECT,     // Disconnect from a room

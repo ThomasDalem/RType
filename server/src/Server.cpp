@@ -59,6 +59,8 @@ void Server::handleTCPMessages(network::NetTCPServerClient *client)
             break;
         case network::TCPEvent::GET_ROOMS:
             sendRoomsToClient(client);
+        case network::TCPEvent::GET_ROOM_INFO:
+            sendRoomInfo(client, message);
         default:
             _rooms[message->data[0]]->pushTCPMessage(message, client->getID());
             break;
@@ -113,6 +115,19 @@ void Server::disconnectClientFromRoom(network::NetTCPServerClient *client, std::
     }
     client->setRoomID(-1);
     _rooms[client->getRoomID()]->pushTCPMessage(message, client->getID());
+}
+
+void Server::sendRoomInfo(network::NetTCPServerClient *client, std::unique_ptr<network::TCPMessage> &message)
+{
+    network::TCPMessage messageToSend = {network::TCPEvent::ERROR};
+
+    if (_rooms.find(message->data[0]) == _rooms.end()) {
+        client->sendMessage(messageToSend);
+        return;
+    }
+    messageToSend.event = network::TCPEvent::GET_ROOM_INFO;
+    std::memcpy(messageToSend.data, _rooms[message->data[0]]->getRoomName().c_str(), _rooms[message->data[0]]->getRoomName().length() + 1);
+    client->sendMessage(messageToSend);
 }
 
 void Server::sendTCPMessagesFromRooms()

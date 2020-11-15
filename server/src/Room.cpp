@@ -23,6 +23,11 @@ Room::~Room()
     _thread.join();
 }
 
+std::string const& Room::getRoomName() const
+{
+    return _roomName;
+}
+
 void Room::roomLoop()
 {
     while (1) {

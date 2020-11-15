@@ -22,6 +22,7 @@ public:
         SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &UDPMessagesToSend);
     ~Room();
 
+    std::string const& getRoomName() const;
     void roomLoop();
     void startGameLoop();
     void pushTCPMessage(std::unique_ptr<network::TCPMessage> &message, int clientID);
