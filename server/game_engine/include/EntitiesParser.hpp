@@ -24,7 +24,7 @@ namespace game_engine {
                 int i = 0;
 
                 for (listEntitiesIter = listEntities->begin(); listEntitiesIter != listEntities->end(); listEntitiesIter++) {
-                    if (checkEntities(listEntitiesIter, typeList) == true) {
+                    if (checkEntities(listEntitiesIter, typeList)) {
                         newListEntities->push_back(listEntities->at(i));
                     }
                     i++;
@@ -48,6 +48,8 @@ namespace game_engine {
                     return (true);
                 return (false);
             }
+        private:
+        protected:
     };
 }
 

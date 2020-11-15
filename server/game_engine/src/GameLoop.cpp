@@ -58,7 +58,7 @@ bool game_engine::GameLoop::areTherePlayers()
     while (server.hasMessages()) {
         playerExisting = false;
         message = server.getFirstMessage();
-        if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION){
+        if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION) {
             std::cout << "create new player" << std::endl;
             respondToConnection(message);
         }
@@ -174,14 +174,6 @@ void game_engine::GameLoop::gameLoop() {
     auto start = chrono::steady_clock::now();
 
     while (!areTherePlayers());
-
-    // while (true) {
-    //     while (serverTCP.getFirstMessage()->event != network::TCPEvent::START) {
-    //         // serverTCP.getFirstMessage()->event != network::TCPEvent::
-    //         cout << "J'attend le début de la partie" << endl;
-    //     }
-    // }
-
     while (areTherePlayers()) {
         auto now = chrono::steady_clock::now();
         auto diff = now - start;

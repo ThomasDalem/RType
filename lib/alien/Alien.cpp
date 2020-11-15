@@ -11,11 +11,9 @@
 
 enemies::Alien::Alien(game_engine::Vector position, int id) : game_engine::Enemy(position, id)
 {
-    //_render = std::make_shared<game_engine::Render>("./path_to_ennemy sprite", game_engine::Rectangle(0, 67, 33, 36)); //r-typesheet18.gif
     _entitesID = game_engine::EntitiesType::ENEMYALIEN;
     _collision = std::make_shared<game_engine::Collision>(game_engine::Rectangle(0, 0, 99, 108), true);
     _componentList.push_back(_collision);
-    //_componentList.push_back(_render);
 }
 
 enemies::Alien::~Alien()

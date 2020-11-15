@@ -48,6 +48,7 @@ namespace game_engine {
 
             virtual void enemyIA() {};
 
+        private:
         protected:
             int _uniqueID;
             EntitiesType _entitesID;

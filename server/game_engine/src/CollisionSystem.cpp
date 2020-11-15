@@ -59,9 +59,9 @@ void game_engine::CollisionSystem::collideAll()
             if (playerComponentIter->get()->getType() == ComponentType::COLLISION)
                 collisionComponent = static_cast<Collision *>(playerComponentIter->get());
         }
-        for (powerUpIter = _powerUp->begin(); powerUpIter != _powerUp->end() && stop == false; powerUpIter++) {
+        for (powerUpIter = _powerUp->begin(); powerUpIter != _powerUp->end() && !stop; powerUpIter ++) {
             powerUpComponent = powerUpIter->get()->getComponentList();
-            if (collisionWithPowerUp(*transfromComponent, *collisionComponent, powerUpComponent) == true) {
+            if (collisionWithPowerUp(*transfromComponent, *collisionComponent, powerUpComponent)) {
                 PowerUp *powerUpEntitie = static_cast<PowerUp *>(powerUpIter->get());
                 Player *playerEntitie = static_cast<Player *>(playerIter->get());
                 powerUpEntitie->activePowerUp(*playerEntitie);

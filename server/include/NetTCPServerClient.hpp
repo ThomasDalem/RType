@@ -36,6 +36,8 @@ namespace network {
             boost::asio::ip::tcp::socket _socket;
             std::queue<std::unique_ptr<TCPMessage>> _messages;
             char _data[MAX_MESSAGE_LENGTH];
+
+        protected:
     };
 }
 
