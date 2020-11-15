@@ -26,12 +26,12 @@ namespace client {
             void setSize(size_t size);
             void setString(string str);
             void setPosition(sf::Vector2f pos);
-            void setColor(sf::Color color = sf::Color::White);
-            void update(string value, sf::Color color = sf::Color::White);
             shared_ptr<sf::Text> getData(void) const;
             shared_ptr<sf::Font> getFont(void) const;
             shared_ptr<sf::Color> getColor(void) const;
             shared_ptr<sf::Vector2f> getPosition(void) const;
+            void setColor(sf::Color color = sf::Color::White);
+            void update(string value, sf::Color color = sf::Color::White);
 
         private:
             shared_ptr<sf::Text> _data;
