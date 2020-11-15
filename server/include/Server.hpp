@@ -29,6 +29,7 @@ private:
     void createRoom(network::NetTCPServerClient *client, std::unique_ptr<network::TCPMessage> const& message);
     void connectClientToRoom(network::NetTCPServerClient *client, int roomNbr, char *data);
     void disconnectClientFromRoom(network::NetTCPServerClient *client, std::unique_ptr<network::TCPMessage> &message);
+    void sendRoomInfo(network::NetTCPServerClient *client, std::unique_ptr<network::TCPMessage> &message);
     void sendTCPMessagesFromRooms();
     void sendUDPMessagesFromRooms();
     void sendRoomsToClient(network::NetTCPServerClient *clientNbr);
