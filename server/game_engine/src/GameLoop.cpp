@@ -7,9 +7,11 @@
 
 #include "GameLoop.hpp"
 
-game_engine::GameLoop::GameLoop(std::shared_ptr<std::vector<std::shared_ptr<IEntities>>> entities):
-    server(8081), _entities(entities), moveSystem(entities), deathSystem(entities),
-    spawnSystem(entities), collisionSystem(entities), damageSystem(entities)
+game_engine::GameLoop::GameLoop(int roomNbr,
+    SafeQueue<std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>>> &UDPMessages,
+    SafeQueue<std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>> &UDPMessagesToSend):
+    _entities(std::make_shared<std::vector<std::shared_ptr<game_engine::IEntities>>>()), _UDPMessages(UDPMessages), _UDPMessagesToSend(UDPMessagesToSend),
+    _roomNbr(roomNbr), moveSystem(_entities), deathSystem(_entities, _UDPMessagesToSend), spawnSystem(_entities), collisionSystem(_entities), damageSystem(_entities)
 {
 }
 
@@ -24,7 +26,7 @@ void game_engine::GameLoop::respondToConnection(std::unique_ptr<std::pair<networ
     game_engine::Player *player;
     int newPlayerID = 0;
 
-    memset(&responseMessage, 0, sizeof(network::UDPClientMessage));
+    std::memset(&responseMessage, 0, sizeof(network::UDPClientMessage));
     newPlayerID = spawnSystem.newPlayer(message->second);
     responseMessage.event = network::SendEvent::UPDATE;
     responseMessage.entitieType = 0;
@@ -43,7 +45,9 @@ void game_engine::GameLoop::respondToConnection(std::unique_ptr<std::pair<networ
     responseMessage.value[5] = player->getRender()->getRect().y;
     responseMessage.value[6] = player->getRender()->getRect().L;
     responseMessage.value[7] = player->getRender()->getRect().l;
-    server.sendMessage(responseMessage, message->second);
+    std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>> messageToSend =
+        std::make_unique<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>(responseMessage, message->second);
+    _UDPMessagesToSend.push(messageToSend);
 }
 
 bool game_engine::GameLoop::areTherePlayers()
@@ -51,15 +55,21 @@ bool game_engine::GameLoop::areTherePlayers()
     std::shared_ptr<std::vector<std::shared_ptr<game_engine::IEntities>>> playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
     std::vector<std::shared_ptr<game_engine::IEntities>>::iterator playerListIter;
     game_engine::Player *player;
-    std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message;
     bool playerExisting = false;
     int newPlayerID = 0;
 
-    while (server.hasMessages()) {
+    while (!_UDPMessages.empty()) {
         playerExisting = false;
-        message = server.getFirstMessage();
-        if (message->first.playerID == -1 && message->first.event != network::Event::CONFIRMCONNECTION) {
-            std::cout << "create new player" << std::endl;
+        std::unique_ptr<std::pair<network::UDPMessage, boost::asio::ip::udp::endpoint>> message;
+        if (_UDPMessages.tryGetPop(message) == false) {
+            continue;
+        }
+        if (isNewClient(message->second)) {
+            _connectedClientsEndpoints.push_back(message->second);
+        } else if (message->first.event == network::Event::DISCONNECT) {
+            removeClient(message->second);
+        }
+        if (message->first.playerID == -1 && message->first.event == network::Event::CONFIRMCONNECTION){
             respondToConnection(message);
         }
         else if (message->first.event != network::Event::CONFIRMCONNECTION) {
@@ -72,7 +82,7 @@ bool game_engine::GameLoop::areTherePlayers()
             }
         }
         if (message->first.event == network::Event::DISCONNECTION) {
-            deathSystem.disconnectClient(message->second, server);
+            deathSystem.disconnectClient(message->second);
             playersList = EntitiesParser::getEntities(std::vector<game_engine::EntitiesType>{game_engine::EntitiesType::PLAYER}, _entities);
             break;
         }
@@ -87,7 +97,7 @@ void game_engine::GameLoop::sendEntitiesToClient(std::vector<std::shared_ptr<gam
 {
     network::UDPClientMessage clientMessage;
 
-    memset(&clientMessage, 0, sizeof(network::UDPClientMessage));
+    std::memset(&clientMessage, 0, sizeof(network::UDPClientMessage));
     clientMessage.event = network::SendEvent::UPDATE;
     clientMessage.entitieType = entitiesListIter->get()->getEntitiesID();
     clientMessage.uniqueID = entitiesListIter->get()->getUniqueID();
@@ -99,7 +109,7 @@ void game_engine::GameLoop::sendEntitiesToClient(std::vector<std::shared_ptr<gam
     clientMessage.value[5] = render->getRect().y;
     clientMessage.value[6] = render->getRect().L;
     clientMessage.value[7] = render->getRect().l;
-    server.broadcastMessage(clientMessage);
+    broadcastMessage(clientMessage);
 }
 
 void game_engine::GameLoop::sendHUDToClient()
@@ -121,7 +131,9 @@ void game_engine::GameLoop::sendHUDToClient()
         else {
             clientMessage.value[0] = 0;
         }
-        server.sendMessage(clientMessage, player->getClientEndpoint());
+        std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>> message =
+            std::make_unique<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>(clientMessage, player->getClientEndpoint());;
+        _UDPMessagesToSend.push(message);
     }
 }
 
@@ -164,7 +176,12 @@ void game_engine::GameLoop::oneLoop() {
     moveSystem.moveSystem();
     collisionSystem.collisionSystem();
     damageSystem.damageSystem();
-    deathSystem.deathSystem(server);
+    deathSystem.deathSystem();
+    std::queue<network::UDPClientMessage> messagesToBroadcast = deathSystem.getMessagesToBroadcast();
+    while (messagesToBroadcast.empty() == false) {
+        broadcastMessage(messagesToBroadcast.front());
+        messagesToBroadcast.pop();
+    }
     spawnSystem.spawnSystem();
     sendToClients();
 }
@@ -181,5 +198,34 @@ void game_engine::GameLoop::gameLoop() {
         if (diff >= chrono::milliseconds(10))
             oneLoop();
         this_thread::sleep_until(end);
+    }
+}
+
+bool game_engine::GameLoop::isNewClient(boost::asio::ip::udp::endpoint const& endpoint) const
+{
+    for (auto it = _connectedClientsEndpoints.begin(); it != _connectedClientsEndpoints.end(); it++) {
+        if (endpoint == *it) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void game_engine::GameLoop::removeClient(boost::asio::ip::udp::endpoint const& endpoint)
+{
+    for (auto it = _connectedClientsEndpoints.begin(); it != _connectedClientsEndpoints.end(); it++) {
+        if (endpoint == *it) {
+            _connectedClientsEndpoints.erase(it);
+            return;
+        }
+    }
+}
+
+void game_engine::GameLoop::broadcastMessage(network::UDPClientMessage const& message)
+{
+    for (auto it = _connectedClientsEndpoints.begin(); it != _connectedClientsEndpoints.end(); it++) {
+        std::unique_ptr<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>> messageToSend =
+            std::make_unique<std::pair<network::UDPClientMessage, boost::asio::ip::udp::endpoint>>(message, *it);
+        _UDPMessagesToSend.push(messageToSend);
     }
 }
