@@ -8,6 +8,7 @@
 #include "Room.hpp"
 #include "TextSFML.hpp"
 #include "ImageSFML.hpp"
+#include "ManetteSFML.hpp"
 
 client::RoomMenu::RoomMenu(string name, size_t ndx) {
     _name = "";
@@ -29,7 +30,6 @@ void client::RoomMenu::addItems(vector<shared_ptr<Button>> &roomlist, size_t row
     roomlist[row]->setText("./resources/fonts/2MASS.otf", "R. " + to_string(row + 1), 75, sf::Color::White);
 }
 
-#include "ManetteSFML.hpp"
 client::ReturnRoom client::RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) {
     sf::Event event;
     ManetteSFML Remote;
@@ -90,7 +90,8 @@ void client::RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, client
     }
 }
 
-client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<client::Player>> players) {
+client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<client::Player>> &players,
+    network::NetTCPClient &client, int &roomNbr) {
     sf::Event event;
     ManetteSFML Remote;
     string roomname = "Partie de " + players[0]->getName();
@@ -98,7 +99,22 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
+    network::TCPMessage message = {network::TCPEvent::CREATE_ROOM, {-1}};
 
+    std::memcpy(message.data, roomname.c_str(), roomname.length() + 1);
+    client.sendMessage(message);
+    while (!client.hasMessages());
+    while (client.hasMessages()) {
+        std::unique_ptr<network::TCPMessage> receivedMessage = client.getFirstMessage();
+        if (receivedMessage->event == network::TCPEvent::CREATE_ROOM) {
+            std::cout << "Room " << int(receivedMessage->data[0]) << " created" << std::endl;
+            roomNbr = int(receivedMessage->data[0]);
+            message.event = network::TCPEvent::CONNECT;
+            message.data[0] = receivedMessage->data[0];
+            client.sendMessage(message);
+        }
+    }
+    std::cout << "Connected to room " << roomNbr << std::endl;
     arrow->setScale(sf::Vector2f(0.25, 0.25));
     choice->setScale(sf::Vector2f(0.05, 0.05));
     choice->setRotate(-90);
@@ -136,10 +152,21 @@ client::ReturnRoom client::RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _
             EventHandler(_window, *players[0]);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _window->close();
-            if (arrow->isClicked(event, _window))
+            if (arrow->isClicked(event, _window)) {
                 return Back;
-            if (players[0]->getAdmin() && _play->isClicked(event, _window))
+            }
+            if (players[0]->getAdmin() && _play->isClicked(event, _window)) {
+                network::TCPMessage startMessage = {network::TCPEvent::START, {char(roomNbr)}};
+                client.sendMessage(startMessage);
+                while (!client.hasMessages());
+                while (client.hasMessages()) {
+                    std::unique_ptr<network::TCPMessage> receivedMessage = client.getFirstMessage();
+                    if (receivedMessage->event == network::TCPEvent::START) {
+                        return Continue;
+                    }
+                }
                 return Continue;
+            }
         }
     }
     return Continue;

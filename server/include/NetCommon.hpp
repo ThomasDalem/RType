@@ -24,6 +24,7 @@ namespace network
         REMOVE,
         CONFIRMCONNECTION,
         DISCONNECTION,
+        DISCONNECT
     };
 
     enum class SendEvent : std::uint8_t
@@ -37,9 +38,13 @@ namespace network
 
     enum class TCPEvent : std::uint8_t
     {
-        CONNECT,
-        DISCONNECT,
-        START
+        ERROR,
+        OK,
+        GET_ROOMS,      // Get rooms numbers
+        CONNECT,        // Connect to a room
+        DISCONNECT,     // Disconnect from a room
+        CREATE_ROOM,    // Create a room
+        START           // Start a game inside a room
     };
 
     struct UDPMessage
@@ -47,6 +52,7 @@ namespace network
         int playerID;
         int value[10];
         Event event;
+        std::uint8_t roomNbr;
     };
 
     struct TCPMessage
