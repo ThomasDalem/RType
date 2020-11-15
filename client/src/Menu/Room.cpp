@@ -95,7 +95,7 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
 ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<Player>> &players, NetTCPClient &client, int &roomNbr) {
     sf::Event event;
     ManetteSFML Remote;
-    TCPMessage message = {TCPEvent::CREATE_ROOM, {-1}};
+    TCPMessage message = {TCPEvent::CREATE_ROOM, {0}};
     string roomname = "Partie de " + players[0]->getName();
     shared_ptr<ImageSFML> choice = make_shared<ImageSFML>("./resources/sprites/choice.png");
     shared_ptr<ImageSFML> arrow = make_shared<ImageSFML>("./resources/sprites/arrow_back.png");
@@ -160,18 +160,16 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
             EventHandler(_window, *players[0]);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _window->close();
-            if (arrow->isClicked(event, _window)) {
+            if (arrow->isClicked(event, _window))
                 return Back;
-            }
             if (players[0]->getAdmin() && _play->isClicked(event, _window)) {
                 TCPMessage startMessage = {TCPEvent::START, {char(roomNbr)}};
                 client.sendMessage(startMessage);
                 while (!client.hasMessages());
                 while (client.hasMessages()) {
                     unique_ptr<TCPMessage> receivedMessage = client.getFirstMessage();
-                    if (receivedMessage->event == TCPEvent::START) {
+                    if (receivedMessage->event == TCPEvent::START)
                         return Continue;
-                    }
                 }
                 return Continue;
             }

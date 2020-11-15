@@ -22,9 +22,6 @@ client::Player::Player(int id) {
     _image->getSprite()->setPosition(sf::Vector2f(250, 250));
 }
 client::Player::~Player() {
-//     _image->~ImageSFML();
-//     _name.~basic_string();
-//     _textname->~TextSfml();
 }
 
 void client::Player::setPosition(sf::Vector2f newpos) {

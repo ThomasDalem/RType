@@ -168,26 +168,22 @@ bool Client::MenusLoop(void) {
         if (mainissue == Creating) {
             ReturnRoom roomissue = RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomNbr);
 
-            if (roomissue == ReturnRoom::Continue)
-                isLooping = false;
-            else if (roomissue == ReturnRoom::Back);
-            else if (roomissue == ReturnRoom::Salle)
-                cout << "Entering in the room" << endl;
+            switch(roomissue) {
+                case ReturnRoom::Continue: isLooping = false; break;
+                case ReturnRoom::Back: break;
+                case ReturnRoom::Salle: cout << "Entering in the room" << endl; break;
+            }
         } else if (mainissue == Room) {
             ReturnRoom roomissue = RoomMenu("wsh", roomNbr).loop(_windowhdl->getWindow(), *_players[0]);
+            int roomer = _players[0]->getRoom();
 
-            if (roomissue == ReturnRoom::Continue)
-                isLooping = false;
-            else if (roomissue == ReturnRoom::Back);
-            else if (roomissue == ReturnRoom::Salle) {
-                int roomer = _players[0]->getRoom();
-                cout << "Entering in the room" << endl;
-
-                RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomer);
+            switch(roomissue) {
+                case ReturnRoom::Continue: isLooping = false; break;
+                case ReturnRoom::Back: break;
+                case ReturnRoom::Salle: RoomMenu().creatingGame(_windowhdl->getWindow(), _players, _netTCP, roomer); break;
             }
         } else if (mainissue == Quit)
             return false;
-
     }
     _environment->setPlayerName(_players[0]->getName());
     return true;
@@ -206,7 +202,6 @@ void Client::waitConnection(void) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || event.type == sf::Event::Closed)
                 _windowhdl->close();
         if (frame > (attempt > 0 ? 300 : 60)) {
-            // _netTCP.sendMessage(_msgCoTcp);
             frame = 0;
             attempt ++;
         }
@@ -217,16 +212,10 @@ void Client::waitConnection(void) {
     }
 }
 
-bool Client::isTCPConnected(void) {
-    return _netTCP.isConnected();
-}
+void Client::setRoomNbr(int nbr) {_roomNbr = nbr;}
 MusicSystem Client::getMusicSystem(void) const {return _musics;}
-size_t Client::getNumbersPlayer(void) const {return _players.size();}
+bool Client::isTCPConnected(void) {return _netTCP.isConnected();}
 network::NetUDPClient &Client::getNetworkUDP(void) {return _netUDP;}
+size_t Client::getNumbersPlayer(void) const {return _players.size();}
 shared_ptr<client::WindowHandler> Client::getWindowHandler(void) const {return _windowhdl;}
 shared_ptr<client::Player> Client::getPlayer(size_t row) const {return row > 4 ? nullptr : _players[row];}
-
-void Client::setRoomNbr(int nbr)
-{
-    _roomNbr = nbr;
-}
