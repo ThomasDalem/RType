@@ -8,7 +8,6 @@
 #include <thread>
 #include <iostream>
 
-// #include "Exception.hpp"
 #include "NetTCPClient.hpp"
 
 namespace network {

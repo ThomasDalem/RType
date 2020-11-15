@@ -70,17 +70,26 @@ Test(Client, Update, .init = redirect_all_std) {
     _client.update(message);
 }
 
-// {_players[0]->getId(), {-1, 0}, network::Event::DISCONNECTION}
+Test(Client, Disconection, .init = redirect_all_std) {
+    Client _client;
+    network::UDPClientMessage message = {network::SendEvent::UPDATE, 0, 1, {0}};
+
+    _client.disconnection(message);
+}
+
+Test(Client, getter, .init = redirect_all_std) {
+    Client _client;
+
+    _client.getPlayer(0);
+    _client.getNetworkUDP();
+    // _client.getMusicSystem();
+    _client.getWindowHandler();
+}
+
 // void game(void);
 // bool MenusLoop(void);
 // void waitConnection(void);
-// MusicSystem getMusicSystem(void) const;
-// shared_ptr<Player> getPlayer(size_t) const;
-// void disconnection(network::UDPClientMessage message);
-// shared_ptr<WindowHandler> getWindowHandler(void) const;
 // void setScoreAndSprite(network::UDPClientMessage message);
-// shared_ptr<network::NetUDPClient> getNetworkUDP(void) const;
-// shared_ptr<network::NetUDPClient> getNetworkUDPTCP(void) const;
 
 //Environnement
 Test(Environnement, Score, .init = redirect_all_std) {
