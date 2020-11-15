@@ -69,7 +69,7 @@ ReturnRoom RoomMenu::loop(shared_ptr<sf::RenderWindow> _window, Player &player) 
         if (arrow->isClicked(event, _window))
             return Back;
     }
-    return player.getRoom() > 0 ? Salle : Back;
+    return player.getRoom() >= 0 ? Salle : Back;
 }
 
 void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player) {
@@ -86,13 +86,15 @@ void RoomMenu::EventHandler(shared_ptr<sf::RenderWindow> _window, Player &player
             else if (event.key.code == 57)
                 _name = _name + " ";
         } for (size_t i = 0; i < roomlist.size(); i ++) {
-            if (roomlist[i]->isClicked(event, _window))
+            if (roomlist[i]->isClicked(event, _window)) {
                 player.setRoom(i + 1);
+                cout << "Playing Room set:" << i << endl;
+            }
         }
     }
 }
 
-ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<Player>> &players, NetTCPClient &client, int &roomNbr) {
+ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<shared_ptr<Player>> &players, NetTCPClient &client, int &roomNbr, bool admin) {
     sf::Event event;
     ManetteSFML Remote;
     TCPMessage message = {TCPEvent::CREATE_ROOM, {0}};
@@ -102,7 +104,7 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
     shared_ptr<ImageSFML> back = make_shared<ImageSFML>("./resources/sprites/mainbackground.png");
     shared_ptr<TextSfml> name_txt = make_shared<TextSfml>(roomname, "./resources/fonts/2MASS.otf", sf::Color::White, 600, 25);
 
-    if (players[0]->getAdmin()) {
+    if (admin) {
         memcpy(message.data, roomname.c_str(), roomname.length() + 1);
         client.sendMessage(message);
         while (!client.hasMessages());
@@ -130,7 +132,6 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
     choice->setPosition(sf::Vector2f(650, 800));
     name_txt->setPosition(sf::Vector2f(875 - ((_name.length() / 2) * 14), 25));
     _name = roomname;
-    players[0]->setAdmin(true);
     _window->setFramerateLimit(60);
     for (size_t frame = 0; _window->isOpen() && !isPlay; frame ++) {
         EventHandler(_window, *players[0]);
@@ -149,7 +150,7 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
 
             _window->draw(*players[i]->getImage()->getSprite());
             _window->draw(*players[i]->getNameText()->getData());
-        } if (players[0]->getAdmin())
+        } if (admin)
             _play->drawButton(_window);
         _window->display();
         _window->clear();
@@ -163,7 +164,7 @@ ReturnRoom RoomMenu::creatingGame(shared_ptr<sf::RenderWindow> _window, vector<s
                 _window->close();
             if (arrow->isClicked(event, _window))
                 return Back;
-            if (players[0]->getAdmin() && _play->isClicked(event, _window)) {
+            if (admin && _play->isClicked(event, _window)) {
                 TCPMessage startMessage = {TCPEvent::START, {char(roomNbr)}};
                 client.sendMessage(startMessage);
                 while (!client.hasMessages());
